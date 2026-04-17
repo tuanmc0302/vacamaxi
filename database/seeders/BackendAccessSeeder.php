@@ -13,6 +13,20 @@ class BackendAccessSeeder extends Seeder
     {
         $permissionMap = [
             'admin.dashboard.view' => 'Xem bảng điều khiển',
+            'admin.widgets.view' => 'Xem cấu hình widget trang chủ',
+            'admin.widgets.edit' => 'Cập nhật cấu hình widget trang chủ',
+            'admin.categories.view' => 'Xem danh mục sản phẩm và bài viết',
+            'admin.categories.create' => 'Tạo danh mục sản phẩm và bài viết',
+            'admin.categories.edit' => 'Cập nhật danh mục sản phẩm và bài viết',
+            'admin.categories.delete' => 'Xóa danh mục sản phẩm và bài viết',
+            'admin.products.view' => 'Xem sản phẩm',
+            'admin.products.create' => 'Tạo sản phẩm',
+            'admin.products.edit' => 'Cập nhật sản phẩm',
+            'admin.products.delete' => 'Xóa sản phẩm',
+            'admin.posts.view' => 'Xem bài viết',
+            'admin.posts.create' => 'Tạo bài viết',
+            'admin.posts.edit' => 'Cập nhật bài viết',
+            'admin.posts.delete' => 'Xóa bài viết',
             'admin.users.view' => 'Xem danh sách người dùng',
             'admin.users.create' => 'Tạo mới người dùng',
             'admin.users.edit' => 'Cập nhật người dùng',
@@ -43,16 +57,23 @@ class BackendAccessSeeder extends Seeder
         $superAdmin->permissions()->sync($permissions->pluck('id')->all());
 
         $seoPermissions = $permissions
-            ->whereIn('name', ['admin.dashboard.view'])
+            ->whereIn('name', [
+                'admin.dashboard.view',
+                'admin.widgets.view',
+                'admin.widgets.edit',
+                'admin.categories.view',
+                'admin.posts.view',
+                'admin.posts.create',
+                'admin.posts.edit',
+            ])
             ->pluck('id')
             ->all();
 
         $seoRole->permissions()->sync($seoPermissions);
 
-        $user = User::query()->where('username', 'sondev03')->first();
-
-        if ($user) {
-            $user->roles()->syncWithoutDetaching([$superAdmin->id]);
-        }
+        User::query()
+            ->whereIn('username', ['sondev03', 'testuser', 'admin'])
+            ->get()
+            ->each(fn (User $user) => $user->roles()->syncWithoutDetaching([$superAdmin->id]));
     }
 }

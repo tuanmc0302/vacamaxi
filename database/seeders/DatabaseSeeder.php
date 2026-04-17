@@ -24,6 +24,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             BackendAccessSeeder::class,
             FrontendWidgetSeeder::class,
+            ContentSeeder::class,
         ]);
     }
 }

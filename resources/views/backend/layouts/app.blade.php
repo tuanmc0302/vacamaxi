@@ -8,6 +8,9 @@
         'home' => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="h-5 w-5"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10.5 12 3l9 7.5"/><path stroke-linecap="round" stroke-linejoin="round" d="M5.25 9.75V21h13.5V9.75"/></svg>',
         'users' => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="h-5 w-5"><path stroke-linecap="round" stroke-linejoin="round" d="M16 19a4 4 0 0 0-8 0"/><circle cx="12" cy="11" r="3"/><path stroke-linecap="round" stroke-linejoin="round" d="M20 19a4 4 0 0 0-3-3.87"/><path stroke-linecap="round" stroke-linejoin="round" d="M17 8a3 3 0 1 1 0 6"/></svg>',
         'shield' => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="h-5 w-5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3l7 3v6c0 4.5-2.9 7.74-7 9-4.1-1.26-7-4.5-7-9V6l7-3Z"/><path stroke-linecap="round" stroke-linejoin="round" d="m9.5 12 1.7 1.7L14.8 10"/></svg>',
+        'box' => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="h-5 w-5"><path stroke-linecap="round" stroke-linejoin="round" d="m21 8.5-9-5-9 5 9 5 9-5Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M3 8.5v7l9 5 9-5v-7"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 13.5v7"/></svg>',
+        'file' => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="h-5 w-5"><path stroke-linecap="round" stroke-linejoin="round" d="M7 3.75h6.25L17 7.5v12.75H7V3.75Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M13 3.75V8h4"/><path stroke-linecap="round" stroke-linejoin="round" d="M9.5 12h5M9.5 15h5"/></svg>',
+        'grid' => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="h-5 w-5"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4h6v6H4V4Zm10 0h6v6h-6V4ZM4 14h6v6H4v-6Zm10 0h6v6h-6v-6Z"/></svg>',
     ];
 @endphp
 <!DOCTYPE html>
@@ -65,7 +68,7 @@
                 <nav class="space-y-1 px-4 py-4">
                     @foreach ($menuItems as $item)
                         @php
-                            $active = request()->routeIs($item['route']);
+                            $active = request()->routeIs($item['route']) || request()->routeIs(str($item['route'])->beforeLast('.')->append('.*')->toString());
                             $icon = $iconMap[$item['icon']] ?? $iconMap['home'];
                         @endphp
                         <a href="{{ route($item['route']) }}" class="{{ $active ? 'bg-blue-50 text-blue-700' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900' }} flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition">
@@ -172,5 +175,6 @@
             });
         });
     </script>
+    @stack('scripts')
 </body>
 </html>

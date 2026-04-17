@@ -1,0 +1,43 @@
+@extends('backend.layouts.app')
+
+@php
+    $isNews = $module === 'news';
+    $isEdit = $category->exists;
+    $indexRoute = $isNews ? 'admin.news-categories.index' : 'admin.product-categories.index';
+    $storeRoute = $isNews ? 'admin.news-categories.store' : 'admin.product-categories.store';
+    $updateRoute = $isNews ? 'admin.news-categories.update' : 'admin.product-categories.update';
+    $heading = ($isEdit ? 'Sửa ' : 'Thêm ').($isNews ? 'danh mục bài viết' : 'danh mục sản phẩm');
+@endphp
+
+@section('title', 'Admin | '.$heading)
+@section('eyebrow', 'Danh mục')
+@section('page_heading', $heading)
+
+@section('content')
+    <x-backend.panel class="mx-auto max-w-3xl">
+        <x-backend.page-header kicker="{{ $isNews ? 'News' : 'Product' }}" :title="$heading">
+            <a href="{{ route($indexRoute) }}" class="inline-flex items-center rounded-xl border border-slate-300 px-5 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-50">Xem danh sách</a>
+        </x-backend.page-header>
+        <x-backend.alert class="mt-6" type="error" :message="$errors->first()" />
+
+        <form method="POST" action="{{ $isEdit ? route($updateRoute, $category) : route($storeRoute) }}" class="mt-8 space-y-5">
+            @csrf
+            @if($isEdit) @method('PUT') @endif
+            <x-backend.form.input id="name" name="name" label="Tên danh mục" :value="$category->name" required />
+            <x-backend.form.input id="slug" name="slug" label="Slug" :value="$category->slug" placeholder="Tự sinh nếu để trống" />
+            <div>
+                <label for="description" class="mb-2 block text-sm font-medium text-slate-700">Mô tả</label>
+                <textarea id="description" name="description" rows="5" class="block w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900 shadow-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100">{{ old('description', $category->description) }}</textarea>
+            </div>
+            <div class="grid gap-5 md:grid-cols-2">
+                <x-backend.form.input id="sort_order" name="sort_order" type="number" label="Thứ tự" :value="$category->sort_order" />
+                <label class="flex items-center gap-3 rounded-xl border border-slate-200 px-4 py-3 text-sm text-slate-700">
+                    <input type="hidden" name="is_active" value="0">
+                    <input type="checkbox" name="is_active" value="1" @checked(old('is_active', $category->is_active)) class="rounded border-slate-300 text-blue-600 focus:ring-blue-500">
+                    Hiển thị
+                </label>
+            </div>
+            <button type="submit" class="inline-flex w-full items-center justify-center rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-700">{{ $isEdit ? 'Cập nhật' : 'Tạo mới' }}</button>
+        </form>
+    </x-backend.panel>
+@endsection
