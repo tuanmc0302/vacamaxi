@@ -177,6 +177,7 @@
             }
         }
     </style>
+    @include('frontend.partials.base-layout-styles')
     @stack('styles')
 </head>
 <body>
