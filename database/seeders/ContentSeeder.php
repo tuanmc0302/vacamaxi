@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Category;
+use App\Models\Post;
 use App\Models\Product;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
@@ -81,6 +82,44 @@ class ContentSeeder extends Seeder
                     ],
                 );
             }
+        }
+
+        $newsCategory = Category::query()
+            ->where('module', Category::MODULE_NEWS)
+            ->where('is_active', true)
+            ->orderBy('sort_order')
+            ->first();
+
+        if (! $newsCategory) {
+            return;
+        }
+
+        $posts = [
+            ['title' => 'Nha hang Vaca Maxi va trai nghiem steak cao cap', 'image' => 'image/Rectangle 5.png'],
+            ['title' => 'Chat luong thit bo Vaca Maxi den tu dau', 'image' => 'image/Rectangle 11.png'],
+            ['title' => 'Ruou sam 369 va huong vi nong nghiep Viet', 'image' => 'image/Rectangle 4.png'],
+            ['title' => 'Doi ngu chuyen gia Argentina cua Vaca Maxi', 'image' => 'image/Rectangle 2.png'],
+            ['title' => 'Quy trinh chon loc giong bo chu luc', 'image' => 'image/Rectangle 3.png'],
+            ['title' => 'Xay dung chuoi gia tri thit bo ben vung', 'image' => 'image/Rectangle 11.png'],
+            ['title' => 'Khong gian nha hang 5 sao Vaca Maxi', 'image' => 'image/Rectangle 5.png'],
+            ['title' => 'Xu huong am thuc steak va grill hien dai', 'image' => 'image/Rectangle 11.png'],
+        ];
+
+        foreach ($posts as $index => $item) {
+            Post::query()->updateOrCreate(
+                ['slug' => Str::slug($item['title'])],
+                [
+                    'category_id' => $newsCategory->id,
+                    'title' => $item['title'],
+                    'image' => $item['image'],
+                    'description' => 'Nha hang steak va grill cao cap, noi am thuc khong chi duoc thuong thuc bang vi giac ma con bang trai nghiem ve nguyen lieu, khong gian va cau chuyen san pham.',
+                    'content' => '<h2>'.$item['title'].'</h2><p>VACA MAXI phat trien he sinh thai san pham dua tren chat luong nguyen lieu, quy trinh chon loc va trai nghiem khach hang. Bai viet cung cap goc nhin ve nha hang, san pham va nhung gia tri ma VACA MAXI theo duoi.</p><p>Moi san pham duoc xay dung voi tinh than ben vung, dam bao tinh on dinh va phu hop voi nhu cau thuong thuc hien dai.</p>',
+                    'seo_title' => $item['title'],
+                    'seo_description' => 'Tin tuc VACA MAXI ve am thuc, thit bo, ruou va nha hang.',
+                    'published_at' => now()->subDays($index),
+                    'is_active' => true,
+                ],
+            );
         }
     }
 }

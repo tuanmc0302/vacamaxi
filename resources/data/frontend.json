@@ -10,7 +10,7 @@
       {"label": "Thịt bò", "url": "/san-pham/thit-bo", "key": "beef"}
     ]},
     {"label": "Dịch vụ - Nhà hàng", "url": "/#restaurant", "key": "restaurant"},
-    {"label": "Tin Tức", "url": "/tin-tuc/ruou-trang-tam-coc", "key": "news"},
+    {"label": "Tin Tức", "url": "/tin-tuc", "key": "news"},
     {"label": "Liên hệ", "url": "/gioi-thieu#footer", "key": "contact"}
   ],
   "footer": {

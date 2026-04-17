@@ -8,6 +8,8 @@
     @php
         $isProductOption = str($widget->key)->startsWith('product_option_');
         $isFeedbackWidget = $widget->key === 'feedback_home';
+        $imageConfigWidgetKeys = ['about_me_home', 'about_team_home', 'about_restaurant_home'];
+        $isImageConfigWidget = in_array($widget->key, $imageConfigWidgetKeys, true);
         $selectedCategoryId = old('category_id', data_get($widget->settings, 'category_id'));
         $defaultFeedbackItems = [
             [
@@ -22,9 +24,26 @@
                 'name' => 'Tùng Phan',
                 'content' => 'Đúng chuẩn quán bò cho người mê thịt. Không gian đẹp, nhân viên thân thiện, tư vấn món rất có tâm.',
             ],
+            ['avatar' => '/image/Rectangle 4.png', 'role' => 'Khach hang', 'name' => 'Minh Anh', 'content' => 'Mon an chin chu, ruou dung kem rat hop vi va khong gian phu hop cho bua toi gia dinh.'],
+            ['avatar' => '/image/Rectangle 5.png', 'role' => 'Khach hang', 'name' => 'Quoc Huy', 'content' => 'Bo nuong vua do, thit ngot va nhan vien phuc vu nhanh. Trai nghiem rat dang quay lai.'],
+            ['avatar' => '/image/Rectangle 2.png', 'role' => 'Khach hang', 'name' => 'Thanh Mai', 'content' => 'Toi thich cach Vaca Maxi tu van phan thit phu hop. Chat luong moi lan ghe deu rat on dinh.'],
+            ['avatar' => '/image/Rectangle 3.png', 'role' => 'Khach hang', 'name' => 'Duc Nam', 'content' => 'Nha hang co chat luong thit tot, muc che bien dung yeu cau va bo tri khong gian thoai mai.'],
+            ['avatar' => '/image/Rectangle 4.png', 'role' => 'Khach hang', 'name' => 'Lan Phuong', 'content' => 'Phan ruou sam 369 goi y trong bua an rat hop. Mot dia chi nen thu khi thich steak.'],
+            ['avatar' => '/image/Rectangle 5.png', 'role' => 'Khach hang', 'name' => 'Gia Bao', 'content' => 'Toi danh gia cao nguyen lieu va cach phuc vu. Moi thu rat gon gang, chuyen nghiep.'],
+            ['avatar' => '/image/Rectangle 2.png', 'role' => 'Khach hang', 'name' => 'Kim Ngan', 'content' => 'Khong gian am, mon ra dung nhip va chat luong thit tao cam giac rat yen tam.'],
+            ['avatar' => '/image/Rectangle 3.png', 'role' => 'Khach hang', 'name' => 'Anh Tuan', 'content' => 'Da an thu nhieu lan va chat luong van deu. Chat thit ro, nuong ngon, phuc vu lich su.'],
         ];
         $feedbackItems = collect(old('feedback_items', data_get($widget->settings, 'items', $defaultFeedbackItems)))
             ->take(10)
+            ->values();
+        $defaultImageSets = [
+            'about_me_home' => ['/image/Rectangle 2.png', '/image/Rectangle 3.png', '/image/Rectangle 4.png', '/image/Rectangle 5.png'],
+            'about_team_home' => ['/image/Rectangle 2.png', '/image/Rectangle 3.png', '/image/Rectangle 4.png', '/image/Rectangle 5.png'],
+            'about_restaurant_home' => ['/image/Rectangle 5.png', '/image/Rectangle 3.png', '/image/Rectangle 2.png', '/image/Rectangle 11.png'],
+        ];
+        $widgetImages = collect(old('widget_images', data_get($widget->settings, 'images', $defaultImageSets[$widget->key] ?? [])))
+            ->pad(4, '')
+            ->take(4)
             ->values();
     @endphp
 
@@ -46,6 +65,31 @@
                 <label for="description" class="mb-2 block text-sm font-medium text-slate-700">Description</label>
                 <textarea id="description" name="description" rows="8" class="block w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900 shadow-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100">{{ old('description', $widget->description) }}</textarea>
             </div>
+
+            @if ($isImageConfigWidget)
+                <div class="rounded-2xl border border-slate-200 bg-slate-50 p-5">
+                    <h3 class="text-base font-semibold text-slate-900">Cấu hình 4 ảnh hiển thị</h3>
+                    <p class="mt-1 text-sm text-slate-500">Nhập đường dẫn ảnh trong public, ví dụ: /image/Rectangle 2.png</p>
+                    <div class="mt-5 grid gap-4 md:grid-cols-2">
+                        @foreach ($widgetImages as $imageIndex => $imagePath)
+                            <div>
+                                <x-backend.form.input
+                                    id="widget_image_{{ $imageIndex }}"
+                                    name="widget_images[{{ $imageIndex }}]"
+                                    label="Ảnh {{ $imageIndex + 1 }}"
+                                    :value="$imagePath"
+                                />
+                                @if ($imagePath)
+                                    @php
+                                        $previewSrc = str_starts_with($imagePath, 'http') || str_starts_with($imagePath, '/') ? $imagePath : asset($imagePath);
+                                    @endphp
+                                    <img src="{{ $previewSrc }}" alt="Ảnh {{ $imageIndex + 1 }}" class="mt-3 h-24 w-full rounded-xl object-cover">
+                                @endif
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            @endif
 
             @if ($isProductOption)
                 <div>

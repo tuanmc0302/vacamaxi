@@ -13,6 +13,12 @@ use Illuminate\View\View;
 
 class WidgetController extends Controller
 {
+    private const IMAGE_CONFIG_WIDGET_KEYS = [
+        'about_me_home',
+        'about_team_home',
+        'about_restaurant_home',
+    ];
+
     public function index(): View
     {
         return view('backend.content.widgets.index', [
@@ -48,6 +54,8 @@ class WidgetController extends Controller
             'feedback_items.*.role' => ['nullable', 'string', 'max:80'],
             'feedback_items.*.name' => ['nullable', 'string', 'max:120'],
             'feedback_items.*.content' => ['nullable', 'string', 'max:500'],
+            'widget_images' => ['nullable', 'array', 'max:4'],
+            'widget_images.*' => ['nullable', 'string', 'max:255'],
         ]);
 
         $settings = $widget->settings ?? [];
@@ -60,6 +68,10 @@ class WidgetController extends Controller
             $settings['items'] = $this->feedbackItems($validated['feedback_items'] ?? []);
         }
 
+        if (in_array($widget->key, self::IMAGE_CONFIG_WIDGET_KEYS, true)) {
+            $settings['images'] = $this->widgetImages($validated['widget_images'] ?? []);
+        }
+
         $widget->update([
             'title' => $validated['title'] ?? null,
             'sub_title' => $validated['sub_title'] ?? null,
@@ -70,6 +82,16 @@ class WidgetController extends Controller
         ]);
 
         return redirect()->route('admin.widgets.index')->with('status', 'Đã cập nhật widget trang chủ.');
+    }
+
+    private function widgetImages(array $images): array
+    {
+        return collect($images)
+            ->take(4)
+            ->map(fn ($image): string => trim((string) $image))
+            ->filter()
+            ->values()
+            ->all();
     }
 
     private function feedbackItems(array $items): array

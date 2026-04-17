@@ -4,6 +4,11 @@
     $description = data_get($widget, 'description');
     $buttonText = data_get($widget, 'settings.button_text', 'Tìm hiểu thêm');
     $buttonUrl = data_get($widget, 'settings.button_url', '/gioi-thieu');
+    $images = collect(data_get($widget, 'settings.images', ['/image/Rectangle 2.png', '/image/Rectangle 3.png', '/image/Rectangle 4.png', '/image/Rectangle 5.png']))
+        ->filter()
+        ->take(4)
+        ->values();
+    $imageSrc = fn ($path) => str_starts_with($path, 'http') || str_starts_with($path, '/') ? $path : asset($path);
 @endphp
 <section class="expert-section">
     <div class="container">
@@ -21,10 +26,9 @@
             </div>
             <div class="col-lg-6">
                 <div class="expert-gallery">
-                    <img src="/image/Rectangle 2.png" alt="Chuyên gia Vaca Maxi">
-                    <img src="/image/Rectangle 3.png" alt="Thịt bò Vaca Maxi">
-                    <img src="/image/Rectangle 4.png" alt="Trang trại Vaca Maxi">
-                    <img src="/image/Rectangle 5.png" alt="Nhà hàng Vaca Maxi">
+                    @foreach ($images as $index => $image)
+                        <img src="{{ $imageSrc($image) }}" alt="{{ $title }} {{ $index + 1 }}">
+                    @endforeach
                 </div>
             </div>
         </div>

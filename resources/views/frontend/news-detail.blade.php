@@ -1,334 +1,121 @@
 <!doctype html>
 <html lang="vi">
-
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Rượu Trắng Tam Cốc - VACA MAXI</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>{{ $post->seo_title ?: $post->title }} - VACA MAXI</title>
+    <meta name="description" content="{{ $post->seo_description ?: $post->description }}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        :root {
-            --gold: #e9ad00;
-            --sand: #c3a98b;
-            --text: #111111;
-        }
-
-        body {
-            margin: 0;
-            color: var(--text);
-            font-family: Arial, Helvetica, sans-serif;
-            background: #ffffff;
-        }
-
-        .site-header {
-            background: rgba(0, 0, 0, 0.57);
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 10;
-            min-height: 54px;
-        }
-
-        .site-header .navbar {
-            min-height: 54px;
-            padding: 0;
-        }
-
-        .brand-logo {
-            width: 116px;
-            max-height: 40px;
-            object-fit: contain;
-        }
-
-        .main-menu {
-            gap: 18px;
-        }
-
-        .main-menu .nav-link {
-            color: #f3f3f3;
-            font-size: 12px;
-            letter-spacing: 0;
-            padding: 0;
-        }
-
-        .main-menu .nav-link:hover,
-        .main-menu .nav-link.active {
-            color: var(--gold);
-        }
-
-        .page-hero {
-            min-height: 168px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 76px 16px 30px;
-            color: #ffffff;
-            text-align: center;
-            background:
-                linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.58)),
-                url("/image/banner.png") center 52% / cover no-repeat;
-        }
-
-        .page-hero h1 {
-            margin: 0;
-            font-size: 26px;
-            font-weight: 800;
-            letter-spacing: 1.2px;
-            text-transform: uppercase;
-        }
-
-        .breadcrumb-line {
-            margin-top: 8px;
-            color: rgba(255, 255, 255, 0.82);
-            font-size: 12px;
-        }
-
-        .article-section {
-            padding: 34px 0 56px;
-            background: #ffffff;
-        }
-
-        .article-wrap {
-            max-width: 980px;
-            margin: 0 auto;
-        }
-
-        .article-lead {
-            display: grid;
-            grid-template-columns: 1.02fr 1fr;
-            gap: 24px;
-            align-items: start;
-            margin-bottom: 32px;
-        }
-
-        .article-image {
-            width: 100%;
-            aspect-ratio: 1.24;
-            object-fit: cover;
-            border-radius: 2px;
-            box-shadow: 0 7px 15px rgba(0, 0, 0, 0.15);
-        }
-
-        .article-summary h2 {
-            margin: 0 0 7px;
-            font-size: 24px;
-            font-weight: 800;
-        }
-
-        .article-summary .meta {
-            margin-bottom: 13px;
-            color: #555555;
-            font-size: 12px;
-        }
-
-        .article-summary p {
-            margin: 0;
-            color: #111111;
-            font-size: 14px;
-            line-height: 1.9;
-        }
-
-        .toc-box {
-            width: 490px;
-            max-width: 100%;
-            margin: 0 0 34px;
-            padding: 14px 21px 12px;
-            border-radius: 5px;
-            background: var(--sand);
-            color: #ffffff;
-        }
-
-        .toc-box h3 {
-            margin: 0 0 6px;
-            font-size: 18px;
-            font-weight: 700;
-        }
-
-        .toc-box ul {
-            margin: 0;
-            padding-left: 22px;
-            font-size: 14px;
-            line-height: 1.55;
-        }
-
-        .article-content {
-            max-width: 900px;
-            color: #111111;
-            font-size: 14px;
-            line-height: 1.9;
-        }
-
-        .article-content h2 {
-            margin: 0 0 10px;
-            font-size: 22px;
-            font-weight: 800;
-            text-transform: uppercase;
-        }
-
-        .article-content h3 {
-            margin: 0 0 2px;
-            font-size: 14px;
-            font-weight: 700;
-        }
-
-        .article-content p {
-            margin: 0 0 8px;
-        }
-
-        .float-contact {
-            position: fixed;
-            right: 0;
-            top: 54%;
-            z-index: 20;
-            transform: translateY(-50%);
-            width: 58px;
-            padding: 18px 7px;
-            border-radius: 35px 0 0 35px;
-            background: linear-gradient(180deg, #f7c64f, #f0ad00);
-            display: grid;
-            justify-items: center;
-            gap: 14px;
-            color: #ffffff;
-            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.14);
-        }
-
-        .float-contact a {
-            color: #ffffff;
-            font-size: 9px;
-            text-align: center;
-            line-height: 1.2;
-            text-decoration: none;
-        }
-
-        .float-icon {
-            width: 25px;
-            height: 25px;
-            display: grid;
-            place-items: center;
-            margin: 0 auto 4px;
-            border-radius: 50%;
-            border: 2px solid rgba(255, 255, 255, 0.85);
-            font-size: 13px;
-            font-weight: 700;
-        }
-
-        @media (max-width: 991.98px) {
-            .site-header {
-                position: relative;
-                background: #171717;
-            }
-
-            .main-menu {
-                padding: 16px 0;
-                gap: 14px;
-            }
-
-            .page-hero {
-                padding-top: 45px;
-            }
-
-            .article-lead {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        @media (max-width: 575.98px) {
-            .page-hero h1 {
-                font-size: 22px;
-            }
-
-            .article-summary h2 {
-                font-size: 21px;
-            }
-
-            .float-contact {
-                display: none;
-            }
-        }
+        body { margin: 0; background: #fff; color: #111; font-family: Arial, Helvetica, sans-serif; }
+        .site-header { position: absolute; inset: 0 0 auto; z-index: 10; background: rgba(16, 16, 16, .62); }
+        .site-header .navbar { padding: 0; }
+        .brand-mark { width: 170px; max-height: 58px; object-fit: contain; }
+        .site-header .nav-link { color: #fff; font-weight: 500; }
+        .site-header .nav-link.active, .site-header .nav-link:hover { color: #e7a900; }
+        .site-header .dropdown-menu { border: 0; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,.16); }
+        @media (min-width: 992px) { .site-header .nav-item.dropdown:hover .dropdown-menu { display: block; margin-top: 0; } }
+        .page-hero { min-height: 278px; display: flex; align-items: center; justify-content: center; text-align: center; color: #fff; background-image: linear-gradient(rgba(0,0,0,.6), rgba(0,0,0,.6)), url('/image/banner.png'); background-size: cover; background-position: center; padding: 105px 16px 54px; }
+        .page-hero h1 { margin: 0; font-size: 34px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+        .page-hero p { margin: 8px 0 0; color: rgba(255,255,255,.82); }
+        .article-section { padding: 44px 0 70px; }
+        .article-top { display: grid; grid-template-columns: minmax(300px, 42%) minmax(0, 1fr); gap: 26px; align-items: start; margin-bottom: 30px; }
+        .article-cover { width: 100%; aspect-ratio: 422 / 280; object-fit: cover; border-radius: 4px; box-shadow: 0 8px 18px rgba(0,0,0,.15); }
+        .article-summary h2 { margin: 0 0 8px; font-size: 28px; font-weight: 700; line-height: 1.18; }
+        .article-meta { margin: 0 0 13px; color: #777; font-size: 13px; }
+        .article-summary p { margin: 0; font-size: 16px; line-height: 1.75; }
+        .article-note { max-width: 430px; margin: 20px 0 26px; padding: 16px 18px; border-radius: 6px; background: #c3a98a; color: #fff; }
+        .article-note strong { display: block; margin-bottom: 6px; font-size: 15px; }
+        .article-note ul { margin: 0; padding-left: 18px; font-size: 14px; line-height: 1.55; }
+        .article-content { max-width: 920px; font-size: 16px; line-height: 1.85; }
+        .article-content h1, .article-content h2, .article-content h3 { margin: 28px 0 12px; font-weight: 700; line-height: 1.2; }
+        .article-content img { max-width: 100%; height: auto; border-radius: 6px; }
+        .related-section { padding-top: 34px; margin-top: 44px; border-top: 1px solid #e5e5e5; }
+        .related-title { margin: 0 0 24px; font-size: 28px; font-weight: 700; text-transform: uppercase; }
+        .related-title span { color: #e7a900; }
+        .related-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+        .related-card { overflow: hidden; border-radius: 8px; background: #fff; box-shadow: 0 7px 14px rgba(0,0,0,.18); color: inherit; text-decoration: none; }
+        .related-card img { width: 100%; aspect-ratio: 269 / 124; object-fit: cover; display: block; }
+        .related-card-body { padding: 11px 13px 13px; }
+        .related-card h3 { margin: 0 0 8px; font-size: 18px; font-weight: 700; line-height: 1.15; }
+        .related-card p { margin: 0; font-size: 13px; line-height: 1.35; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        @media (max-width: 991.98px) { .article-top { grid-template-columns: 1fr; } .related-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+        @media (max-width: 575.98px) { .brand-mark { width: 140px; } .page-hero h1 { font-size: 28px; } .related-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
-
 <body>
-    @php
-        $frontendData = json_decode(file_get_contents(resource_path('data/frontend.json')), true);
-    @endphp
-    @include('frontend.partials.header', ['active' => 'news', 'nav' => $frontendData['nav']])
+@php
+    $nav = $frontendData['nav'] ?? [];
+    $footer = $frontendData['footer'] ?? [];
+    $active = 'news';
+    $image = \App\Presentation\Http\Controllers\Frontend\NewsController::imageUrl($post->image, 'image/Rectangle 4.png');
+    $description = $post->description ?: \Illuminate\Support\Str::limit(strip_tags($post->content), 220);
+@endphp
+@include('frontend.partials.header')
+<main>
+    <section class="page-hero">
+        <div>
+            <h1>{{ $post->title }}</h1>
+            <p>{{ optional($post->category)->name ?: 'Tin tức VACA MAXI' }}</p>
+        </div>
+    </section>
 
-    <main>
-        <section class="page-hero">
-            <div>
-                <h1>Rượu trắng Tam Cốc</h1>
-                <div class="breadcrumb-line">Trang chủ / Tin tức / Rượu trắng Tam Cốc</div>
+    <section class="article-section">
+        <div class="container">
+            <div class="article-top">
+                <img class="article-cover" src="{{ $image }}" alt="{{ $post->title }}">
+                <div class="article-summary">
+                    <h2>{{ $post->title }}</h2>
+                    <p class="article-meta">
+                        {{ optional($post->published_at)->format('d/m/Y') ?: $post->created_at->format('d/m/Y') }}
+                        @if ($post->category)
+                            · {{ $post->category->name }}
+                        @endif
+                    </p>
+                    <p>{{ $description }}</p>
+                </div>
             </div>
-        </section>
 
-        <section class="article-section">
-            <div class="container">
-                <article class="article-wrap">
-                    <div class="article-lead">
-                        <img class="article-image" src="/image/Rectangle 4.png" alt="Rượu Trắng Tam Cốc">
-                        <div class="article-summary">
-                            <h2>Rượu Trắng Tam Cốc</h2>
-                            <div class="meta">Rượu Anh / Thứ Hai, 02/03/2026</div>
-                            <p>
-                                Không dùng cồn công nghiệp - không chất tạo mùi - tạo ngọt. Được kiểm nghiệm định kỳ theo
-                                tiêu chuẩn an toàn thực phẩm. TRĂNG TÂM CỐC là dòng rượu trắng truyền thống do VACA MAXI
-                                phát triển, được nấu từ 3 loại ngũ cốc quen thuộc với người Việt. Rượu được nấu theo công
-                                thức gia truyền, nhưng sản xuất trên dây chuyền hiện đại, giúp giữ được chất rượu truyền
-                                thống mà vẫn đảm bảo độ trong, an toàn và ổn định.
-                            </p>
-                            <p>
-                                TRĂNG TÂM CỐC không chỉ là rượu để uống, mà còn là một phần ký ức quê nhà, là hình ảnh của
-                                bếp lửa, mâm cơm, và sự sum vầy.
-                            </p>
-                        </div>
+            @if ($description)
+                <div class="article-note">
+                    <strong>Nội dung bài viết</strong>
+                    <ul>
+                        <li>{{ \Illuminate\Support\Str::limit($description, 90) }}</li>
+                    </ul>
+                </div>
+            @endif
+
+            <article class="article-content">
+                @if ($post->content)
+                    {!! $post->content !!}
+                @else
+                    <p>{{ $description }}</p>
+                @endif
+            </article>
+
+            @if ($relatedPosts->isNotEmpty())
+                <section class="related-section">
+                    <h2 class="related-title">Bài viết <span>liên quan</span></h2>
+                    <div class="related-grid">
+                        @foreach ($relatedPosts as $relatedPost)
+                            @php
+                                $relatedImage = \App\Presentation\Http\Controllers\Frontend\NewsController::imageUrl($relatedPost->image, 'image/Rectangle 5.png');
+                            @endphp
+                            <a class="related-card" href="{{ route('frontend.news.show', $relatedPost->slug) }}">
+                                <img src="{{ $relatedImage }}" alt="{{ $relatedPost->title }}">
+                                <div class="related-card-body">
+                                    <h3>{{ $relatedPost->title }}</h3>
+                                    <p>{{ $relatedPost->description ?: \Illuminate\Support\Str::limit(strip_tags($relatedPost->content), 90) }}</p>
+                                </div>
+                            </a>
+                        @endforeach
                     </div>
-
-                    <div class="toc-box">
-                        <h3>Nội dung bài viết</h3>
-                        <ul>
-                            <li>Câu chuyện rượu trắng tam cốc</li>
-                            <li>Ý nghĩa cái tên trắng tam cốc</li>
-                        </ul>
-                    </div>
-
-                    <div class="article-content">
-                        <h2>Câu chuyện rượu trắng Tam Cốc</h2>
-                        <h3>Câu chuyện từ 3 loại ngũ cốc</h3>
-                        <p>
-                            TRĂNG TÂM CỐC là loại rượu truyền thống được nấu từ ba nguyên liệu quen thuộc đời sống người
-                            Việt: thóc nếp thơm, tấm thơm và ngô vàng. Đây là những ngũ cốc đã hiện diện trong mỗi vùng
-                            quê, gắn với mùa gặt, mâm cơm và cả những mẩu chuyện được lưu giữ qua từng thế hệ.
-                        </p>
-                        <p>
-                            Thóc nếp thơm cho vị rượu thanh, vị nhẹ. Tấm thơm tạo độ ngọt hậu và độ sâu tự nhiên. Ngô vàng
-                            tạo điểm nhấn bằng vị êm và ấm.
-                        </p>
-                        <p>
-                            Với TRĂNG TÂM CỐC, ba nguyên liệu ấy được lựa chọn từ vùng trồng nông sản nổi tiếng, nấu bằng
-                            men cổ truyền nhưng chưng cất bằng thiết bị hiện đại. Nhờ đó, từng giọt rượu giữ được cái hồn
-                            xưa, mà vẫn đạt độ tinh khiết, ổn định và an toàn cho sức khỏe.
-                        </p>
-
-                        <h2>Ý nghĩa cái tên Trắng Tam Cốc</h2>
-                        <p>
-                            “Trắng” gợi lên sự trong sạch, nguyên bản và mộc mạc của rượu Việt. “Tam Cốc” là ba loại ngũ
-                            cốc nền tảng tạo nên hương vị cân bằng. Cái tên không chỉ nói về nguyên liệu mà còn nhắc đến
-                            sự kết nối giữa đất, người và văn hóa ẩm thực truyền thống.
-                        </p>
-                    </div>
-                </article>
-            </div>
-        </section>
-    </main>
-
-        @include('frontend.partials.floating-contact')
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+                </section>
+            @endif
+        </div>
+    </section>
+</main>
+@include('frontend.partials.footer')
+@include('frontend.partials.floating-contact')
 </body>
-
 </html>
-
-
-
