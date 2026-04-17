@@ -43,12 +43,21 @@ class WidgetController extends Controller
             'sort_order' => ['nullable', 'integer', 'min:0'],
             'is_active' => ['nullable', 'boolean'],
             'category_id' => ['nullable', 'integer', 'exists:categories,id'],
+            'feedback_items' => ['nullable', 'array', 'max:10'],
+            'feedback_items.*.avatar' => ['nullable', 'string', 'max:255'],
+            'feedback_items.*.role' => ['nullable', 'string', 'max:80'],
+            'feedback_items.*.name' => ['nullable', 'string', 'max:120'],
+            'feedback_items.*.content' => ['nullable', 'string', 'max:500'],
         ]);
 
         $settings = $widget->settings ?? [];
 
         if (Str::startsWith($widget->key, 'product_option_')) {
             $settings['category_id'] = $validated['category_id'] ?? null;
+        }
+
+        if ($widget->key === 'feedback_home') {
+            $settings['items'] = $this->feedbackItems($validated['feedback_items'] ?? []);
         }
 
         $widget->update([
@@ -61,6 +70,21 @@ class WidgetController extends Controller
         ]);
 
         return redirect()->route('admin.widgets.index')->with('status', 'Đã cập nhật widget trang chủ.');
+    }
+
+    private function feedbackItems(array $items): array
+    {
+        return collect($items)
+            ->take(10)
+            ->map(fn (array $item): array => [
+                'avatar' => trim($item['avatar'] ?? '') ?: '/image/Rectangle 2.png',
+                'role' => trim($item['role'] ?? '') ?: 'Khách hàng',
+                'name' => trim($item['name'] ?? ''),
+                'content' => trim($item['content'] ?? ''),
+            ])
+            ->filter(fn (array $item): bool => $item['name'] !== '' || $item['content'] !== '')
+            ->values()
+            ->all();
     }
 
     public function toggle(Request $request, FrontendWidget $widget): JsonResponse
