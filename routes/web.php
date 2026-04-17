@@ -11,4 +11,5 @@ Route::get('/san-pham', [ProductController::class, 'index'])->name('frontend.pro
 Route::get('/san-pham/{categorySlug}', [ProductController::class, 'category'])->name('frontend.products.category');
 Route::get('/san-pham/{categorySlug}/{productSlug}', [ProductController::class, 'show'])->name('frontend.product.show');
 Route::get('/tin-tuc', [NewsController::class, 'index'])->name('frontend.news.index');
+Route::get('/tin-tuc/danh-muc/{categorySlug}', [NewsController::class, 'category'])->name('frontend.news.category');
 Route::get('/tin-tuc/{slug}', [NewsController::class, 'show'])->name('frontend.news.show');
