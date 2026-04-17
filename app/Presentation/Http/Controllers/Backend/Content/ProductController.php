@@ -78,7 +78,7 @@ class ProductController extends Controller
             'category_id' => ['nullable', 'exists:categories,id'],
             'name' => ['required', 'string', 'max:255'],
             'slug' => ['required', 'string', 'max:255', Rule::unique('products')->ignore($product?->id)],
-            'image' => ['nullable', 'string', 'max:255'],
+            'image_file' => ['nullable', 'image', 'max:4096'],
             'short_description' => ['nullable', 'string'],
             'description' => ['nullable', 'string'],
             'seo_title' => ['nullable', 'string', 'max:255'],
@@ -86,6 +86,15 @@ class ProductController extends Controller
             'sort_order' => ['nullable', 'integer', 'min:0'],
             'is_active' => ['nullable', 'boolean'],
         ]);
+
+        unset($validated['image_file']);
+
+        if ($request->hasFile('image_file')) {
+            $path = $request->file('image_file')->store('products', 'public');
+            $validated['image'] = 'storage/' . $path;
+        } elseif (! $product) {
+            $validated['image'] = null;
+        }
 
         $validated['is_active'] = $request->boolean('is_active');
         $validated['sort_order'] = (int) ($validated['sort_order'] ?? 0);

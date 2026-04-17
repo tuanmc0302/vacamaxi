@@ -4,6 +4,7 @@ namespace App\Presentation\Http\Controllers\Backend\Content;
 
 use App\Http\Controllers\Controller;
 use App\Models\FrontendWidget;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -38,10 +39,40 @@ class WidgetController extends Controller
             'title' => $validated['title'] ?? null,
             'sub_title' => $validated['sub_title'] ?? null,
             'description' => $validated['description'] ?? null,
-            'sort_order' => $validated['sort_order'] ?? 0,
+            'sort_order' => (int) ($validated['sort_order'] ?? 0),
             'is_active' => $request->boolean('is_active'),
         ]);
 
         return redirect()->route('admin.widgets.index')->with('status', 'Đã cập nhật widget trang chủ.');
+    }
+
+    public function toggle(Request $request, FrontendWidget $widget): JsonResponse
+    {
+        $validated = $request->validate([
+            'is_active' => ['required', 'boolean'],
+        ]);
+
+        $widget->update(['is_active' => (bool) $validated['is_active']]);
+
+        return response()->json([
+            'message' => 'Đã cập nhật trạng thái widget.',
+            'is_active' => $widget->is_active,
+        ]);
+    }
+
+    public function reorder(Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'widgets' => ['required', 'array'],
+            'widgets.*' => ['integer', 'exists:frontend_widgets,id'],
+        ]);
+
+        foreach ($validated['widgets'] as $index => $widgetId) {
+            FrontendWidget::query()
+                ->whereKey($widgetId)
+                ->update(['sort_order' => $index + 1]);
+        }
+
+        return response()->json(['message' => 'Đã cập nhật thứ tự widget.']);
     }
 }

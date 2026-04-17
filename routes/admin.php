@@ -61,6 +61,12 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::put('/widgets/{widget}', [WidgetController::class, 'update'])
                 ->middleware('permission:admin.widgets.edit')
                 ->name('widgets.update');
+            Route::patch('/widgets/{widget}/toggle', [WidgetController::class, 'toggle'])
+                ->middleware('permission:admin.widgets.edit')
+                ->name('widgets.toggle');
+            Route::post('/widgets/reorder', [WidgetController::class, 'reorder'])
+                ->middleware('permission:admin.widgets.edit')
+                ->name('widgets.reorder');
 
             Route::get('/product-categories', [CategoryController::class, 'index'])
                 ->defaults('module', 'product')
