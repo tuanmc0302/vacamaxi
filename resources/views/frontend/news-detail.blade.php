@@ -1,0 +1,334 @@
+<!doctype html>
+<html lang="vi">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Rượu Trắng Tam Cốc - VACA MAXI</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --gold: #e9ad00;
+            --sand: #c3a98b;
+            --text: #111111;
+        }
+
+        body {
+            margin: 0;
+            color: var(--text);
+            font-family: Arial, Helvetica, sans-serif;
+            background: #ffffff;
+        }
+
+        .site-header {
+            background: rgba(0, 0, 0, 0.57);
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 10;
+            min-height: 54px;
+        }
+
+        .site-header .navbar {
+            min-height: 54px;
+            padding: 0;
+        }
+
+        .brand-logo {
+            width: 116px;
+            max-height: 40px;
+            object-fit: contain;
+        }
+
+        .main-menu {
+            gap: 18px;
+        }
+
+        .main-menu .nav-link {
+            color: #f3f3f3;
+            font-size: 12px;
+            letter-spacing: 0;
+            padding: 0;
+        }
+
+        .main-menu .nav-link:hover,
+        .main-menu .nav-link.active {
+            color: var(--gold);
+        }
+
+        .page-hero {
+            min-height: 168px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 76px 16px 30px;
+            color: #ffffff;
+            text-align: center;
+            background:
+                linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.58)),
+                url("/image/banner.png") center 52% / cover no-repeat;
+        }
+
+        .page-hero h1 {
+            margin: 0;
+            font-size: 26px;
+            font-weight: 800;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+        }
+
+        .breadcrumb-line {
+            margin-top: 8px;
+            color: rgba(255, 255, 255, 0.82);
+            font-size: 12px;
+        }
+
+        .article-section {
+            padding: 34px 0 56px;
+            background: #ffffff;
+        }
+
+        .article-wrap {
+            max-width: 980px;
+            margin: 0 auto;
+        }
+
+        .article-lead {
+            display: grid;
+            grid-template-columns: 1.02fr 1fr;
+            gap: 24px;
+            align-items: start;
+            margin-bottom: 32px;
+        }
+
+        .article-image {
+            width: 100%;
+            aspect-ratio: 1.24;
+            object-fit: cover;
+            border-radius: 2px;
+            box-shadow: 0 7px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        .article-summary h2 {
+            margin: 0 0 7px;
+            font-size: 24px;
+            font-weight: 800;
+        }
+
+        .article-summary .meta {
+            margin-bottom: 13px;
+            color: #555555;
+            font-size: 12px;
+        }
+
+        .article-summary p {
+            margin: 0;
+            color: #111111;
+            font-size: 14px;
+            line-height: 1.9;
+        }
+
+        .toc-box {
+            width: 490px;
+            max-width: 100%;
+            margin: 0 0 34px;
+            padding: 14px 21px 12px;
+            border-radius: 5px;
+            background: var(--sand);
+            color: #ffffff;
+        }
+
+        .toc-box h3 {
+            margin: 0 0 6px;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .toc-box ul {
+            margin: 0;
+            padding-left: 22px;
+            font-size: 14px;
+            line-height: 1.55;
+        }
+
+        .article-content {
+            max-width: 900px;
+            color: #111111;
+            font-size: 14px;
+            line-height: 1.9;
+        }
+
+        .article-content h2 {
+            margin: 0 0 10px;
+            font-size: 22px;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        .article-content h3 {
+            margin: 0 0 2px;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .article-content p {
+            margin: 0 0 8px;
+        }
+
+        .float-contact {
+            position: fixed;
+            right: 0;
+            top: 54%;
+            z-index: 20;
+            transform: translateY(-50%);
+            width: 58px;
+            padding: 18px 7px;
+            border-radius: 35px 0 0 35px;
+            background: linear-gradient(180deg, #f7c64f, #f0ad00);
+            display: grid;
+            justify-items: center;
+            gap: 14px;
+            color: #ffffff;
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.14);
+        }
+
+        .float-contact a {
+            color: #ffffff;
+            font-size: 9px;
+            text-align: center;
+            line-height: 1.2;
+            text-decoration: none;
+        }
+
+        .float-icon {
+            width: 25px;
+            height: 25px;
+            display: grid;
+            place-items: center;
+            margin: 0 auto 4px;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.85);
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        @media (max-width: 991.98px) {
+            .site-header {
+                position: relative;
+                background: #171717;
+            }
+
+            .main-menu {
+                padding: 16px 0;
+                gap: 14px;
+            }
+
+            .page-hero {
+                padding-top: 45px;
+            }
+
+            .article-lead {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 575.98px) {
+            .page-hero h1 {
+                font-size: 22px;
+            }
+
+            .article-summary h2 {
+                font-size: 21px;
+            }
+
+            .float-contact {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    @php
+        $frontendData = json_decode(file_get_contents(resource_path('data/frontend.json')), true);
+    @endphp
+    @include('frontend.partials.header', ['active' => 'news', 'nav' => $frontendData['nav']])
+
+    <main>
+        <section class="page-hero">
+            <div>
+                <h1>Rượu trắng Tam Cốc</h1>
+                <div class="breadcrumb-line">Trang chủ / Tin tức / Rượu trắng Tam Cốc</div>
+            </div>
+        </section>
+
+        <section class="article-section">
+            <div class="container">
+                <article class="article-wrap">
+                    <div class="article-lead">
+                        <img class="article-image" src="/image/Rectangle 4.png" alt="Rượu Trắng Tam Cốc">
+                        <div class="article-summary">
+                            <h2>Rượu Trắng Tam Cốc</h2>
+                            <div class="meta">Rượu Anh / Thứ Hai, 02/03/2026</div>
+                            <p>
+                                Không dùng cồn công nghiệp - không chất tạo mùi - tạo ngọt. Được kiểm nghiệm định kỳ theo
+                                tiêu chuẩn an toàn thực phẩm. TRĂNG TÂM CỐC là dòng rượu trắng truyền thống do VACA MAXI
+                                phát triển, được nấu từ 3 loại ngũ cốc quen thuộc với người Việt. Rượu được nấu theo công
+                                thức gia truyền, nhưng sản xuất trên dây chuyền hiện đại, giúp giữ được chất rượu truyền
+                                thống mà vẫn đảm bảo độ trong, an toàn và ổn định.
+                            </p>
+                            <p>
+                                TRĂNG TÂM CỐC không chỉ là rượu để uống, mà còn là một phần ký ức quê nhà, là hình ảnh của
+                                bếp lửa, mâm cơm, và sự sum vầy.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="toc-box">
+                        <h3>Nội dung bài viết</h3>
+                        <ul>
+                            <li>Câu chuyện rượu trắng tam cốc</li>
+                            <li>Ý nghĩa cái tên trắng tam cốc</li>
+                        </ul>
+                    </div>
+
+                    <div class="article-content">
+                        <h2>Câu chuyện rượu trắng Tam Cốc</h2>
+                        <h3>Câu chuyện từ 3 loại ngũ cốc</h3>
+                        <p>
+                            TRĂNG TÂM CỐC là loại rượu truyền thống được nấu từ ba nguyên liệu quen thuộc đời sống người
+                            Việt: thóc nếp thơm, tấm thơm và ngô vàng. Đây là những ngũ cốc đã hiện diện trong mỗi vùng
+                            quê, gắn với mùa gặt, mâm cơm và cả những mẩu chuyện được lưu giữ qua từng thế hệ.
+                        </p>
+                        <p>
+                            Thóc nếp thơm cho vị rượu thanh, vị nhẹ. Tấm thơm tạo độ ngọt hậu và độ sâu tự nhiên. Ngô vàng
+                            tạo điểm nhấn bằng vị êm và ấm.
+                        </p>
+                        <p>
+                            Với TRĂNG TÂM CỐC, ba nguyên liệu ấy được lựa chọn từ vùng trồng nông sản nổi tiếng, nấu bằng
+                            men cổ truyền nhưng chưng cất bằng thiết bị hiện đại. Nhờ đó, từng giọt rượu giữ được cái hồn
+                            xưa, mà vẫn đạt độ tinh khiết, ổn định và an toàn cho sức khỏe.
+                        </p>
+
+                        <h2>Ý nghĩa cái tên Trắng Tam Cốc</h2>
+                        <p>
+                            “Trắng” gợi lên sự trong sạch, nguyên bản và mộc mạc của rượu Việt. “Tam Cốc” là ba loại ngũ
+                            cốc nền tảng tạo nên hương vị cân bằng. Cái tên không chỉ nói về nguyên liệu mà còn nhắc đến
+                            sự kết nối giữa đất, người và văn hóa ẩm thực truyền thống.
+                        </p>
+                    </div>
+                </article>
+            </div>
+        </section>
+    </main>
+
+        @include('frontend.partials.floating-contact')
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
+
+
+

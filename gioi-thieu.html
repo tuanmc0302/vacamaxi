@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="vi">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Giới thiệu - VACA MAXI</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --gold: #e7ab00;
+            --dark: #210800;
+        }
+
+        body {
+            margin: 0;
+            color: #151515;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #ffffff;
+        }
+
+        .site-header {
+            background: rgba(16, 16, 16, 0.5);
+            position: relative;
+            z-index: 10;
+            min-height: 78px;
+        }
+
+        .site-header .navbar {
+            min-height: 78px;
+            padding: 0;
+        }
+
+        .brand-logo {
+            width: 170px;
+            max-height: 58px;
+            object-fit: contain;
+        }
+
+        .main-menu {
+            gap: 22px;
+        }
+
+        .main-menu .nav-link {
+            color: rgba(255, 255, 255, 0.86);
+            font-size: 14px;
+            letter-spacing: 0;
+            padding: 0;
+        }
+
+        .main-menu .nav-link.active,
+        .main-menu .nav-link:hover {
+            color: var(--gold);
+        }
+
+        .intro-page {
+            min-height: 575px;
+            display: flex;
+            align-items: center;
+            padding: 88px 0 110px;
+            background:
+                linear-gradient(90deg, rgba(255, 255, 255, 0.98) 0%, rgba(255, 255, 255, 0.9) 50%, rgba(255, 255, 255, 0.98) 100%),
+                url("image/bg_gioithieu.png") center bottom / cover no-repeat;
+        }
+
+        .intro-panel {
+            max-width: 780px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .eyebrow {
+            margin: 0;
+            color: var(--gold);
+            font-size: 30px;
+            font-style: italic;
+            font-weight: 800;
+            line-height: 1.05;
+            text-transform: uppercase;
+        }
+
+        .intro-subtitle {
+            margin-top: 4px;
+            color: var(--gold);
+            font-size: 13px;
+            letter-spacing: 1.3px;
+            text-transform: uppercase;
+        }
+
+        .title-rule {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin: -2px 0 20px;
+        }
+
+        .title-rule::before,
+        .title-rule::after {
+            content: "";
+            height: 1px;
+            background: var(--gold);
+            flex: 1 1 0;
+            max-width: 290px;
+        }
+
+        .title-rule span {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: var(--gold);
+            display: inline-block;
+        }
+
+        .intro-copy {
+            max-width: 690px;
+            margin: 0 auto;
+            color: #111111;
+            font-size: 13px;
+            line-height: 1.95;
+        }
+
+        .intro-copy p {
+            margin: 0 0 12px;
+        }
+
+        .site-footer {
+            background: var(--dark);
+            color: #ffffff;
+            padding: 42px 0 34px;
+        }
+
+        .footer-logo {
+            width: 175px;
+            margin-bottom: 16px;
+        }
+
+        .footer-text,
+        .footer-menu a,
+        .footer-contact {
+            color: rgba(255, 255, 255, 0.86);
+            font-size: 13px;
+            line-height: 1.7;
+            text-decoration: none;
+        }
+
+        .footer-menu {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: grid;
+            gap: 9px;
+        }
+
+        .footer-menu a:hover {
+            color: var(--gold);
+        }
+
+        .footer-heading {
+            color: #ffffff;
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+        }
+
+        .footer-map {
+            height: 120px;
+            border-radius: 7px;
+            background: linear-gradient(135deg, #d8e3ed, #9fc2d6);
+            color: #8a1c1c;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        @media (max-width: 991.98px) {
+            .site-header {
+                background: #171717;
+            }
+
+            .main-menu {
+                padding: 18px 0;
+                gap: 14px;
+            }
+
+            .intro-page {
+                min-height: auto;
+                padding: 70px 0 86px;
+            }
+        }
+
+        @media (max-width: 575.98px) {
+            .brand-logo {
+                width: 145px;
+            }
+
+            .eyebrow {
+                font-size: 26px;
+            }
+
+            .intro-copy {
+                font-size: 12px;
+                line-height: 1.8;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="site-header">
+        <div class="container">
+            <nav class="navbar navbar-expand-lg navbar-dark">
+                <a class="navbar-brand" href="index.html" aria-label="VACA MAXI">
+                    <img class="brand-logo" src="image/logo.png" alt="VACA MAXI">
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar"
+                    aria-controls="mainNavbar" aria-expanded="false" aria-label="Mở menu">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse justify-content-end" id="mainNavbar">
+                    <ul class="navbar-nav main-menu mb-2 mb-lg-0 align-items-lg-center">
+                        <li class="nav-item"><a class="nav-link" href="index.html">Trang chủ</a></li>
+                        <li class="nav-item"><a class="nav-link active" aria-current="page" href="gioi-thieu.html">Giới thiệu</a></li>
+                        <li class="nav-item"><a class="nav-link" href="chi-tiet-tin-tuc.html">Tin tức</a></li>
+                        <li class="nav-item"><a class="nav-link" href="san-pham.html">Sản phẩm</a></li>
+                        <li class="nav-item"><a class="nav-link" href="index.html#restaurant">Dịch vụ - nhà hàng</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#footer">Liên hệ</a></li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="intro-page" aria-labelledby="introTitle">
+            <div class="container">
+                <div class="intro-panel">
+                    <h1 class="eyebrow" id="introTitle">Giới thiệu</h1>
+                    <div class="intro-subtitle">Về VACA MAXI</div>
+                    <div class="title-rule" aria-hidden="true"><span></span></div>
+                    <div class="intro-copy">
+                        <p>
+                            VACA MAXI ra đời với khát vọng thay đổi cục diện ngành chăn nuôi Việt Nam. Trong bối cảnh
+                            người tiêu dùng ngày càng đòi hỏi cao về chất lượng thịt bò, ngành chăn nuôi trong nước vẫn
+                            còn nhiều hạn chế về giống, quy trình và năng suất. Với triết lý phát triển nông nghiệp chuẩn
+                            cao, đồng hành cùng chuyên gia hàng đầu thế giới, VACA MAXI đã đặt lên móng một hệ sinh thái
+                            chăn nuôi hiện đại, đồng bộ và bền vững. Không chỉ là nơi sản xuất bò giống, VACA MAXI còn là
+                            trung tâm chuyển giao công nghệ, lan tỏa tri thức và ứng dụng giá trị cho nông dân Việt.
+                        </p>
+                        <p>
+                            Song song với huyết thống bò giống và thịt bò cao cấp, VACA MAXI phát triển mảng rượu - kết
+                            nối giá trị cuối giá trị trong nông nghiệp. Rượu Tăng Tâm Cốc là tinh hoa từ nông sản chọn
+                            lọc, kết hợp với nghệ thuật chưng cất truyền thống, tạo nên loại rượu mang đậm bản sắc dân
+                            tộc.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer" id="footer">
+        <div class="container">
+            <div class="row g-4 align-items-start">
+                <div class="col-lg-5 col-md-6">
+                    <img class="footer-logo" src="image/logo.png" alt="VACA MAXI">
+                    <p class="footer-text mb-3">
+                        VACA MAXI ra đời với khát vọng thay đổi cục diện ngành chăn nuôi Việt Nam. Trong bối cảnh người
+                        tiêu dùng ngày càng đòi hỏi cao về chất lượng thịt bò, ngành chăn nuôi trong nước vẫn còn nhiều
+                        hạn chế về giống, quy trình và năng suất.
+                    </p>
+                    <div class="footer-contact">Địa chỉ: 166 Phạm Văn Đồng, P. Đông Ngạc, TP. Hà Nội</div>
+                    <div class="footer-contact">Hotline: 0983 38 1900 - Hỗ trợ Rượu</div>
+                    <div class="footer-contact">0988 06 1900 - Hỗ trợ về Bò</div>
+                    <div class="footer-contact">Email: info@vacamaxivn</div>
+                    <div class="footer-contact">Website: vacamaxi.vn</div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="footer-heading">Menu</div>
+                    <ul class="footer-menu">
+                        <li><a href="index.html">Trang chủ</a></li>
+                        <li><a href="gioi-thieu.html">Giới thiệu</a></li>
+                        <li><a href="chi-tiet-tin-tuc.html">Tin tức</a></li>
+                        <li><a href="san-pham.html">Sản phẩm</a></li>
+                        <li><a href="index.html#restaurant">Dịch vụ - nhà hàng</a></li>
+                        <li><a href="#footer">Liên hệ</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-4">
+                    <div class="footer-map">Vaca Maxi restaurant</div>
+                    <div class="footer-heading mt-3 mb-2">Mạng xã hội</div>
+                    <div class="footer-contact">Zalo - Facebook - YouTube</div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,17 @@
+<svg width="238" height="81" viewBox="0 0 238 81" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect width="238" height="81" fill="none"/>
+    <g transform="translate(11 9)">
+        <path d="M23 9 3 0l18 25 20-6Z" fill="#b3882b"/>
+        <path d="M61 9 81 0 63 25l-20-6Z" fill="#b3882b"/>
+        <path d="M19 17 34 2l8 10 8-10 15 15-7 22H26Z" fill="#eee3c1"/>
+        <path d="M26 25 42 14l16 11-6 31-10 9-10-9Z" fill="#121212"/>
+        <path d="M31 30 42 22l11 8-4 12H35Z" fill="#f7e9b3"/>
+        <path d="M34 45h16l-4 11-4 3-4-3Z" fill="#d6a92e"/>
+        <circle cx="34" cy="34" r="3" fill="#ffffff"/>
+        <circle cx="50" cy="34" r="3" fill="#ffffff"/>
+        <circle cx="35" cy="34" r="1.2" fill="#111111"/>
+        <circle cx="49" cy="34" r="1.2" fill="#111111"/>
+    </g>
+    <text x="99" y="36" fill="#ffffff" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700" letter-spacing="0">VA CA</text>
+    <text x="99" y="58" fill="#d6a92e" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700" letter-spacing="0">MAXI</text>
+</svg>
