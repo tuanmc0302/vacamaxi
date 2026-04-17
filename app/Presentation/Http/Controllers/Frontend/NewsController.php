@@ -18,10 +18,10 @@ class NewsController extends Controller
         $frontendData = $this->frontendData();
         $categories = $this->newsCategories();
 
+        $firstCategoryId = $categories->first()?->id;
         $postsByCategory = $categories->mapWithKeys(fn (Category $category): array => [
-            $category->id => $this->publishedPosts()
+            $category->id => $this->postsForCategory($category->id, $firstCategoryId)
                 ->with('category')
-                ->where('category_id', $category->id)
                 ->orderByDesc('published_at')
                 ->orderByDesc('id')
                 ->limit(8)
@@ -40,9 +40,8 @@ class NewsController extends Controller
         $frontendData = $this->frontendData();
         $category = $this->newsCategories()->firstWhere('slug', $categorySlug) ?? abort(404);
 
-        $posts = $this->publishedPosts()
+        $posts = $this->postsForCategory($category->id, $this->newsCategories()->first()?->id)
             ->with('category')
-            ->where('category_id', $category->id)
             ->orderByDesc('published_at')
             ->orderByDesc('id')
             ->paginate(12);
@@ -96,6 +95,18 @@ class NewsController extends Controller
             ->where(function (Builder $query): void {
                 $query->whereNull('published_at')
                     ->orWhere('published_at', '<=', now());
+            });
+    }
+
+    private function postsForCategory(int $categoryId, ?int $firstCategoryId): Builder
+    {
+        return $this->publishedPosts()
+            ->where(function (Builder $query) use ($categoryId, $firstCategoryId): void {
+                $query->where('category_id', $categoryId);
+
+                if ($firstCategoryId === $categoryId) {
+                    $query->orWhereNull('category_id');
+                }
             });
     }
 
