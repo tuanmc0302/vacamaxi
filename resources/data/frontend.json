@@ -1,59 +1,17 @@
 {
   "nav": [
-    {
-      "label": "Trang chủ",
-      "url": "/",
-      "key": "home"
-    },
-    {
-      "label": "Giới thiệu",
-      "url": "/gioi-thieu",
-      "key": "about",
-      "children": [
-        {
-          "label": "Nhà máy",
-          "url": "/gioi-thieu/nha-may",
-          "key": "factory"
-        },
-        {
-          "label": "Trang trại",
-          "url": "/gioi-thieu/trang-trai",
-          "key": "farm"
-        }
-      ]
-    },
-    {
-      "label": "Sản phẩm",
-      "url": "/san-pham",
-      "key": "product",
-      "children": [
-        {
-          "label": "Rượu",
-          "url": "/san-pham/ruou",
-          "key": "wine"
-        },
-        {
-          "label": "Thịt bò",
-          "url": "/san-pham/thit-bo",
-          "key": "beef"
-        }
-      ]
-    },
-    {
-      "label": "Dịch vụ - Nhà hàng",
-      "url": "/#restaurant",
-      "key": "restaurant"
-    },
-    {
-      "label": "Tin Tức",
-      "url": "/tin-tuc/ruou-trang-tam-coc",
-      "key": "news"
-    },
-    {
-      "label": "Liên hệ",
-      "url": "/gioi-thieu#footer",
-      "key": "contact"
-    }
+    {"label": "Trang chủ", "url": "/", "key": "home"},
+    {"label": "Giới thiệu", "url": "/gioi-thieu", "key": "about", "children": [
+      {"label": "Nhà máy", "url": "/gioi-thieu/nha-may", "key": "factory"},
+      {"label": "Trang trại", "url": "/gioi-thieu/trang-trai", "key": "farm"}
+    ]},
+    {"label": "Sản phẩm", "url": "/san-pham", "key": "product", "children": [
+      {"label": "Rượu", "url": "/san-pham/ruou", "key": "wine"},
+      {"label": "Thịt bò", "url": "/san-pham/thit-bo", "key": "beef"}
+    ]},
+    {"label": "Dịch vụ - Nhà hàng", "url": "/#restaurant", "key": "restaurant"},
+    {"label": "Tin Tức", "url": "/tin-tuc/ruou-trang-tam-coc", "key": "news"},
+    {"label": "Liên hệ", "url": "/gioi-thieu#footer", "key": "contact"}
   ],
   "footer": {
     "intro": "VACA MAXI ra đời với khát vọng thay đổi cục diện ngành chăn nuôi Việt Nam. Trong bối cảnh người tiêu dùng ngày càng đòi hỏi cao về chất lượng thịt bò, ngành chăn nuôi trong nước vẫn còn nhiều hạn chế về giống, quy trình và năng suất.",

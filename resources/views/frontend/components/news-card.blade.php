@@ -3,7 +3,7 @@
 @endphp
 <article class="news-card">
     <img src="{{ $item['image'] }}" alt="{{ $item['title'] }}">
-    <div class="news-body">
+    <div class="news-card-body">
         <h3>{{ $item['title'] }}</h3>
         <p>{{ $description }}</p>
         <div class="news-meta">

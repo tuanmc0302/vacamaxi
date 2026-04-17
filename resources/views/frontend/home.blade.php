@@ -10,7 +10,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
-    <title>Hello, world!</title>
+    <title>VACA MAXI</title>
     <style>
         body {
             margin: 0;
@@ -1203,233 +1203,26 @@
 </head>
 
 <body>
-    @php
-        $frontendData = json_decode(file_get_contents(resource_path('data/frontend.json')), true);
-    @endphp
-    @include('frontend.partials.header', ['active' => 'home', 'nav' => $frontendData['nav']])
-    <main>
-        <section class="hero-banner">
-            <div class="container">
-                <div class="hero-content">
-                    <p class="hero-eyebrow">NhÃ  hÃ ng 5 sao Vaca Maxi</p>
-                    <h1 class="hero-title">VACA MAXI lÃ  nhÃ  hÃ ng steak &amp; grill cao cáº¥p</h1>
-                    <p class="hero-copy">NÆ¡i áº©m thá»±c khÃ´ng chá»‰ Ä‘Æ°á»£c thÆ°á»Ÿng thá»©c báº±ng vá»‹ giÃ¡c, mÃ  cÃ²n Ä‘Æ°á»£c cáº£m nháº­n báº±ng tháº©m má»¹, khÃ´ng gian vÃ  chiá»u sÃ¢u cá»§a cÃ¢u chuyá»‡n phÃ­a sau má»—i lá»±a chá»n.</p>
-                    <a class="hero-action" href="#">KHÃM PHÃ NGAY</a>
-                </div>
-            </div>
-        </section>
-        <section class="about-section">
-            <div class="container">
-                <div class="row align-items-center">
-                    <div class="col-12 col-lg-5">
-                        <div class="about-gallery">
-                            <img class="about-photo" src="/image/Rectangle%202.png" alt="BÃ² giá»‘ng VACA MAXI">
-                            <img class="about-photo" src="/image/Rectangle%203.png" alt="Thá»‹t bÃ² cháº¥t lÆ°á»£ng cao">
-                            <img class="about-photo" src="/image/Rectangle%204.png" alt="RÆ°á»£u vÃ  mÃ³n Äƒn táº¡i VACA MAXI">
-                            <img class="about-photo" src="/image/Rectangle%205.png" alt="KhÃ´ng gian nhÃ  hÃ ng VACA MAXI">
-                        </div>
-                    </div>
-                    <div class="col-12 col-lg-7">
-                        <div class="about-content">
-                            <div class="section-heading">
-                                <h2>Vá»€ VACA MAXI</h2>
-                                <span></span>
-                            </div>
-                            <p class="about-text"><strong>VACA MAXI</strong> tiÃªn phong kiáº¿n táº¡o há»‡ sinh thÃ¡i chÄƒn nuÃ´i cÃ´ng nghá»‡ cao táº¡i Viá»‡t Nam. Há»£p tÃ¡c cÃ¹ng chuyÃªn gia hÃ ng Ä‘áº§u Argentina, chÃºng tÃ´i phÃ¡t triá»ƒn bÃ² giá»‘ng vÃ  thá»‹t bÃ² cháº¥t lÆ°á»£ng cao theo chuáº©n quá»‘c táº¿. Má»Ÿ rá»™ng chuá»—i giÃ¡ trá»‹ vá»›i rÆ°á»£u cao cáº¥p vÃ  nhÃ  hÃ ng tinh tuyá»ƒn, VACA MAXI mang Ä‘áº¿n giÃ¡ trá»‹ bá»n vá»¯ng vÃ  tráº£i nghiá»‡m Ä‘áº³ng cáº¥p.</p>
-                            <a class="about-action" href="#">TÃ¬m hiá»ƒu thÃªm</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <section class="breeds-section">
-            <div class="container">
-                <div class="row breeds-intro align-items-start">
-                    <div class="col-lg-6">
-                        <p class="breeds-kicker">GIá»NG BÃ’ Cá»¦A CHÃšNG TÃ”I</p>
-                        <h2 class="breeds-title"><span>CÃC GIá»NG BÃ’</span> VACA MAXI</h2>
-                    </div>
-                    <div class="col-lg-6">
-                        <p class="breeds-description">Má»—i giá»‘ng bÃ² táº¡i VACA MAXI lÃ  káº¿t quáº£ cá»§a quÃ¡ trÃ¬nh chá»n lá»c vÃ  phÃ¡t triá»ƒn di truyá»n nghiÃªm ngáº·t, Ä‘áº£m báº£o nÄƒng xuáº¥t vÃ  cháº¥t lÆ°á»£ng vÆ°á»£t trá»™i</p>
-                    </div>
-                </div>
-                <div class="breed-grid">
-                    @foreach ($frontendData['breeds'] as $item)
-                        @include('frontend.components.product-card', ['item' => $item, 'class' => 'breed-card'])
-                    @endforeach
-                </div>
-                <div class="breeds-more">
-                    <a class="about-action" href="#">XEM THÃŠM</a>
-                </div>
-            </div>
-        </section>
-        <section class="expert-section">
-            <div class="container">
-                <div class="row align-items-center">
-                    <div class="col-lg-7 col-12">
-                        <div class="expert-content">
-                            <div class="expert-title">
-                                <h2>Äá»˜I NGÅ¨ CHUYÃŠN GIA Cá»¦A VACA MAXI</h2>
-                                <span></span>
-                            </div>
-                            <p class="expert-lead">Há»£p tÃ¡c giá»¯a Vaca Maxi vÃ  chuyÃªn gia Argentina</p>
-                            <p class="expert-text">Há»‡ thá»‘ng sáº£n xuáº¥t chÄƒn nuÃ´i Ä‘Æ°á»£c thiáº¿t káº¿ vÃ  triá»ƒn khai bá»Ÿi Ä‘á»™i ngÅ© chuyÃªn gia hÃ ng Ä‘áº§u tháº¿ giá»›i. CÃ¡c chuyÃªn gia cÃ³ chuyÃªn mÃ´n vá» dinh dÆ°á»¡ng Ä‘á»™ng váº­t, sá»©c khá»e bÃ² vÃ  cháº¥t lÆ°á»£ng thá»‹t, chá»‹u trÃ¡ch nhiá»‡m giÃ¡m sÃ¡t toÃ n bá»™ quy trÃ¬nh â€” tá»« cháº©n Ä‘oÃ¡n thai ká»³, sinh sáº£n, Ä‘áº¿n giai Ä‘oáº¡n vá»— bÃ©o vÃ  láº¥y thá»‹t. Nhá»¯ng chuyÃªn gia nÃ y khÃ´ng chá»‰ dáº«n Ä‘áº§u táº¡i Argentina mÃ  cÃ²n Ä‘Æ°á»£c cÃ´ng nháº­n trÃªn toÃ n tháº¿ giá»›i, liÃªn tá»¥c tÆ° váº¥n vÃ  chuyá»ƒn giao cÃ´ng nghá»‡ cho cÃ¡c quá»‘c gia cÃ³ ná»n chÄƒn nuÃ´i tiÃªn tiáº¿n</p>
-                            <a class="about-action" href="#">TÃ¬m hiá»ƒu thÃªm</a>
-                        </div>
-                    </div>
-                    <div class="col-12 col-lg-5">
-                        <div class="about-gallery">
-                            <img class="about-photo" src="/image/Rectangle%202.png" alt="BÃ² giá»‘ng VACA MAXI">
-                            <img class="about-photo" src="/image/Rectangle%203.png" alt="Thá»‹t bÃ² cháº¥t lÆ°á»£ng cao">
-                            <img class="about-photo" src="/image/Rectangle%204.png" alt="RÆ°á»£u vÃ  mÃ³n Äƒn táº¡i VACA MAXI">
-                            <img class="about-photo" src="/image/Rectangle%205.png" alt="KhÃ´ng gian nhÃ  hÃ ng VACA MAXI">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <section class="product-section">
-            <div class="container">
-                <div class="row breeds-intro align-items-start">
-                    <div class="col-lg-6">
-                        <p class="breeds-kicker">Sáº¢N PHáº¨M Vá»€ THá»ŠT BÃ’</p>
-                        <h2 class="product-title">CHáº¤T LÆ¯á»¢NG THá»ŠT BÃ’ <span>VACA MAXI</span></h2>
-                    </div>
-                    <div class="col-lg-6">
-                        <p class="breeds-description">Má»—i giá»‘ng bÃ² táº¡i VACA MAXI lÃ  káº¿t quáº£ cá»§a quÃ¡ trÃ¬nh chá»n lá»c vÃ  phÃ¡t triá»ƒn di truyá»n nghiÃªm ngáº·t, Ä‘áº£m báº£o nÄƒng xuáº¥t vÃ  cháº¥t lÆ°á»£ng vÆ°á»£t trá»™i</p>
-                    </div>
-                </div>
-                <div class="breed-grid">
-                    @foreach ($frontendData['beefProducts'] as $item)
-                        @include('frontend.components.product-card', ['item' => $item, 'class' => 'breed-card product-card'])
-                    @endforeach
-                </div>
-                <div class="breeds-more">
-                    <a class="about-action" href="#">XEM THÃŠM</a>
-                </div>
-            </div>
-        </section>
-        <section class="product-section">
-            <div class="container">
-                <div class="row breeds-intro align-items-start">
-                    <div class="col-lg-6">
-                        <p class="breeds-kicker">TINH HOA NÃ”NG NGHIá»†P</p>
-                        <h2 class="product-title"><span>Sáº¢N PHáº¨M RÆ¯á»¢U</span> VACA MAXI</h2>
-                    </div>
-                    <div class="col-lg-6">
-                        <p class="breeds-description">RÆ°á»£u truyá»n thá»‘ng do VACA MAXI phÃ¡t triá»ƒn Ä‘Æ°á»£c náº¥u tá»« 3 loáº¡i ngÅ© cá»‘c quen thuá»™c vá»›i ngÆ°á»i Viá»‡t</p>
-                    </div>
-                </div>
-                <div class="breed-grid">
-                    @foreach ($frontendData['wineProducts'] as $item)
-                        @include('frontend.components.product-card', ['item' => $item, 'class' => 'breed-card product-card'])
-                    @endforeach
-                </div>
-                <div class="breeds-more">
-                    <a class="about-action" href="#">XEM THÃŠM</a>
-                </div>
-            </div>
-        </section>
-        <section class="restaurant-section">
-            <div class="container">
-                <div class="restaurant-heading">
-                    <h2>NHÃ€ HÃ€NG 5 SAO VACA MAXI</h2>
-                    <span></span>
-                </div>
-                <p class="restaurant-copy">NÆ¡i áº©m thá»±c khÃ´ng chá»‰ Ä‘Æ°á»£c thÆ°á»Ÿng thá»©c báº±ng vá»‹ giÃ¡c, mÃ  cÃ²n Ä‘Æ°á»£c cáº£m nháº­n báº±ng tháº©m má»¹, khÃ´ng gian vÃ  chiá»u sÃ¢u cá»§a cÃ¢u chuyá»‡n phÃ­a sau má»—i lá»±a chá»n.</p>
-                <div class="restaurant-gallery">
-                    <img src="/image/Rectangle%202.png" alt="KhÃ´ng gian nhÃ  hÃ ng VACA MAXI">
-                    <img src="/image/Rectangle%203.png" alt="MÃ³n steak VACA MAXI">
-                    <img src="/image/Rectangle%204.png" alt="KhÃ´ng gian thÆ°á»Ÿng thá»©c VACA MAXI">
-                    <img src="/image/Rectangle%205.png" alt="MÃ³n nÆ°á»›ng VACA MAXI">
-                </div>
-                <div class="restaurant-dots" aria-hidden="true">
-                    <i></i>
-                    <i></i>
-                    <i></i>
-                    <span></span>
-                    <i></i>
-                </div>
-            </div>
-        </section>
-        <section class="testimonial-section">
-            <div class="container">
-                <div class="testimonial-heading">
-                    <h2>ÄÃNH GIÃ Cá»¦A KHÃCH HÃ€NG</h2>
-                    <p>trÃªn Google Maps</p>
-                </div>
-                <div class="container">
-                    <div class="testimonial-main">
-                        <article class="testimonial-card">
-                            <div class="d-flex gap-3 mt-3 align-items-center">
-                                <img class="testimonial-avatar" src="/image/Rectangle%202.png" alt="HoÃ ng Trang">
-                                <div class="testimonial-item">
-                                    <p class="testimonial-role mt-1">KhÃ¡ch hÃ ng</p>
-                                <h3 class="testimonial-name mt-1 mb-0">HoÃ ng Trang</h3>
-                                </div>
-                                
-                            </div>
-                            <p class="testimonial-text mt-3">â€œThá»‹t bÃ² Vacamax tháº­t sá»± cháº¥t lÆ°á»£ng! BÃ² má»m, tÆ°Æ¡i vÃ  Ä‘Æ°á»£c nÃªm náº¿m ráº¥t vá»«a miá»‡ng. MÃ¬nh thÃ­ch nháº¥t lÃ  cÃ¡c mÃ³n bÃ² nÆ°á»›ng vÃ  bÃ² sá»‘t, Äƒn khÃ´ng bá»‹ ngáº¥yâ€</p>
-                            <span class="testimonial-quote">â€</span>
-                        </article>
-                        <article class="testimonial-card">
-                            <div class="d-flex gap-3 mt-3 align-items-center">
-                                <img class="testimonial-avatar" src="/image/Rectangle%203.png" alt="TÃ¹ng phan">
-                                <div class="testimonial-item">
-                                    <p class="testimonial-role mt-1">KhÃ¡ch hÃ ng</p>
-                                    <h3 class="testimonial-name mt-1 mb-0">TÃ¹ng phan</h3>
-                                </div>
-                            </div>
-                            <p class="testimonial-text mt-3">â€œÄÃºng chuáº©n quÃ¡n bÃ² cho ngÆ°á»i mÃª thá»‹t. Pháº§n Äƒn Ä‘áº§y Ä‘áº·n, giÃ¡ cáº£ há»£p lÃ½ so vá»›i cháº¥t lÆ°á»£ng. NhÃ¢n viÃªn thÃ¢n thiá»‡n, tÆ° váº¥n mÃ³n ráº¥t cÃ³ tÃ¢m. Äi nhÃ³m báº¡n hay gia Ä‘Ã¬nh Ä‘á»u há»£pâ€</p>
-                            <span class="testimonial-quote">â€</span>
-                        </article>
-                    </div>
-                </div>
-                <div class="restaurant-dots" aria-hidden="true">
-                    <i></i>
-                    <i></i>
-                    <i></i>
-                    <span></span>
-                    <i></i>
-                </div>
-            </div>
-        </section>
-    </main>
-    <section class="news-section">
-        <div class="container">
-            <div class="row news-intro align-items-start">
-                <div class="col-lg-6">
-                    <p class="news-kicker">TIN Tá»¨C Má»šI NHáº¤T</p>
-                    <h2 class="news-title">GÃ“C NHÃŒN &amp; <span>XU HÆ¯á»šNG</span></h2>
-                </div>
-                <div class="col-lg-6">
-                    <p class="news-description">Tin Tá»©c Má»›i Nháº¥t â€“ GÃ³c NhÃ¬n Tá»« NÃ´ng Nghiá»‡p Bá»n Vá»¯ng Äáº¿n NhÃ  HÃ ng Hiá»‡n Äáº¡i, Káº¿t Ná»‘i VÄƒn HÃ³a áº¨m Thá»±c VÃ  Nhá»¯ng Xu HÆ°á»›ng RÆ°á»£u Äang Äá»‹nh HÃ¬nh Thá»‹ TrÆ°á»ng</p>
-                </div>
-            </div>
-            <div class="news-grid">
-                    @foreach ($frontendData['news'] as $item)
-                        @include('frontend.components.news-card', ['item' => $item])
-                    @endforeach
-                </div>
-                <div class="news-more">
-                <a class="about-action" href="/tin-tuc/ruou-trang-tam-coc">XEM THÃŠM</a>
-            </div>
-        </div>
-    </section>
-        @include('frontend.partials.footer', ['footer' => $frontendData['footer'], 'nav' => $frontendData['nav']])
-    <!-- Optional JavaScript; choose one of the two! -->
-
-    <!-- Option 1: Bootstrap Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-        crossorigin="anonymous"></script>
-
-    <!-- Option 2: Separate Popper and Bootstrap JS -->
-    <!--
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
-    -->
+@php
+    $frontendData = $frontendData ?? json_decode(file_get_contents(resource_path('data/frontend.json')), true) ?: [];
+    $widgets = $widgets ?? collect();
+    $nav = $frontendData['nav'] ?? [];
+    $footer = $frontendData['footer'] ?? [];
+    $active = 'home';
+@endphp
+@include('frontend.partials.header')
+<main>
+    @include('frontend.widgets.banner_home', ['widget' => $widgets->get('banner_home')])
+    @include('frontend.widgets.about_me_home', ['widget' => $widgets->get('about_me_home')])
+    @include('frontend.widgets.product_option_one', ['widget' => $widgets->get('product_option_one'), 'items' => $frontendData['breeds'] ?? []])
+    @include('frontend.widgets.about_team_home', ['widget' => $widgets->get('about_team_home')])
+    @include('frontend.widgets.product_option_two', ['widget' => $widgets->get('product_option_two'), 'items' => $frontendData['beefProducts'] ?? []])
+    @include('frontend.widgets.product_option_three', ['widget' => $widgets->get('product_option_three'), 'items' => $frontendData['wineProducts'] ?? []])
+    @include('frontend.widgets.about_restaurant_home', ['widget' => $widgets->get('about_restaurant_home')])
+    @include('frontend.widgets.feedback_home', ['widget' => $widgets->get('feedback_home')])
+    @include('frontend.widgets.news_home', ['widget' => $widgets->get('news_home'), 'news' => $frontendData['news'] ?? []])
+</main>
+@include('frontend.partials.footer')
+@include('frontend.partials.floating-contact')
 </body>
-
 </html>
-
