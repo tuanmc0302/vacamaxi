@@ -3,6 +3,7 @@
 namespace App\Presentation\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use App\Models\FrontendWidget;
 use App\Models\Product;
 use Illuminate\Support\Collection;
@@ -21,6 +22,7 @@ class HomeController extends Controller
     public function __invoke(): View
     {
         $frontendData = json_decode(file_get_contents(resource_path('data/frontend.json')), true) ?: [];
+        $frontendData['nav'] = $this->withProductNav($frontendData['nav'] ?? []);
 
         try {
             $widgets = FrontendWidget::query()
@@ -51,6 +53,7 @@ class HomeController extends Controller
             }
 
             $products = Product::query()
+                ->with('category')
                 ->where('is_active', true)
                 ->where('category_id', $categoryId)
                 ->latest('id')
@@ -65,10 +68,42 @@ class HomeController extends Controller
                 'image' => $product->image ? asset($product->image) : asset('image/Rectangle 11.png'),
                 'title' => $product->name,
                 'description' => $product->short_description ?: Str::limit(strip_tags($product->description ?? ''), 90),
-                'url' => route('frontend.product-detail'),
+                'url' => $product->category
+                    ? route('frontend.product.show', [$product->category->slug, $product->slug])
+                    : route('frontend.products.index'),
             ])->all();
         }
 
         return $items;
+    }
+
+    private function withProductNav(array $nav): array
+    {
+        try {
+            $children = Category::query()
+                ->where('module', Category::MODULE_PRODUCT)
+                ->where('is_active', true)
+                ->orderBy('sort_order')
+                ->orderBy('name')
+                ->get()
+                ->map(fn (Category $category): array => [
+                    'label' => $category->name,
+                    'url' => route('frontend.products.category', $category->slug),
+                    'key' => 'product-' . $category->slug,
+                ])
+                ->values()
+                ->all();
+        } catch (Throwable) {
+            return $nav;
+        }
+
+        foreach ($nav as &$item) {
+            if (($item['key'] ?? '') === 'product') {
+                $item['url'] = route('frontend.products.index');
+                $item['children'] = $children;
+            }
+        }
+
+        return $nav;
     }
 }
