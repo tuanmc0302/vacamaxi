@@ -6,19 +6,15 @@
     $buttonText = data_get($widget, 'settings.button_text', 'XEM THÊM');
     $buttonUrl = data_get($widget, 'settings.button_url', '/san-pham');
     $items = $items ?? [];
-    $sectionClass = $sectionClass ?? 'breeds-section';
-    $titleClass = $titleClass ?? 'breeds-title';
-    $gridClass = $gridClass ?? 'breed-grid';
-    $cardClass = $cardClass ?? 'breed-card';
 @endphp
-<section class="{{ $sectionClass }}">
+<section class="breeds-section">
     <div class="container">
         <div class="row breeds-intro align-items-start g-4">
             <div class="col-lg-5">
                 @if($subTitle)
                     <p class="breeds-kicker">{{ $subTitle }}</p>
                 @endif
-                <h2 class="{{ $titleClass }}">
+                <h2 class="breeds-title">
                     @if($highlight && str_contains($title, $highlight))
                         {!! e(str_replace($highlight, '', $title)) !!}<span>{{ $highlight }}</span>
                     @else
@@ -32,9 +28,9 @@
                 @endif
             </div>
         </div>
-        <div class="{{ $gridClass }}">
+        <div class="breed-grid">
             @foreach($items as $item)
-                @include('frontend.components.product-card', ['item' => $item, 'class' => $cardClass])
+                @include('frontend.components.product-card', ['item' => $item, 'class' => 'breed-card'])
             @endforeach
         </div>
         <div class="breeds-more">
