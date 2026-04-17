@@ -3,10 +3,12 @@
 namespace App\Presentation\Http\Controllers\Backend\Content;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use App\Models\FrontendWidget;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class WidgetController extends Controller
@@ -22,6 +24,13 @@ class WidgetController extends Controller
     {
         return view('backend.content.widgets.edit', [
             'widget' => $widget,
+            'productCategories' => Category::query()
+                ->where('module', Category::MODULE_PRODUCT)
+                ->where('is_active', true)
+                ->withCount('products')
+                ->orderBy('sort_order')
+                ->orderBy('name')
+                ->get(),
         ]);
     }
 
@@ -33,7 +42,14 @@ class WidgetController extends Controller
             'description' => ['nullable', 'string'],
             'sort_order' => ['nullable', 'integer', 'min:0'],
             'is_active' => ['nullable', 'boolean'],
+            'category_id' => ['nullable', 'integer', 'exists:categories,id'],
         ]);
+
+        $settings = $widget->settings ?? [];
+
+        if (Str::startsWith($widget->key, 'product_option_')) {
+            $settings['category_id'] = $validated['category_id'] ?? null;
+        }
 
         $widget->update([
             'title' => $validated['title'] ?? null,
@@ -41,6 +57,7 @@ class WidgetController extends Controller
             'description' => $validated['description'] ?? null,
             'sort_order' => (int) ($validated['sort_order'] ?? 0),
             'is_active' => $request->boolean('is_active'),
+            'settings' => $settings,
         ]);
 
         return redirect()->route('admin.widgets.index')->with('status', 'Đã cập nhật widget trang chủ.');

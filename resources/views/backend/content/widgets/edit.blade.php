@@ -5,6 +5,11 @@
 @section('page_heading', 'Sửa widget trang chủ')
 
 @section('content')
+    @php
+        $isProductOption = str($widget->key)->startsWith('product_option_');
+        $selectedCategoryId = old('category_id', data_get($widget->settings, 'category_id'));
+    @endphp
+
     <x-backend.panel class="mx-auto max-w-4xl">
         <x-backend.page-header kicker="{{ $widget->key }}" :title="$widget->title ?: 'Widget trang chủ'">
             <a href="{{ route('admin.widgets.index') }}" class="inline-flex items-center rounded-xl border border-slate-300 px-5 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-50">Quay lại</a>
@@ -23,6 +28,21 @@
                 <label for="description" class="mb-2 block text-sm font-medium text-slate-700">Description</label>
                 <textarea id="description" name="description" rows="8" class="block w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900 shadow-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100">{{ old('description', $widget->description) }}</textarea>
             </div>
+
+            @if ($isProductOption)
+                <div>
+                    <label for="category_id" class="mb-2 block text-sm font-medium text-slate-700">Danh mục sản phẩm hiển thị</label>
+                    <select id="category_id" name="category_id" class="block w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900 shadow-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100">
+                        <option value="">Dùng dữ liệu mặc định</option>
+                        @foreach ($productCategories as $category)
+                            <option value="{{ $category->id }}" @selected((string) $selectedCategoryId === (string) $category->id)>
+                                {{ $category->name }} ({{ $category->products_count }} sản phẩm)
+                            </option>
+                        @endforeach
+                    </select>
+                    <p class="mt-2 text-xs text-slate-500">Widget sẽ lấy 4 sản phẩm mới nhất thuộc danh mục được chọn.</p>
+                </div>
+            @endif
 
             <div class="grid gap-5 md:grid-cols-2">
                 <x-backend.form.input id="sort_order" name="sort_order" type="number" label="Thứ tự" :value="$widget->sort_order" />

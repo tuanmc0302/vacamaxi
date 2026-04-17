@@ -240,7 +240,7 @@
             font-size: 34px;
             font-weight: 400;
             line-height: 1;
-            letter-spacing: 4px;
+            letter-spacing: 2px;
             white-space: nowrap;
         }
 
@@ -327,15 +327,16 @@
 
         .breeds-title span {
             color: #e7a900;
+            margin-left: 6px;
         }
 
         .breeds-description {
-            max-width: 680px;
             margin: 0;
             color: #1c1c1c;
             font-size: 16px;
             line-height: 1.35;
             letter-spacing: 1px;
+            text-align: right;
         }
 
         .breed-grid {
@@ -649,7 +650,6 @@
         }
 
         .testimonial-wrap {
-            max-width: 980px;
             margin: 0 auto;
             display: grid;
             grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1214,10 +1214,10 @@
 <main>
     @include('frontend.widgets.banner_home', ['widget' => $widgets->get('banner_home')])
     @include('frontend.widgets.about_me_home', ['widget' => $widgets->get('about_me_home')])
-    @include('frontend.widgets.product_option_one', ['widget' => $widgets->get('product_option_one'), 'items' => $frontendData['breeds'] ?? []])
+    @include('frontend.widgets.product_option_one', ['widget' => $widgets->get('product_option_one'), 'items' => $productOptionItems['product_option_one'] ?? $frontendData['breeds'] ?? []])
     @include('frontend.widgets.about_team_home', ['widget' => $widgets->get('about_team_home')])
-    @include('frontend.widgets.product_option_two', ['widget' => $widgets->get('product_option_two'), 'items' => $frontendData['beefProducts'] ?? []])
-    @include('frontend.widgets.product_option_three', ['widget' => $widgets->get('product_option_three'), 'items' => $frontendData['wineProducts'] ?? []])
+    @include('frontend.widgets.product_option_two', ['widget' => $widgets->get('product_option_two'), 'items' => $productOptionItems['product_option_two'] ?? $frontendData['beefProducts'] ?? []])
+    @include('frontend.widgets.product_option_three', ['widget' => $widgets->get('product_option_three'), 'items' => $productOptionItems['product_option_three'] ?? $frontendData['wineProducts'] ?? []])
     @include('frontend.widgets.about_restaurant_home', ['widget' => $widgets->get('about_restaurant_home')])
     @include('frontend.widgets.feedback_home', ['widget' => $widgets->get('feedback_home')])
     @include('frontend.widgets.news_home', ['widget' => $widgets->get('news_home'), 'news' => $frontendData['news'] ?? []])

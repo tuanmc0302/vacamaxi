@@ -1,6 +1,37 @@
 @php
     $backendUser = auth()->user();
+    $productMenuCategories = collect();
+
+    if ($backendUser?->hasPermission('admin.products.view')) {
+        try {
+            $productMenuCategories = \App\Models\Category::query()
+                ->where('module', \App\Models\Category::MODULE_PRODUCT)
+                ->where('is_active', true)
+                ->has('products', '>=', 4)
+                ->withCount('products')
+                ->orderBy('sort_order')
+                ->orderBy('name')
+                ->get();
+        } catch (\Throwable) {
+            $productMenuCategories = collect();
+        }
+    }
+
     $menuItems = collect(config('menu_aside_backend', []))
+        ->map(function (array $item) use ($productMenuCategories) {
+            if (($item['route'] ?? null) === 'admin.products.index' && $productMenuCategories->isNotEmpty()) {
+                $item['children'] = $productMenuCategories
+                    ->map(fn ($category) => [
+                        'title' => $category->name . ' (' . $category->products_count . ')',
+                        'route' => 'admin.products.index',
+                        'params' => ['category_id' => $category->id],
+                        'permission' => 'admin.products.view',
+                    ])
+                    ->all();
+            }
+
+            return $item;
+        })
         ->filter(fn (array $item) => ! isset($item['permission']) || $backendUser?->hasPermission($item['permission']))
         ->values();
 
@@ -53,6 +84,8 @@
             background: rgb(37 99 235);
             color: white;
         }
+        .admin-menu-details > summary { list-style: none; }
+        .admin-menu-details > summary::-webkit-details-marker { display: none; }
     </style>
 </head>
 <body class="min-h-screen bg-slate-50 text-slate-900">
@@ -68,13 +101,51 @@
                 <nav class="space-y-1 px-4 py-4">
                     @foreach ($menuItems as $item)
                         @php
-                            $active = request()->routeIs($item['route']) || request()->routeIs(str($item['route'])->beforeLast('.')->append('.*')->toString());
+                            $children = collect($item['children'] ?? [])
+                                ->filter(fn (array $child) => ! isset($child['permission']) || $backendUser?->hasPermission($child['permission']))
+                                ->values();
+                            $routePrefix = str($item['route'])->beforeLast('.')->append('.*')->toString();
+                            $itemActive = request()->routeIs($item['route']) || request()->routeIs($routePrefix);
+                            $childActive = $children->contains(function (array $child) {
+                                if (! request()->routeIs($child['route'])) {
+                                    return false;
+                                }
+
+                                $params = $child['params'] ?? [];
+
+                                return ! isset($params['category_id']) || (string) request('category_id') === (string) $params['category_id'];
+                            });
+                            $active = $itemActive || $childActive;
                             $icon = $iconMap[$item['icon']] ?? $iconMap['home'];
+                            $baseClass = $active ? 'bg-blue-50 text-blue-700' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900';
                         @endphp
-                        <a href="{{ route($item['route']) }}" class="{{ $active ? 'bg-blue-50 text-blue-700' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900' }} flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition">
-                            <span class="shrink-0">{!! $icon !!}</span>
-                            <span>{{ $item['title'] }}</span>
-                        </a>
+
+                        @if ($children->isNotEmpty())
+                            <details class="admin-menu-details group rounded-xl" {{ $active ? 'open' : '' }}>
+                                <summary class="{{ $baseClass }} flex cursor-pointer items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition">
+                                    <span class="shrink-0">{!! $icon !!}</span>
+                                    <span class="flex-1">{{ $item['title'] }}</span>
+                                    <svg viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4 transition group-open:rotate-180">
+                                        <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 11.168l3.71-3.938a.75.75 0 1 1 1.08 1.04l-4.25 4.5a.75.75 0 0 1-1.08 0l-4.25-4.5a.75.75 0 0 1 .02-1.06Z" clip-rule="evenodd" />
+                                    </svg>
+                                </summary>
+                                <div class="mt-1 space-y-1 pl-11">
+                                    <a href="{{ route($item['route'], $item['params'] ?? []) }}" class="{{ $itemActive && ! request('category_id') ? 'bg-blue-50 text-blue-700' : 'text-slate-500 hover:bg-slate-100 hover:text-slate-900' }} block rounded-lg px-3 py-2 text-xs font-medium transition">Tất cả sản phẩm</a>
+                                    @foreach ($children as $child)
+                                        @php
+                                            $params = $child['params'] ?? [];
+                                            $isChildActive = request()->routeIs($child['route']) && (! isset($params['category_id']) || (string) request('category_id') === (string) $params['category_id']);
+                                        @endphp
+                                        <a href="{{ route($child['route'], $params) }}" class="{{ $isChildActive ? 'bg-blue-50 text-blue-700' : 'text-slate-500 hover:bg-slate-100 hover:text-slate-900' }} block rounded-lg px-3 py-2 text-xs font-medium transition">{{ $child['title'] }}</a>
+                                    @endforeach
+                                </div>
+                            </details>
+                        @else
+                            <a href="{{ route($item['route'], $item['params'] ?? []) }}" class="{{ $baseClass }} flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition">
+                                <span class="shrink-0">{!! $icon !!}</span>
+                                <span>{{ $item['title'] }}</span>
+                            </a>
+                        @endif
                     @endforeach
                 </nav>
             </aside>
