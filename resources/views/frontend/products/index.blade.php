@@ -1,21 +1,16 @@
-<!doctype html>
-<html lang="vi">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Tất cả sản phẩm - VACA MAXI</title>
-    <meta name="description" content="Danh sách tất cả sản phẩm VACA MAXI">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    @include('frontend.products._styles')
-</head>
-<body>
+@extends('frontend.master')
+
 @php
-    $nav = $frontendData['nav'] ?? [];
+    $pageTitle = 'Tất cả sản phẩm - VACA MAXI';
+    $metaDescription = 'Danh sách tất cả sản phẩm VACA MAXI';
     $active = 'product';
 @endphp
-@include('frontend.partials.header')
 
-<main>
+@push('styles')
+    @include('frontend.products._styles')
+@endpush
+
+@section('content')
     <section class="page-hero">
         <div>
             <h1>Tất cả các sản phẩm</h1>
@@ -74,9 +69,4 @@
             @endif
         </div>
     </section>
-</main>
-
-@include('frontend.partials.floating-contact')
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+@endsection

@@ -1,24 +1,19 @@
-<!doctype html>
-<html lang="vi">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ $product->seo_title ?: $product->name . ' - VACA MAXI' }}</title>
-    <meta name="description" content="{{ $product->seo_description ?: ($product->short_description ?: 'Chi tiết sản phẩm ' . $product->name) }}">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    @include('frontend.products._styles')
-</head>
-<body>
+@extends('frontend.master')
+
 @php
-    $nav = $frontendData['nav'] ?? [];
+    $pageTitle = ($product->seo_title ?: $product->name) . ' - VACA MAXI';
+    $metaDescription = $product->seo_description ?: ($product->short_description ?: 'Chi tiết sản phẩm ' . $product->name);
     $active = 'product-' . ($product->category?->slug ?? '');
     $image = \App\Presentation\Http\Controllers\Frontend\ProductController::imageUrl($product->image);
     $thumbs = collect([$image, '/image/Rectangle 2.png', '/image/Rectangle 3.png', '/image/Rectangle 4.png'])->take(4);
     $code = str_pad((string) $product->id, 2, '0', STR_PAD_LEFT);
 @endphp
-@include('frontend.partials.header')
 
-<main>
+@push('styles')
+    @include('frontend.products._styles')
+@endpush
+
+@section('content')
     <section class="page-hero">
         <div>
             <h1>{{ $product->name }}</h1>
@@ -115,9 +110,4 @@
             </div>
         </section>
     @endif
-</main>
-
-@include('frontend.partials.floating-contact')
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+@endsection

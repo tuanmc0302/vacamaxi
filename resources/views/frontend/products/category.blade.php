@@ -1,21 +1,16 @@
-<!doctype html>
-<html lang="vi">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ $category->name }} - VACA MAXI</title>
-    <meta name="description" content="{{ $category->description ?: 'Danh sách sản phẩm ' . $category->name }}">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    @include('frontend.products._styles')
-</head>
-<body>
+@extends('frontend.master')
+
 @php
-    $nav = $frontendData['nav'] ?? [];
+    $pageTitle = $category->name . ' - VACA MAXI';
+    $metaDescription = $category->description ?: 'Danh sách sản phẩm ' . $category->name;
     $active = 'product-' . $category->slug;
 @endphp
-@include('frontend.partials.header')
 
-<main>
+@push('styles')
+    @include('frontend.products._styles')
+@endpush
+
+@section('content')
     <section class="page-hero">
         <div>
             <h1>{{ $category->name }}</h1>
@@ -58,9 +53,4 @@
             @endif
         </div>
     </section>
-</main>
-
-@include('frontend.partials.floating-contact')
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+@endsection
