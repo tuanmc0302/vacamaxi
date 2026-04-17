@@ -1,18 +1,18 @@
-@php
-    $title = data_get($widget, 'title', 'ĐÁNH GIÁ CỦA KHÁCH HÀNG');
-    $subTitle = data_get($widget, 'sub_title', 'trên Google Maps');
+﻿@php
+    $title = data_get($widget, 'title', 'ÄÃNH GIÃ Cá»¦A KHÃCH HÃ€NG');
+    $subTitle = data_get($widget, 'sub_title', 'trÃªn Google Maps');
     $defaultItems = [
         [
             'avatar' => '/image/Rectangle 2.png',
-            'role' => 'Khách hàng',
-            'name' => 'Hoàng Trang',
-            'content' => 'Thịt bò Vaca Maxi thật sự chất lượng. Bò mềm, tươi và được nêm nếm rất vừa miệng.',
+            'role' => 'KhÃ¡ch hÃ ng',
+            'name' => 'HoÃ ng Trang',
+            'content' => 'Thá»‹t bÃ² Vaca Maxi tháº­t sá»± cháº¥t lÆ°á»£ng. BÃ² má»m, tÆ°Æ¡i vÃ  Ä‘Æ°á»£c nÃªm náº¿m ráº¥t vá»«a miá»‡ng.',
         ],
         [
             'avatar' => '/image/Rectangle 3.png',
-            'role' => 'Khách hàng',
-            'name' => 'Tùng Phan',
-            'content' => 'Đúng chuẩn quán bò cho người mê thịt. Không gian đẹp, nhân viên thân thiện, tư vấn món rất có tâm.',
+            'role' => 'KhÃ¡ch hÃ ng',
+            'name' => 'TÃ¹ng Phan',
+            'content' => 'ÄÃºng chuáº©n quÃ¡n bÃ² cho ngÆ°á»i mÃª thá»‹t. KhÃ´ng gian Ä‘áº¹p, nhÃ¢n viÃªn thÃ¢n thiá»‡n, tÆ° váº¥n mÃ³n ráº¥t cÃ³ tÃ¢m.',
         ],
     ];
     $items = collect(data_get($widget, 'settings.items', $defaultItems))
@@ -24,44 +24,7 @@
     $sliderId = 'feedback-slider-' . data_get($widget, 'id', 'default');
 @endphp
 <section class="testimonial-section">
-    <style>
-        #{{ $sliderId }} .testimonial-slide {
-            display: none;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 26px;
-        }
-
-        #{{ $sliderId }} .testimonial-slide.is-active {
-            display: grid;
-        }
-
-        #{{ $sliderId }} .testimonial-dots {
-            display: flex;
-            justify-content: center;
-            gap: 8px;
-            margin-top: 22px;
-        }
-
-        #{{ $sliderId }} .testimonial-dot {
-            width: 9px;
-            height: 9px;
-            border: 0;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.45);
-            padding: 0;
-        }
-
-        #{{ $sliderId }} .testimonial-dot.is-active {
-            background: #f3b21a;
-        }
-
-        @media (max-width: 767.98px) {
-            #{{ $sliderId }} .testimonial-slide {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
-    <div class="container">
+<div class="container">
         <div class="testimonial-heading">
             <h2>{{ $title }}</h2>
             <p>{{ $subTitle }}</p>
@@ -75,12 +38,12 @@
                             $avatarSrc = str_starts_with($avatar, 'http') || str_starts_with($avatar, '/') ? $avatar : asset($avatar);
                         @endphp
                         <article class="testimonial-card">
-                            <span class="testimonial-quote">”</span>
+                            <span class="testimonial-quote">â€</span>
                             <div class="d-flex gap-3 mt-3 align-items-center">
-                                <img class="testimonial-avatar" src="{{ $avatarSrc }}" alt="{{ data_get($item, 'role', 'Khách hàng') }} {{ data_get($item, 'name', '') }}">
+                                <img class="testimonial-avatar" src="{{ $avatarSrc }}" alt="{{ data_get($item, 'role', 'KhÃ¡ch hÃ ng') }} {{ data_get($item, 'name', '') }}">
                                 <div class="testimonial-item">
-                                    <p class="testimonial-role mt-1">{{ data_get($item, 'role', 'Khách hàng') }}</p>
-                                    <h3 class="testimonial-name mt-1 mb-0">{{ data_get($item, 'name', 'Khách hàng') }}</h3>
+                                    <p class="testimonial-role mt-1">{{ data_get($item, 'role', 'KhÃ¡ch hÃ ng') }}</p>
+                                    <h3 class="testimonial-name mt-1 mb-0">{{ data_get($item, 'name', 'KhÃ¡ch hÃ ng') }}</h3>
                                 </div>
                             </div>
                             <p class="testimonial-text mt-3">{{ data_get($item, 'content') }}</p>
@@ -90,7 +53,7 @@
             @endforeach
 
             @if ($slides->count() > 1)
-                <div class="testimonial-dots" aria-label="Chọn slide feedback">
+                <div class="testimonial-dots" aria-label="Chá»n slide feedback">
                     @foreach ($slides as $slideIndex => $slideItems)
                         <button type="button" class="testimonial-dot {{ $slideIndex === 0 ? 'is-active' : '' }}" data-feedback-dot data-feedback-index="{{ $slideIndex }}" aria-label="Feedback slide {{ $slideIndex + 1 }}"></button>
                     @endforeach
