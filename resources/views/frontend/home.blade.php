@@ -1206,21 +1206,64 @@
 @php
     $frontendData = $frontendData ?? json_decode(file_get_contents(resource_path('data/frontend.json')), true) ?: [];
     $widgets = $widgets ?? collect();
+    $productOptionItems = $productOptionItems ?? [];
     $nav = $frontendData['nav'] ?? [];
     $footer = $frontendData['footer'] ?? [];
     $active = 'home';
 @endphp
 @include('frontend.partials.header')
 <main>
-    @include('frontend.widgets.banner_home', ['widget' => $widgets->get('banner_home')])
-    @include('frontend.widgets.about_me_home', ['widget' => $widgets->get('about_me_home')])
-    @include('frontend.widgets.product_option_one', ['widget' => $widgets->get('product_option_one'), 'items' => $productOptionItems['product_option_one'] ?? $frontendData['breeds'] ?? []])
-    @include('frontend.widgets.about_team_home', ['widget' => $widgets->get('about_team_home')])
-    @include('frontend.widgets.product_option_two', ['widget' => $widgets->get('product_option_two'), 'items' => $productOptionItems['product_option_two'] ?? $frontendData['beefProducts'] ?? []])
-    @include('frontend.widgets.product_option_three', ['widget' => $widgets->get('product_option_three'), 'items' => $productOptionItems['product_option_three'] ?? $frontendData['wineProducts'] ?? []])
-    @include('frontend.widgets.about_restaurant_home', ['widget' => $widgets->get('about_restaurant_home')])
-    @include('frontend.widgets.feedback_home', ['widget' => $widgets->get('feedback_home')])
-    @include('frontend.widgets.news_home', ['widget' => $widgets->get('news_home'), 'news' => $frontendData['news'] ?? []])
+    @php
+        $defaultWidgetOrder = collect([
+            'banner_home',
+            'about_me_home',
+            'product_option_one',
+            'about_team_home',
+            'product_option_two',
+            'product_option_three',
+            'about_restaurant_home',
+            'feedback_home',
+            'news_home',
+        ]);
+
+        $widgetOrder = $widgets->isNotEmpty() ? $widgets->keys() : $defaultWidgetOrder;
+        $widgetIncludes = [
+            'banner_home' => ['view' => 'frontend.widgets.banner_home'],
+            'about_me_home' => ['view' => 'frontend.widgets.about_me_home'],
+            'product_option_one' => [
+                'view' => 'frontend.widgets.product_option_one',
+                'items' => $productOptionItems['product_option_one'] ?? $frontendData['breeds'] ?? [],
+            ],
+            'about_team_home' => ['view' => 'frontend.widgets.about_team_home'],
+            'product_option_two' => [
+                'view' => 'frontend.widgets.product_option_two',
+                'items' => $productOptionItems['product_option_two'] ?? $frontendData['beefProducts'] ?? [],
+            ],
+            'product_option_three' => [
+                'view' => 'frontend.widgets.product_option_three',
+                'items' => $productOptionItems['product_option_three'] ?? $frontendData['wineProducts'] ?? [],
+            ],
+            'about_restaurant_home' => ['view' => 'frontend.widgets.about_restaurant_home'],
+            'feedback_home' => ['view' => 'frontend.widgets.feedback_home'],
+            'news_home' => [
+                'view' => 'frontend.widgets.news_home',
+                'news' => $frontendData['news'] ?? [],
+            ],
+        ];
+    @endphp
+
+    @foreach ($widgetOrder as $widgetKey)
+        @continue(! isset($widgetIncludes[$widgetKey]))
+
+        @php
+            $includeConfig = $widgetIncludes[$widgetKey];
+            $includeData = ['widget' => $widgets->get($widgetKey)] + collect($includeConfig)
+                ->except('view')
+                ->all();
+        @endphp
+
+        @include($includeConfig['view'], $includeData)
+    @endforeach
 </main>
 @include('frontend.partials.footer')
 @include('frontend.partials.floating-contact')
