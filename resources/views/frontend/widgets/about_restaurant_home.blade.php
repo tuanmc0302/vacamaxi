@@ -7,6 +7,7 @@
         ->values();
     $imageSrc = fn ($path) => str_starts_with($path, 'http') || str_starts_with($path, '/') ? $path : asset($path);
 @endphp
+
 <section class="restaurant-section" id="restaurant">
     <div class="container">
         <div class="restaurant-heading">
@@ -14,11 +15,13 @@
             <span></span>
         </div>
         <p class="restaurant-copy">{!! nl2br(e($description)) !!}</p>
-        <div class="restaurant-gallery">
+        
+        <div class="restaurant-grid">
             @foreach ($images as $index => $image)
-                <img src="{{ $imageSrc($image) }}" alt="{{ $title }} {{ $index + 1 }}">
+                <div class="restaurant-item">
+                    <img src="{{ $imageSrc($image) }}" alt="{{ $title }} {{ $index + 1 }}">
+                </div>
             @endforeach
         </div>
-        <div class="restaurant-dots"><i></i><i></i><i></i><span></span><i></i></div>
     </div>
 </section>

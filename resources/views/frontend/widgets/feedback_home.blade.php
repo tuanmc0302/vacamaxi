@@ -24,11 +24,12 @@
     $sliderId = 'feedback-slider-' . data_get($widget, 'id', 'default');
 @endphp
 <section class="testimonial-section">
-<div class="container">
+    <div class="container">
         <div class="testimonial-heading">
             <h2>{{ $title }}</h2>
-            <p>{{ $subTitle }}</p>
+            <span></span>
         </div>
+        <p class="testimonial-sub">{{ $subTitle }}</p>
         <div id="{{ $sliderId }}" class="testimonial-slider" data-feedback-slider>
             @foreach ($slides as $slideIndex => $slideItems)
                 <div class="testimonial-slide {{ $slideIndex === 0 ? 'is-active' : '' }}" data-feedback-slide>
@@ -38,7 +39,7 @@
                             $avatarSrc = str_starts_with($avatar, 'http') || str_starts_with($avatar, '/') ? $avatar : asset($avatar);
                         @endphp
                         <article class="testimonial-card">
-                            <span class="testimonial-quote">â€</span>
+                            <span class="testimonial-quote">”</span>
                             <div class="d-flex gap-3 mt-3 align-items-center">
                                 <img class="testimonial-avatar" src="{{ $avatarSrc }}" alt="{{ data_get($item, 'role', 'KhÃ¡ch hÃ ng') }} {{ data_get($item, 'name', '') }}">
                                 <div class="testimonial-item">

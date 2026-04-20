@@ -9,16 +9,19 @@
 @endphp
 <section class="news-section">
     <div class="container">
+        <div class="news-heading">
+            <h2 class="news-title">
+                @if($highlight && str_contains($title, $highlight))
+                    {!! e(str_replace($highlight, '', $title)) !!}<span>{{ $highlight }}</span>
+                @else
+                    {{ $title }}
+                @endif
+            </h2>
+            <span class="heading-line"></span>
+        </div>
         <div class="row news-intro align-items-start g-4">
             <div class="col-lg-5">
                 <p class="news-kicker">{{ $subTitle }}</p>
-                <h2 class="news-title">
-                    @if($highlight && str_contains($title, $highlight))
-                        {!! e(str_replace($highlight, '', $title)) !!}<span>{{ $highlight }}</span>
-                    @else
-                        {{ $title }}
-                    @endif
-                </h2>
             </div>
             <div class="col-lg-7">
                 <p class="news-description">{!! nl2br(e($description)) !!}</p>
