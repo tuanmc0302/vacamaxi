@@ -51,6 +51,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Admin | Quản trị hệ thống')</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet">
     <style>
@@ -87,6 +88,7 @@
         .admin-menu-details > summary { list-style: none; }
         .admin-menu-details > summary::-webkit-details-marker { display: none; }
     </style>
+    @stack('styles')
 </head>
 <body class="min-h-screen bg-slate-50 text-slate-900">
     <div class="min-h-screen">

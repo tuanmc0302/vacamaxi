@@ -26,7 +26,9 @@
                         <span></span>
                     </div>
                     <p class="about-text">{!! nl2br(e($description)) !!}</p>
-                    <a href="{{ $buttonUrl }}" class="about-action">{{ $buttonText }}</a>
+                    <div class="about-more">
+                        <a href="{{ $buttonUrl }}" class="about-action">{{ $buttonText }}</a>
+                    </div>
                 </div>
             </div>
         </div>

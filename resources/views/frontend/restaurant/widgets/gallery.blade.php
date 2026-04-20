@@ -5,7 +5,8 @@
 <section class="restaurant-gallery">
     <div class="restaurant-container">
         <div class="restaurant-section-heading">
-            <h2>{{ data_get($widget, 'title', 'Nhà hàng 5 sao Vaca Maxi') }}</h2>
+            <h2>{{ data_get($widget, 'title', 'Không gian nhà hàng') }}</h2>
+            <span></span>
             @if (data_get($widget, 'description'))
                 <p>{!! nl2br(e(data_get($widget, 'description'))) !!}</p>
             @endif

@@ -20,7 +20,9 @@
                     </div>
                     <p class="expert-lead">{{ $subTitle }}</p>
                     <p class="expert-text">{!! nl2br(e($description)) !!}</p>
-                    <a href="{{ $buttonUrl }}" class="about-action">{{ $buttonText }}</a>
+                    <div class="expert-more">
+                        <a href="{{ $buttonUrl }}" class="about-action">{{ $buttonText }}</a>
+                    </div>
                 </div>
             </div>
             <div class="col-lg-6">

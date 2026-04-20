@@ -20,19 +20,24 @@
     overflow: hidden;
     border-radius: 12px;
     box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease;
+    transition: all 0.4s ease;
 }
 
 .about-story__media:hover {
     transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(243, 178, 26, 0.15);
 }
 
 .about-story__media img {
-    height: 100%;
     display: block;
     width: 100%;
     aspect-ratio: 1.06;
     object-fit: cover;
+}
+
+.about-story__gallery .about-story__media:nth-child(1),
+.about-story__gallery .about-story__media:nth-child(4) {
+    height: 100%;
 }
 
 .about-story__gallery .about-story__media:nth-child(2) { margin-top: 40px; }
@@ -54,10 +59,9 @@
 .about-story__quote {
     margin: 0 0 30px;
     color: #111111;
-    font-size: 22px;
+    font-size: 24px;
     font-weight: 700;
     line-height: 1.4;
-    font-style: italic;
 }
 
 .about-story__block + .about-story__block {
@@ -76,11 +80,6 @@
     color: #444444;
     font-size: 16px;
     line-height: 1.7;
-}
-
-.core-values {
-    padding: 80px 0;
-    background: #fdfdfd;
 }
 
 .section-line-title {
@@ -104,6 +103,7 @@
     height: 1px;
     background: #f3b21a;
     position: relative;
+    display: block;
 }
 
 .section-line-title span::after {
@@ -117,8 +117,13 @@
     top: -3px;
 }
 
+.core-values {
+    padding: 80px 0;
+    background: #fdfdfd;
+}
+
 .about-feature {
-    padding: 0 0 80px;
+    padding: 80px 0;
 }
 
 .about-feature__grid {
@@ -132,6 +137,11 @@
     border-radius: 20px;
     overflow: hidden;
     box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+    transition: all 0.4s ease;
+}
+
+.about-feature__image:hover {
+    transform: scale(1.02);
 }
 
 .about-feature__image img {
@@ -146,7 +156,7 @@
 }
 
 .about-cta-inline__inner {
-    padding: 40px 50px;
+    padding: 50px;
     border-radius: 24px;
     background: #250900;
     color: #ffffff;
@@ -158,15 +168,9 @@
 
 .about-cta-inline__inner h2 {
     color: #f3b21a;
-    font-size: 32px;
+    font-size: 36px !important;
     font-weight: 800;
     margin-bottom: 8px;
-}
-
-.about-cta-inline__inner p {
-    color: rgba(255,255,255,0.8);
-    font-size: 18px;
-    margin: 0;
 }
 
 .about-cta-inline__button {
@@ -185,97 +189,14 @@
 }
 
 .about-cta-inline__button:hover {
+    background: #ffffff;
+    color: #f3b21a;
     transform: translateY(-3px);
-    box-shadow: 0 10px 20px rgba(243, 178, 26, 0.3);
-    color: #ffffff;
-}
-
-@media (max-width: 1199.98px) {
-    .about-story__grid {
-        grid-template-columns: 380px minmax(0, 1fr);
-    }
-
-    .core-values__wrap {
-        min-height: auto;
-        display: grid;
-        gap: 20px;
-        justify-items: center;
-    }
-
-    .core-values__center,
-    .core-values__item {
-        position: static;
-        transform: none;
-        max-width: 360px;
-    }
-
-    .core-values__item {
-        text-align: center;
-    }
 }
 
 @media (max-width: 991.98px) {
-    .about-story__grid,
-    .about-feature__grid,
-    .about-feature__grid--experts {
-        grid-template-columns: 1fr;
-    }
-
-    .about-story__content,
-    .about-feature__content {
-        padding-top: 0;
-    }
-
-    .section-line-title {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .section-line-title span {
-        width: 100%;
-        margin-top: 0;
-    }
-}
-
-@media (max-width: 767.98px) {
-    .intro-overview {
-        padding: 86px 0 52px;
-    }
-
-    .intro-overview__rule::before,
-    .intro-overview__rule::after {
-        max-width: 120px;
-    }
-
-    .intro-overview__copy p {
-        font-size: 15px;
-        line-height: 1.85;
-    }
-
-    .about-story {
-        padding: 52px 0;
-    }
-
-    .about-story__grid {
-        gap: 28px;
-    }
-
-    .about-story__gallery {
-        gap: 10px;
-    }
-
-    .about-feature,
-    .about-feature--farm,
-    .core-values {
-        padding: 48px 0;
-    }
-
-    .about-cta-inline__inner {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .about-feature__image img {
-        min-height: 280px;
-    }
+    .about-story__grid, .about-feature__grid { grid-template-columns: 1fr; gap: 40px; }
+    .about-content { padding-left: 0; }
+    .about-cta-inline__inner { flex-direction: column; text-align: center; padding: 40px 20px; }
+    .section-line-title h2 { font-size: 30px; }
 }

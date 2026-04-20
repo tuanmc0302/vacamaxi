@@ -36,6 +36,7 @@
                             <a
                                 class="nav-link {{ $hasChildren ? 'dropdown-toggle' : '' }} {{ $isActive ? 'active' : '' }}"
                                 href="{{ $item['url'] ?? '#' }}"
+                                target="{{ $item['target'] ?? '_self' }}"
                                 @if($hasChildren)
                                     id="dropdown-{{ $item['key'] }}"
                                     role="button"
@@ -55,7 +56,7 @@
                                 <ul class="dropdown-menu" aria-labelledby="dropdown-{{ $item['key'] }}">
                                     @foreach ($item['children'] as $child)
                                         <li>
-                                            <a class="dropdown-item {{ ($child['key'] ?? '') === $active ? 'active' : '' }}" href="{{ $child['url'] }}">
+                                            <a class="dropdown-item {{ ($child['key'] ?? '') === $active ? 'active' : '' }}" href="{{ $child['url'] }}" target="{{ $child['target'] ?? '_self' }}">
                                                 {{ $child['label'] }}
                                             </a>
                                         </li>

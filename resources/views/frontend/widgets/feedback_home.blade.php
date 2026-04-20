@@ -43,7 +43,7 @@
                             <div class="d-flex gap-3 mt-3 align-items-center">
                                 <img class="testimonial-avatar" src="{{ $avatarSrc }}" alt="{{ data_get($item, 'role', 'KhÃ¡ch hÃ ng') }} {{ data_get($item, 'name', '') }}">
                                 <div class="testimonial-item">
-                                    <p class="testimonial-role mt-1">{{ data_get($item, 'role', 'KhÃ¡ch hÃ ng') }}</p>
+                                    <p class="testimonial-role mt-1 mb-0">{{ data_get($item, 'role', 'KhÃ¡ch hÃ ng') }}</p>
                                     <h3 class="testimonial-name mt-1 mb-0">{{ data_get($item, 'name', 'KhÃ¡ch hÃ ng') }}</h3>
                                 </div>
                             </div>

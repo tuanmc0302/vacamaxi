@@ -5,7 +5,7 @@
 @endphp
 
 <section id="restaurant-banner" class="restaurant-feature-banner" style="--banner-image: url('{{ $imageUrl($image) }}')">
-    <div class="restaurant-container">
+    <div class="container">
         <div class="restaurant-banner-copy">
             @if (data_get($widget, 'sub_title'))
                 <p class="restaurant-kicker">{{ data_get($widget, 'sub_title') }}</p>
@@ -18,8 +18,5 @@
                 <a class="restaurant-button" href="{{ $buttonUrl }}">{{ $buttonText }}</a>
             @endif
         </div>
-    </div>
-    <div class="restaurant-diamonds" aria-hidden="true">
-        <span></span><span></span><span></span><i></i><span></span>
     </div>
 </section>
