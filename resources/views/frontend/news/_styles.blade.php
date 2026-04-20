@@ -1,1 +1,1 @@
-﻿<link rel="stylesheet" href="{{ asset('css/frontend/news.css') }}">
+<link rel="stylesheet" href="{{ asset('css/frontend/news.css') }}">

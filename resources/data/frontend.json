@@ -2,14 +2,14 @@
   "nav": [
     {"label": "Trang chủ", "url": "/", "key": "home"},
     {"label": "Giới thiệu", "url": "/gioi-thieu", "key": "about", "children": [
-      {"label": "Nhà máy", "url": "/gioi-thieu/nha-may", "key": "factory"},
-      {"label": "Trang trại", "url": "/gioi-thieu/trang-trai", "key": "farm"}
+      {"label": "Về Vaca Maxi", "url": "/gioi-thieu", "key": "about"},
+      {"label": "Quy mô phát triển", "url": "/gioi-thieu-quy-mo", "key": "about-scale"}
     ]},
     {"label": "Sản phẩm", "url": "/san-pham", "key": "product", "children": [
       {"label": "Rượu", "url": "/san-pham/ruou", "key": "wine"},
       {"label": "Thịt bò", "url": "/san-pham/thit-bo", "key": "beef"}
     ]},
-    {"label": "Dịch vụ - Nhà hàng", "url": "/#restaurant", "key": "restaurant"},
+    {"label": "Dịch vụ - Nhà hàng", "url": "/dich-vu-nha-hang", "key": "restaurant"},
     {"label": "Tin Tức", "url": "/tin-tuc", "key": "news"},
     {"label": "Liên hệ", "url": "/gioi-thieu#footer", "key": "contact"}
   ],

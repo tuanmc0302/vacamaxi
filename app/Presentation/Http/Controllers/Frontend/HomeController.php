@@ -13,6 +13,18 @@ use Throwable;
 
 class HomeController extends Controller
 {
+    private const HOME_WIDGET_KEYS = [
+        'banner_home',
+        'about_me_home',
+        'product_option_one',
+        'about_team_home',
+        'product_option_two',
+        'product_option_three',
+        'about_restaurant_home',
+        'feedback_home',
+        'news_home',
+    ];
+
     private const PRODUCT_OPTION_KEYS = [
         'product_option_one',
         'product_option_two',
@@ -27,6 +39,7 @@ class HomeController extends Controller
         try {
             $widgets = FrontendWidget::query()
                 ->where('is_active', true)
+                ->whereIn('key', self::HOME_WIDGET_KEYS)
                 ->orderBy('sort_order')
                 ->get()
                 ->keyBy('key');

@@ -1,4 +1,4 @@
-﻿.testimonial-slider .testimonial-slide {
+.testimonial-slider .testimonial-slide {
     display: none;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 26px;

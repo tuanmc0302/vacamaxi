@@ -1,4 +1,4 @@
-﻿.page-hero { min-height: 278px; display: flex; align-items: center; justify-content: center; text-align: center; color: #fff; background-image: linear-gradient(rgba(0,0,0,.58), rgba(0,0,0,.58)), url('/image/banner.png'); background-size: cover; background-position: center; padding: 105px 16px 54px; }
+.page-hero { min-height: 278px; display: flex; align-items: center; justify-content: center; text-align: center; color: #fff; background-image: linear-gradient(rgba(0,0,0,.58), rgba(0,0,0,.58)), url('/image/banner.png'); background-size: cover; background-position: center; padding: 105px 16px 54px; }
     .page-hero h1 { margin: 0; font-size: 38px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; }
     .page-hero p { margin: 8px 0 0; color: rgba(255,255,255,.82); }
     .news-section { padding: 38px 0 70px; }

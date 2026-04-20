@@ -1,4 +1,4 @@
-﻿.article-section { padding: 44px 0 70px; background: #f5f5f5; }
+.article-section { padding: 44px 0 70px; background: #f5f5f5; }
         .article-shell { background: #fff; border-radius: 14px; padding: 28px; box-shadow: 0 10px 25px rgba(0,0,0,.08); }
         .article-top { display: grid; grid-template-columns: minmax(300px, 42%) minmax(0, 1fr); gap: 26px; align-items: start; margin-bottom: 30px; }
         .article-cover { width: 100%; aspect-ratio: 422 / 280; object-fit: cover; border-radius: 4px; box-shadow: 0 8px 18px rgba(0,0,0,.15); }

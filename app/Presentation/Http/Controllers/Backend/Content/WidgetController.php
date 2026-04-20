@@ -13,23 +13,141 @@ use Illuminate\View\View;
 
 class WidgetController extends Controller
 {
-    private const IMAGE_CONFIG_WIDGET_KEYS = [
-        'about_me_home',
-        'about_team_home',
-        'about_restaurant_home',
+    private const PAGE_WIDGET_GROUPS = [
+        'home' => [
+            'banner_home',
+            'about_me_home',
+            'product_option_one',
+            'about_team_home',
+            'product_option_two',
+            'product_option_three',
+            'about_restaurant_home',
+            'feedback_home',
+            'news_home',
+        ],
+        'about' => [
+            'about_page_hero',
+            'about_page_intro',
+            'about_page_values',
+            'about_page_experts',
+            'about_page_farm',
+            'about_page_cta',
+        ],
+        'about-scale' => [
+            'about_scale_page_hero',
+            'about_scale_page_farm',
+            'about_scale_page_experts',
+            'about_scale_page_care',
+            'about_scale_page_biotech',
+            'about_scale_page_ivf',
+            'about_scale_page_strategy',
+            'about_scale_page_cta',
+        ],
+        'restaurant' => [
+            'restaurant_page_hero',
+            'restaurant_page_intro',
+            'restaurant_page_banner',
+            'restaurant_page_gallery',
+            'restaurant_product_one',
+            'restaurant_product_two',
+        ],
+    ];
+
+    private const IMAGE_CONFIG_WIDGETS = [
+        'about_me_home' => 4,
+        'about_team_home' => 4,
+        'about_restaurant_home' => 4,
+        'about_page_hero' => 1,
+        'about_page_intro' => 4,
+        'about_page_values' => 1,
+        'about_page_experts' => 1,
+        'about_page_farm' => 1,
+        'about_scale_page_hero' => 1,
+        'about_scale_page_farm' => 1,
+        'about_scale_page_experts' => 8,
+        'about_scale_page_care' => 1,
+        'about_scale_page_biotech' => 1,
+        'about_scale_page_ivf' => 1,
+        'about_scale_page_strategy' => 2,
+        'restaurant_page_hero' => 1,
+        'restaurant_page_intro' => 4,
+        'restaurant_page_banner' => 1,
+        'restaurant_page_gallery' => 4,
+    ];
+
+    private const DEFAULT_RESTAURANT_WIDGETS = [
+        'restaurant_page_hero' => [
+            'title' => 'Dịch vụ - Nhà hàng',
+            'sub_title' => 'Trang chủ / Dịch vụ nhà hàng',
+            'description' => 'Không gian steak & grill cao cấp của VACA MAXI.',
+            'settings' => ['images' => ['/image/banner.png']],
+            'sort_order' => 10,
+        ],
+        'restaurant_page_intro' => [
+            'title' => 'Nhà hàng Vaca Maxi',
+            'sub_title' => null,
+            'description' => 'VACA MAXI là nhà hàng steak & grill cao cấp, nơi ẩm thực không chỉ được thưởng thức bằng vị giác, mà còn được cảm nhận bằng thẩm mỹ, không gian và chiều sâu của câu chuyện phía sau mỗi lựa chọn. Nhà hàng được hình thành từ một tư duy khác về trải nghiệm ăn uống: một bữa ăn thực sự trọn vẹn khi nguyên liệu có nền tảng, rượu có độ lên men và không gian đủ tinh tế để mọi cảm xúc được dẫn dắt một cách tự nhiên.',
+            'settings' => [
+                'button_text' => 'Tìm hiểu thêm',
+                'button_url' => '#restaurant-banner',
+                'images' => ['/image/Rectangle 5.png', '/image/Rectangle 3.png', '/image/Rectangle 4.png', '/image/Rectangle 5.png'],
+            ],
+            'sort_order' => 20,
+        ],
+        'restaurant_page_banner' => [
+            'title' => 'VACA MAXI là nhà hàng steak & grill cao cấp',
+            'sub_title' => 'Nhà hàng 5 sao Vaca Maxi',
+            'description' => 'Nơi ẩm thực không chỉ được thưởng thức bằng vị giác, mà còn được cảm nhận bằng thẩm mỹ, không gian và chiều sâu của câu chuyện phía sau mỗi lựa chọn.',
+            'settings' => ['button_text' => 'Khám phá ngay', 'button_url' => '#restaurant-products', 'images' => ['/image/banner.png']],
+            'sort_order' => 30,
+        ],
+        'restaurant_page_gallery' => [
+            'title' => 'Nhà hàng 5 sao Vaca Maxi',
+            'sub_title' => null,
+            'description' => 'Nơi ẩm thực không chỉ được thưởng thức bằng vị giác, mà còn được cảm nhận bằng thẩm mỹ, không gian và chiều sâu của câu chuyện phía sau mỗi lựa chọn.',
+            'settings' => ['images' => ['/image/Rectangle 5.png', '/image/Rectangle 11.png', '/image/Rectangle 2.png', '/image/Rectangle 3.png']],
+            'sort_order' => 40,
+        ],
+        'restaurant_product_one' => [
+            'title' => 'Rượu Vaca Maxi',
+            'sub_title' => null,
+            'description' => 'Các sản phẩm rượu mới nhất tại VACA MAXI.',
+            'settings' => ['button_text' => 'Xem thêm', 'button_url' => '/san-pham/ruou', 'category_slug' => 'ruou'],
+            'sort_order' => 50,
+        ],
+        'restaurant_product_two' => [
+            'title' => 'Thịt bò Vaca Maxi',
+            'sub_title' => null,
+            'description' => 'Các sản phẩm thịt bò mới nhất tại VACA MAXI.',
+            'settings' => ['button_text' => 'Xem thêm', 'button_url' => '/san-pham/thit-bo', 'category_slug' => 'thit-bo'],
+            'sort_order' => 60,
+        ],
     ];
 
     public function index(): View
     {
+        $page = request()->query('page', 'home');
+        $this->ensurePageWidgets($page);
+        $pageKeys = $this->pageKeys($page);
+
         return view('backend.content.widgets.index', [
-            'widgets' => FrontendWidget::query()->orderBy('sort_order')->orderBy('id')->get(),
+            'widgets' => FrontendWidget::query()
+                ->whereIn('key', $pageKeys)
+                ->orderBy('sort_order')
+                ->orderBy('id')
+                ->get(),
+            'currentPage' => $page,
         ]);
     }
 
     public function edit(FrontendWidget $widget): View
     {
+        $page = request()->query('page', $this->pageByWidgetKey($widget->key));
+
         return view('backend.content.widgets.edit', [
             'widget' => $widget,
+            'currentPage' => $page,
+            'imageConfigCount' => $this->imageConfigCount($widget->key),
             'productCategories' => Category::query()
                 ->where('module', Category::MODULE_PRODUCT)
                 ->where('is_active', true)
@@ -42,7 +160,9 @@ class WidgetController extends Controller
 
     public function update(Request $request, FrontendWidget $widget): RedirectResponse
     {
+        $page = (string) $request->input('page', $this->pageByWidgetKey($widget->key));
         $validated = $request->validate([
+            'page' => ['nullable', 'string'],
             'title' => ['nullable', 'string', 'max:255'],
             'sub_title' => ['nullable', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
@@ -54,13 +174,13 @@ class WidgetController extends Controller
             'feedback_items.*.role' => ['nullable', 'string', 'max:80'],
             'feedback_items.*.name' => ['nullable', 'string', 'max:120'],
             'feedback_items.*.content' => ['nullable', 'string', 'max:500'],
-            'widget_images' => ['nullable', 'array', 'max:4'],
+            'widget_images' => ['nullable', 'array', 'max:' . max($this->imageConfigCount($widget->key), 1)],
             'widget_images.*' => ['nullable', 'string', 'max:255'],
         ]);
 
         $settings = $widget->settings ?? [];
 
-        if (Str::startsWith($widget->key, 'product_option_')) {
+        if (Str::startsWith($widget->key, 'product_option_') || Str::startsWith($widget->key, 'restaurant_product_')) {
             $settings['category_id'] = $validated['category_id'] ?? null;
         }
 
@@ -68,8 +188,8 @@ class WidgetController extends Controller
             $settings['items'] = $this->feedbackItems($validated['feedback_items'] ?? []);
         }
 
-        if (in_array($widget->key, self::IMAGE_CONFIG_WIDGET_KEYS, true)) {
-            $settings['images'] = $this->widgetImages($validated['widget_images'] ?? []);
+        if ($this->hasImageConfig($widget->key)) {
+            $settings['images'] = $this->widgetImages($validated['widget_images'] ?? [], $this->imageConfigCount($widget->key));
         }
 
         $widget->update([
@@ -81,17 +201,27 @@ class WidgetController extends Controller
             'settings' => $settings,
         ]);
 
-        return redirect()->route('admin.widgets.index')->with('status', 'Đã cập nhật widget trang chủ.');
+        return redirect()->route('admin.widgets.index', ['page' => $page])->with('status', 'Đã cập nhật widget frontend.');
     }
 
-    private function widgetImages(array $images): array
+    private function widgetImages(array $images, int $limit = 4): array
     {
         return collect($images)
-            ->take(4)
+            ->take($limit)
             ->map(fn ($image): string => trim((string) $image))
             ->filter()
             ->values()
             ->all();
+    }
+
+    private function hasImageConfig(string $key): bool
+    {
+        return array_key_exists($key, self::IMAGE_CONFIG_WIDGETS);
+    }
+
+    private function imageConfigCount(string $key): int
+    {
+        return self::IMAGE_CONFIG_WIDGETS[$key] ?? 0;
     }
 
     private function feedbackItems(array $items): array
@@ -126,16 +256,59 @@ class WidgetController extends Controller
     public function reorder(Request $request): JsonResponse
     {
         $validated = $request->validate([
+            'page' => ['nullable', 'string'],
             'widgets' => ['required', 'array'],
             'widgets.*' => ['integer', 'exists:frontend_widgets,id'],
         ]);
 
-        foreach ($validated['widgets'] as $index => $widgetId) {
+        $page = (string) ($validated['page'] ?? 'home');
+        $pageKeys = $this->pageKeys($page);
+        $allowedIds = FrontendWidget::query()
+            ->whereIn('key', $pageKeys)
+            ->pluck('id')
+            ->all();
+
+        $widgetIds = collect($validated['widgets'])
+            ->filter(fn ($id) => in_array($id, $allowedIds, true))
+            ->values()
+            ->all();
+
+        foreach ($widgetIds as $index => $widgetId) {
             FrontendWidget::query()
                 ->whereKey($widgetId)
                 ->update(['sort_order' => $index + 1]);
         }
 
         return response()->json(['message' => 'Đã cập nhật thứ tự widget.']);
+    }
+
+    private function pageKeys(string $page): array
+    {
+        return self::PAGE_WIDGET_GROUPS[$page] ?? self::PAGE_WIDGET_GROUPS['home'];
+    }
+
+    private function pageByWidgetKey(string $key): string
+    {
+        foreach (self::PAGE_WIDGET_GROUPS as $page => $keys) {
+            if (in_array($key, $keys, true)) {
+                return $page;
+            }
+        }
+
+        return 'home';
+    }
+
+    private function ensurePageWidgets(string $page): void
+    {
+        if ($page !== 'restaurant') {
+            return;
+        }
+
+        foreach (self::DEFAULT_RESTAURANT_WIDGETS as $key => $widget) {
+            FrontendWidget::query()->firstOrCreate(
+                ['key' => $key],
+                $widget + ['is_active' => true]
+            );
+        }
     }
 }

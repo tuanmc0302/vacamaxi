@@ -1,1 +1,1 @@
-﻿<link rel="stylesheet" href="{{ asset('css/frontend/base-layout.css') }}">
+<link rel="stylesheet" href="{{ asset('css/frontend/base-layout.css') }}">

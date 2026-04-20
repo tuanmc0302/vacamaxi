@@ -1,4 +1,4 @@
-﻿@php
+@php
     $title = data_get($widget, 'title', 'ÄÃNH GIÃ Cá»¦A KHÃCH HÃ€NG');
     $subTitle = data_get($widget, 'sub_title', 'trÃªn Google Maps');
     $defaultItems = [

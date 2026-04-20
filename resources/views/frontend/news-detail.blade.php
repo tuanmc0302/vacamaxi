@@ -1,4 +1,4 @@
-﻿@extends('frontend.master')
+@extends('frontend.master')
 
 @php
     $pageTitle = ($post->seo_title ?: $post->title) . ' - VACA MAXI';

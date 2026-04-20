@@ -6,11 +6,14 @@
     $buttonUrl = data_get($widget, 'settings.button_url', '#about');
 @endphp
 <section class="hero-banner">
-    <div class="hero-overlay"></div>
-    <div class="hero-content">
-        <p class="hero-kicker">{{ $subTitle }}</p>
-        <h1>{{ $title }}</h1>
-        <p>{{ $description }}</p>
-        <a href="{{ $buttonUrl }}" class="btn-gold">{{ $buttonText }}</a>
+    <div class="container">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <p class="hero-eyebrow">{{ $subTitle }}</p>
+            <h1 class="hero-title">{{ $title }}</h1>
+            <p class="hero-copy">{{ $description }}</p>
+            <a href="{{ $buttonUrl }}" class="hero-action">{{ $buttonText }}</a>
+        </div>
     </div>
+    
 </section>

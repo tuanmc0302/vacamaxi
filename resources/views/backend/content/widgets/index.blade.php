@@ -1,13 +1,31 @@
 @extends('backend.layouts.app')
 
-@section('title', 'Admin | Widget trang chủ')
-@section('eyebrow', 'Trang chủ')
-@section('page_heading', 'Cấu hình widget trang chủ')
+@section('title', 'Admin | Widget frontend')
+@section('eyebrow', 'Frontend')
+@section('page_heading', 'Cấu hình widget frontend')
 
 @section('content')
     <x-backend.panel>
         <x-backend.alert class="mb-6" :message="session('status')" />
-        <x-backend.page-header kicker="Widget" title="Danh sách widget trang chủ" description="Kéo thả để đổi thứ tự, bật tắt nhanh tại danh sách, hoặc vào sửa để cập nhật nội dung từng section." />
+        <x-backend.page-header kicker="Widget" title="Danh sách widget frontend" description="Kéo thả để đổi thứ tự, bật tắt nhanh tại danh sách, hoặc vào sửa để cập nhật nội dung từng section." />
+        @php
+            $currentPage = $currentPage ?? 'home';
+            $pageTabs = [
+                'home' => 'Trang chủ',
+                'about' => 'Giới thiệu',
+                'about-scale' => 'Giới thiệu quy mô',
+                'restaurant' => 'Dịch vụ - Nhà hàng',
+            ];
+        @endphp
+
+        <div class="mt-5 flex flex-wrap gap-2">
+            @foreach ($pageTabs as $pageKey => $label)
+                <a href="{{ route('admin.widgets.index', ['page' => $pageKey]) }}"
+                   class="inline-flex items-center rounded-lg border px-3 py-2 text-sm font-medium transition {{ $currentPage === $pageKey ? 'border-blue-600 bg-blue-50 text-blue-700' : 'border-slate-300 text-slate-600 hover:bg-slate-50' }}">
+                    {{ $label }}
+                </a>
+            @endforeach
+        </div>
 
         <div id="widget-status" class="mt-6 hidden rounded-xl border px-4 py-3 text-sm font-medium"></div>
 
@@ -49,7 +67,7 @@
                             </td>
                             <td class="px-5 py-4 text-right">
                                 @if (auth()->user()?->hasPermission('admin.widgets.edit'))
-                                    <a href="{{ route('admin.widgets.edit', $widget) }}" class="inline-flex items-center rounded-lg border border-slate-300 px-3 py-2 text-xs font-semibold text-slate-700 transition hover:bg-slate-100">Sửa</a>
+                                    <a href="{{ route('admin.widgets.edit', ['widget' => $widget, 'page' => $currentPage]) }}" class="inline-flex items-center rounded-lg border border-slate-300 px-3 py-2 text-xs font-semibold text-slate-700 transition hover:bg-slate-100">Sửa</a>
                                 @endif
                             </td>
                         </tr>
@@ -96,7 +114,7 @@
                         'Accept': 'application/json',
                         'X-CSRF-TOKEN': csrfToken,
                     },
-                    body: JSON.stringify({ widgets: ids }),
+                    body: JSON.stringify({ widgets: ids, page: @json($currentPage) }),
                 })
                     .then(function (response) {
                         if (!response.ok) throw new Error('Không lưu được thứ tự widget.');

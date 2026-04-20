@@ -1,15 +1,15 @@
 @extends('backend.layouts.app')
 
-@section('title', 'Admin | Sửa widget trang chủ')
-@section('eyebrow', 'Trang chủ')
-@section('page_heading', 'Sửa widget trang chủ')
+@section('title', 'Admin | Sửa widget frontend')
+@section('eyebrow', 'Frontend')
+@section('page_heading', 'Sửa widget frontend')
 
 @section('content')
     @php
-        $isProductOption = str($widget->key)->startsWith('product_option_');
+        $isProductOption = str($widget->key)->startsWith('product_option_') || str($widget->key)->startsWith('restaurant_product_');
         $isFeedbackWidget = $widget->key === 'feedback_home';
-        $imageConfigWidgetKeys = ['about_me_home', 'about_team_home', 'about_restaurant_home'];
-        $isImageConfigWidget = in_array($widget->key, $imageConfigWidgetKeys, true);
+        $imageConfigCount = $imageConfigCount ?? 0;
+        $isImageConfigWidget = $imageConfigCount > 0;
         $selectedCategoryId = old('category_id', data_get($widget->settings, 'category_id'));
         $defaultFeedbackItems = [
             [
@@ -37,19 +37,35 @@
             ->take(10)
             ->values();
         $defaultImageSets = [
+            'about_page_hero' => ['/image/bg_gioithieu.png'],
             'about_me_home' => ['/image/Rectangle 2.png', '/image/Rectangle 3.png', '/image/Rectangle 4.png', '/image/Rectangle 5.png'],
             'about_team_home' => ['/image/Rectangle 2.png', '/image/Rectangle 3.png', '/image/Rectangle 4.png', '/image/Rectangle 5.png'],
             'about_restaurant_home' => ['/image/Rectangle 5.png', '/image/Rectangle 3.png', '/image/Rectangle 2.png', '/image/Rectangle 11.png'],
+            'about_page_intro' => ['/image/Rectangle 11.png', '/image/Rectangle 2.png', '/image/Rectangle 4.png', '/image/Rectangle 5.png'],
+            'about_page_values' => ['/image/GIÁ TRỊ CỐT LÕI-01 1.png'],
+            'about_page_experts' => ['/image/Rectangle 3.png'],
+            'about_page_farm' => ['/image/Rectangle 11.png'],
+            'about_scale_page_hero' => ['/image/bg_about.png'],
+            'about_scale_page_farm' => ['/image/Rectangle 11.png'],
+            'about_scale_page_experts' => ['/image/Rectangle 2.png', '/image/Rectangle 3.png', '/image/Rectangle 4.png', '/image/Rectangle 5.png', '/image/Rectangle 2.png', '/image/Rectangle 3.png', '/image/Rectangle 4.png', '/image/Rectangle 5.png'],
+            'about_scale_page_care' => ['/image/Rectangle 2.png'],
+            'about_scale_page_biotech' => ['/image/Rectangle 5.png'],
+            'about_scale_page_ivf' => ['/image/Rectangle 3.png'],
+            'about_scale_page_strategy' => ['/image/Rectangle 11.png', '/image/Rectangle 11.png'],
+            'restaurant_page_hero' => ['/image/banner.png'],
+            'restaurant_page_intro' => ['/image/Rectangle 5.png', '/image/Rectangle 3.png', '/image/Rectangle 4.png', '/image/Rectangle 5.png'],
+            'restaurant_page_banner' => ['/image/banner.png'],
+            'restaurant_page_gallery' => ['/image/Rectangle 5.png', '/image/Rectangle 11.png', '/image/Rectangle 2.png', '/image/Rectangle 3.png'],
         ];
         $widgetImages = collect(old('widget_images', data_get($widget->settings, 'images', $defaultImageSets[$widget->key] ?? [])))
-            ->pad(4, '')
-            ->take(4)
+            ->pad($imageConfigCount, '')
+            ->take($imageConfigCount)
             ->values();
     @endphp
 
     <x-backend.panel class="mx-auto max-w-4xl">
-        <x-backend.page-header kicker="{{ $widget->key }}" :title="$widget->title ?: 'Widget trang chủ'">
-            <a href="{{ route('admin.widgets.index') }}" class="inline-flex items-center rounded-xl border border-slate-300 px-5 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-50">Quay lại</a>
+        <x-backend.page-header kicker="{{ $widget->key }}" :title="$widget->title ?: 'Widget frontend'">
+            <a href="{{ route('admin.widgets.index', ['page' => $currentPage ?? 'home']) }}" class="inline-flex items-center rounded-xl border border-slate-300 px-5 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-50">Quay lại</a>
         </x-backend.page-header>
 
         <x-backend.alert class="mt-6" type="error" :message="$errors->first()" />
@@ -57,6 +73,7 @@
         <form method="POST" action="{{ route('admin.widgets.update', $widget) }}" class="mt-8 space-y-5">
             @csrf
             @method('PUT')
+            <input type="hidden" name="page" value="{{ $currentPage ?? 'home' }}">
 
             <x-backend.form.input id="title" name="title" label="Title" :value="$widget->title" />
             <x-backend.form.input id="sub_title" name="sub_title" label="Sub title" :value="$widget->sub_title" />
@@ -68,8 +85,11 @@
 
             @if ($isImageConfigWidget)
                 <div class="rounded-2xl border border-slate-200 bg-slate-50 p-5">
-                    <h3 class="text-base font-semibold text-slate-900">Cấu hình 4 ảnh hiển thị</h3>
-                    <p class="mt-1 text-sm text-slate-500">Nhập đường dẫn ảnh trong public, ví dụ: /image/Rectangle 2.png</p>
+                    <h3 class="text-base font-semibold text-slate-900">Cấu hình ảnh hiển thị</h3>
+                    <p class="mt-1 text-sm text-slate-500">
+                        Nhập đường dẫn ảnh trong public, ví dụ: /image/Rectangle 2.png.
+                        Widget này dùng {{ $imageConfigCount }} ảnh.
+                    </p>
                     <div class="mt-5 grid gap-4 md:grid-cols-2">
                         @foreach ($widgetImages as $imageIndex => $imagePath)
                             <div>
