@@ -56,6 +56,7 @@ class HomeController extends Controller
 
         return view('frontend.home', [
             'frontendData' => $frontendData,
+            'footer' => $frontendData['footer'] ?? [],
             'widgets' => $widgets,
             'experts' => $experts,
             'productOptionItems' => $this->productOptionItems($widgets),

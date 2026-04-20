@@ -1,36 +1,16 @@
-<!doctype html>
-<html lang="en">
+@extends('frontend.master')
 
-<head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;700;800&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
-    <title>VACAMAXI</title>
-    <link rel="stylesheet" href="{{ asset('css/frontend/app.css') }}">
-    @include('frontend.partials.base-layout-styles')
-    <link rel="stylesheet" href="{{ asset('css/frontend/home.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/frontend/feedback-home.css') }}">
-    @stack('styles')
-</head>
-
-<body>
 @php
-    $frontendData = $frontendData ?? json_decode(file_get_contents(resource_path('data/frontend.json')), true) ?: [];
-    $widgets = $widgets ?? collect();
-    $productOptionItems = $productOptionItems ?? [];
-    $nav = $frontendData['nav'] ?? [];
-    $footer = $frontendData['footer'] ?? [];
+    $pageTitle = 'VACAMAXI - Từ Trang Trại Đến Bàn Ăn';
     $active = 'home';
 @endphp
-@include('frontend.partials.header', ['isHome' => true])
-<main>
+
+@push('styles')
+    <link rel="stylesheet" href="{{ asset('css/frontend/home.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/frontend/feedback-home.css') }}">
+@endpush
+
+@section('content')
     @php
         $defaultWidgetOrder = collect([
             'banner_home',
@@ -82,11 +62,4 @@
 
         @include($includeConfig['view'], $includeData)
     @endforeach
-</main>
-@include('frontend.partials.footer')
-@include('frontend.partials.floating-contact')
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-@stack('scripts')
-</body>
-</html>
-
+@endsection
