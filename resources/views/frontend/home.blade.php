@@ -15,6 +15,7 @@
     @include('frontend.partials.base-layout-styles')
     <link rel="stylesheet" href="{{ asset('css/frontend/home.css') }}">
     <link rel="stylesheet" href="{{ asset('css/frontend/feedback-home.css') }}">
+    @stack('styles')
 </head>
 
 <body>
@@ -26,7 +27,7 @@
     $footer = $frontendData['footer'] ?? [];
     $active = 'home';
 @endphp
-@include('frontend.partials.header')
+@include('frontend.partials.header', ['isHome' => true])
 <main>
     @php
         $defaultWidgetOrder = collect([
@@ -82,6 +83,8 @@
 </main>
 @include('frontend.partials.footer')
 @include('frontend.partials.floating-contact')
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+@stack('scripts')
 </body>
 </html>
 

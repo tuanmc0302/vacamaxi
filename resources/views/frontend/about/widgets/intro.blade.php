@@ -15,9 +15,9 @@
             </div>
 
             <div class="about-story__content">
-                <p class="about-story__eyebrow">{{ $widget->title ?: 'VACA MAXI' }} <span>– Siêu bò cho tương lai bền vững</span></p>
+                <p class="about-story__eyebrow">{{ $widget->title ?: 'VACA MAXI' }}</p>
                 @if ($widget->sub_title)
-                    <p class="about-story__quote">“{{ $widget->sub_title }}”</p>
+                    <p class="about-story__quote">{{ $widget->sub_title }}</p>
                 @endif
 
                 <div class="about-story__block">

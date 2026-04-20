@@ -20,15 +20,6 @@
                 <div class="core-values__center">
                     <img src="{{ $centerImage }}" alt="Giá trị cốt lõi VACA MAXI">
                 </div>
-
-                @foreach ($valueItems as $index => $item)
-                    <article class="core-values__item core-values__item--{{ $index + 1 }}">
-                        <h3>{{ $index + 1 }}. {{ mb_strtoupper($item['title']) }}</h3>
-                        @if ($item['body'])
-                            <p>{{ $item['body'] }}</p>
-                        @endif
-                    </article>
-                @endforeach
             </div>
         </div>
     </section>

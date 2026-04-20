@@ -1,9 +1,10 @@
 @php
     $active = $active ?? 'home';
     $nav = $nav ?? [];
+    $isHome = $isHome ?? false;
 @endphp
 
-<header class="site-header">
+<header class="site-header {{ $isHome ? 'is-home' : '' }}">
     <nav class="navbar navbar-expand-lg navbar-dark container">
         <div class="container-fluid">
             <a class="navbar-brand brand-link" href="/">

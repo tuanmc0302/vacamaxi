@@ -13,7 +13,6 @@
             <div class="about-feature__content">
                 <div class="section-line-title">
                     <h2>{{ mb_strtoupper($widget->title ?: 'Mô hình trang trại') }}</h2>
-                    <span></span>
                 </div>
                 @foreach ($farmLines as $index => $line)
                     @if ($index === 0)

@@ -9,7 +9,6 @@
             <div class="about-feature__content">
                 <div class="section-line-title">
                     <h2>{{ $widget->title ?: 'Đội ngũ chuyên gia của VACA MAXI' }}</h2>
-                    <span></span>
                 </div>
                 @if ($widget->sub_title)
                     <h3>{{ $widget->sub_title }}</h3>
