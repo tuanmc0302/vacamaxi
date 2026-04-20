@@ -1,113 +1,201 @@
 @extends('frontend.master')
 
 @php
-    $pageTitle = ($product->seo_title ?: $product->name) . ' - VACA MAXI';
-    $metaDescription = $product->seo_description ?: ($product->short_description ?: 'Chi tiết sản phẩm ' . $product->name);
-    $active = 'product-' . ($product->category?->slug ?? '');
-    $image = \App\Presentation\Http\Controllers\Frontend\ProductController::imageUrl($product->image);
-    $thumbs = collect([$image, '/image/Rectangle 2.png', '/image/Rectangle 3.png', '/image/Rectangle 4.png'])->take(4);
-    $code = str_pad((string) $product->id, 2, '0', STR_PAD_LEFT);
+    $pageTitle = $product->name . ' - VACAMAXI';
+    $metaDescription = $product->short_description ?: Str::limit(strip_tags($product->description), 160);
+    $active = 'product';
+    $productImage = \App\Presentation\Http\Controllers\Frontend\ProductController::imageUrl($product->image);
 @endphp
 
 @push('styles')
     @include('frontend.products._styles')
+    <link rel="stylesheet" href="{{ asset('css/frontend/product-detail.css') }}">
 @endpush
 
 @section('content')
     <section class="page-hero">
         <div class="container">
             <h1>{{ $product->name }}</h1>
-            <p>Trang chủ / Sản phẩm / {{ $product->category?->name ?? 'VACA MAXI' }}</p>
+            <p>Trang chủ / Sản phẩm / {{ $product->category?->name ?? 'Chi tiết' }}</p>
         </div>
     </section>
 
     <section class="product-detail">
         <div class="container">
-            <div class="detail-layout">
-                <div class="product-gallery">
-                    <img class="main-product-image" src="{{ $image }}" alt="{{ $product->name }}">
-                    <div class="thumb-grid">
-                        @foreach ($thumbs as $thumb)
-                            <img src="{{ $thumb }}" alt="{{ $product->name }}">
-                        @endforeach
+            <div class="product-detail__grid">
+                <div class="product-detail__gallery">
+                    <div class="product-detail__main-image">
+                        <img src="{{ $productImage }}" alt="{{ $product->name }}">
                     </div>
                 </div>
-
-                <div class="product-info">
-                    <h2>{{ $product->name }}</h2>
-                    <div class="product-code">
-                        <span>Mã: {{ $code }}</span>
-                        <span>Thương hiệu Vaca Maxi</span>
-                        <span class="stars">★★★★★</span>
-                        <span>0 Đánh giá</span>
+                
+                <div class="product-detail__info">
+                    <h2 class="product-detail__title">{{ $product->name }}</h2>
+                    <div class="product-detail__meta">
+                        <span>MÃ: {{ $product->sku ?? '006' }}</span>
+                        <span class="divider">|</span>
+                        <span>Thương hiệu {{ $product->brand ?? 'VACAMAXI' }}</span>
+                        <span class="divider">|</span>
+                        <span class="stars">
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                        </span>
                     </div>
-                    <div class="contact-price">Liên hệ</div>
-                    <div class="product-summary">
-                        @if ($product->short_description)
-                            <p>{{ $product->short_description }}</p>
-                        @endif
 
-                        @php
-                            $summaryLines = collect(preg_split('/\r\n|\r|\n/', strip_tags($product->description ?? '')))
-                                ->filter()
-                                ->take(3);
-                        @endphp
+                    <div class="product-detail__status">
+                        <span class="status-label">Liên hệ</span>
+                    </div>
 
-                        @if ($summaryLines->isNotEmpty())
-                            <ul>
-                                @foreach ($summaryLines as $line)
-                                    <li>{{ $line }}</li>
-                                @endforeach
-                            </ul>
+                    <div class="product-detail__excerpt">
+                        @if($product->slug === 'thit-bo-vaca-a')
+                            Theo Bộ Nông nghiệp Hoa Kỳ (USDA) thịt bò Vaca - A đạt điểm vân mỡ cao, giúp sản phẩm có giá trị cao trên thị trường. Dễ chế biến, thích hợp cho nhà hàng<br>
+                            Sinh sản ổn định: bản năng làm mẹ tốt.
                         @else
-                            <ul>
-                                <li>Sản phẩm được chọn lọc theo tiêu chuẩn VACA MAXI.</li>
-                                <li>Phù hợp cho nhà hàng, quà tặng và trải nghiệm ẩm thực cao cấp.</li>
-                            </ul>
+                            {!! nl2br(e($product->short_description)) !!}
                         @endif
                     </div>
 
-                    <div class="quantity-row">
-                        <span>Số lượng</span>
-                        <input type="number" value="1" min="1" aria-label="Số lượng">
+                    <div class="product-detail__purchase">
+                        <div class="quantity-wrapper">
+                            <label>Số Lượng</label>
+                            <div class="quantity-selector">
+                                <button type="button" class="qty-btn minus">-</button>
+                                <input type="text" id="product-qty" value="01" readonly class="qty-input">
+                                <button type="button" class="qty-btn plus">+</button>
+                            </div>
+                        </div>
+                        
+                        <div class="button-group">
+                            <button type="button" class="btn-buy-now">MUA NGAY</button>
+                            <button type="button" class="btn-add-cart">THÊM VÀO GIỎ HÀNG</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-detail__tabs">
+                <ul class="nav nav-tabs" id="productTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="info-tab" data-bs-toggle="tab" data-bs-target="#info-pane" type="button" role="tab">Thông tin sản phẩm</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="guide-tab" data-bs-toggle="tab" data-bs-target="#guide-pane" type="button" role="tab">Hướng dẫn mua hàng</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="shipping-tab" data-bs-toggle="tab" data-bs-target="#shipping-pane" type="button" role="tab">Giao hàng</button>
+                    </li>
+                </ul>
+                <div class="tab-content" id="productTabsContent">
+                    <div class="tab-pane fade show active" id="info-pane" role="tabpanel" tabindex="0">
+                        <div class="py-4">
+                            <div class="tab-content-wrapper" id="info-content-wrapper">
+                                <div class="tab-real-content">
+                                    {!! $product->description !!}
+                                    @if($product->specifications)
+                                        <div class="mt-4">
+                                            {!! $product->specifications !!}
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="read-more-wrapper">
+                                <button type="button" class="btn-read-more" data-bs-toggle="modal" data-bs-target="#infoModal">Xem thêm</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="tab-pane fade" id="guide-pane" role="tabpanel" tabindex="0">
+                        <div class="py-4">
+                            <p><strong>Bước 1:</strong> Chọn sản phẩm bạn mong muốn và nhấn "MUA NGAY" hoặc "THÊM VÀO GIỎ HÀNG".</p>
+                            <p><strong>Bước 2:</strong> Kiểm tra lại giỏ hàng và điền thông tin giao hàng chính xác.</p>
+                            <p><strong>Bước 3:</strong> Chọn phương thức thanh toán phù hợp (Chuyển khoản hoặc COD).</p>
+                            <p><strong>Bước 4:</strong> Nhấn "ĐẶT HÀNG" và chờ nhân viên VACAMAXI liên hệ xác nhận trong vòng 15-30 phút.</p>
+                        </div>
                     </div>
 
-                    <div class="action-row">
-                        <a class="buy-now" href="#contact">Mua ngay</a>
-                        <button type="button">Thêm vào giỏ hàng</button>
+                    <div class="tab-pane fade" id="shipping-pane" role="tabpanel" tabindex="0">
+                        <div class="py-4">
+                            <p><i class="bi bi-truck me-2"></i> <strong>Giao hàng nội thành:</strong> Nhận hàng trong ngày (2-4h làm việc).</p>
+                            <p><i class="bi bi-geo-alt me-2"></i> <strong>Giao hàng tỉnh:</strong> Thời gian từ 2-3 ngày tùy khu vực.</p>
+                            <p><i class="bi bi-shield-check me-2"></i> <strong>Bảo quản chuyên nghiệp:</strong> Sản phẩm luôn được đóng gói trong thùng xốp cách nhiệt kèm đá khô để đảm bảo độ tươi ngon tuyệt đối khi đến tay khách hàng.</p>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <section class="product-tabs">
-        <div class="container">
-            <div class="tab-buttons">
-                <button class="active" type="button">Thông tin sản phẩm</button>
-                <button type="button">Hướng dẫn mua hàng</button>
-                <button type="button">Giao hàng</button>
-            </div>
-            <div class="description-box">
-                @if ($product->description)
+    <!-- Modal for Info -->
+    <div class="modal fade" id="infoModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Thông tin chi tiết sản phẩm</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
                     {!! $product->description !!}
-                @else
-                    <p>{{ $product->short_description ?: 'Sản phẩm VACA MAXI được tuyển chọn theo tiêu chuẩn chất lượng cao, phù hợp cho trải nghiệm ẩm thực tinh tế.' }}</p>
-                @endif
+                    @if($product->specifications)
+                        <div class="mt-4">
+                            {!! $product->specifications !!}
+                        </div>
+                    @endif
+                </div>
             </div>
         </div>
-    </section>
+    </div>
 
     @if ($relatedProducts->isNotEmpty())
         <section class="related-products">
             <div class="container">
-                <h2 class="category-title mt-0">{{ $product->category?->name ?? 'Sản phẩm liên quan' }}</h2>
+                <div class="related-title">
+                    <h2>Sản phẩm liên quan</h2>
+                    <span></span>
+                </div>
                 <div class="product-grid">
-                    @foreach ($relatedProducts as $relatedProduct)
-                        @include('frontend.products._card', ['product' => $relatedProduct])
+                    @foreach ($relatedProducts as $related)
+                        @include('frontend.products._card', ['product' => $related])
                     @endforeach
                 </div>
             </div>
         </section>
     @endif
 @endsection
+
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const qtyInput = document.getElementById('product-qty');
+        const minusBtn = document.querySelector('.qty-btn.minus');
+        const plusBtn = document.querySelector('.qty-btn.plus');
+
+        if (qtyInput && minusBtn && plusBtn) {
+            minusBtn.addEventListener('click', function() {
+                let value = parseInt(qtyInput.value);
+                if (value > 1) {
+                    value--;
+                    qtyInput.value = value < 10 ? '0' + value : value;
+                }
+            });
+
+            plusBtn.addEventListener('click', function() {
+                let value = parseInt(qtyInput.value);
+                value++;
+                qtyInput.value = value < 10 ? '0' + value : value;
+            });
+        }
+
+        // Handle Read More for Tab Content
+        const infoWrapper = document.getElementById('info-content-wrapper');
+        if (infoWrapper) {
+            const realContent = infoWrapper.querySelector('.tab-real-content');
+            if (realContent && realContent.offsetHeight > 400) {
+                infoWrapper.classList.add('is-long');
+            }
+        }
+    });
+</script>
+@endpush

@@ -10,7 +10,7 @@
             @if (data_get($widget, 'sub_title'))
                 <p class="restaurant-kicker">{{ data_get($widget, 'sub_title') }}</p>
             @endif
-            <h2>{{ data_get($widget, 'title', 'VACA MAXI là nhà hàng steak & grill cao cấp') }}</h2>
+            <h2>{{ data_get($widget, 'title', 'VACAMAXI là nhà hàng steak & grill cao cấp') }}</h2>
             @if (data_get($widget, 'description'))
                 <p class="restaurant-banner-description">{!! nl2br(e(data_get($widget, 'description'))) !!}</p>
             @endif

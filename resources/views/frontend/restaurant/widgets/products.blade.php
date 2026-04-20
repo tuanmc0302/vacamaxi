@@ -11,7 +11,7 @@
 <section id="{{ $widget->key === 'restaurant_product_one' ? 'restaurant-products' : $widget->key }}" class="restaurant-products">
     <div class="container">
         <div class="restaurant-products-head">
-            <h2>{{ data_get($widget, 'title', 'Sản phẩm Vaca Maxi') }}</h2>
+            <h2>{{ data_get($widget, 'title', 'Sản phẩm VACAMAXI') }}</h2>
             <span></span>
             @if (data_get($widget, 'description'))
                 <p>{!! nl2br(e(data_get($widget, 'description'))) !!}</p>
@@ -30,7 +30,7 @@
 
         @if ($buttonText)
             <div class="restaurant-more">
-                <a class="restaurant-button" href="{{ $buttonUrl }}">{{ $buttonText }}</a>
+                <a class="btn-vaca" href="{{ $buttonUrl }}">{{ $buttonText }}</a>
             </div>
         @endif
     </div>

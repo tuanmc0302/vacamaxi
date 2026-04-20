@@ -16,7 +16,7 @@
                 'avatar' => '/image/Rectangle 2.png',
                 'role' => 'Khách hàng',
                 'name' => 'Hoàng Trang',
-                'content' => 'Thịt bò Vaca Maxi thật sự chất lượng. Bò mềm, tươi và được nêm nếm rất vừa miệng.',
+                'content' => 'Thịt bò VACAMAXI thật sự chất lượng. Bò mềm, tươi và được nêm nếm rất vừa miệng.',
             ],
             [
                 'avatar' => '/image/Rectangle 3.png',
@@ -26,7 +26,7 @@
             ],
             ['avatar' => '/image/Rectangle 4.png', 'role' => 'Khach hang', 'name' => 'Minh Anh', 'content' => 'Mon an chin chu, ruou dung kem rat hop vi va khong gian phu hop cho bua toi gia dinh.'],
             ['avatar' => '/image/Rectangle 5.png', 'role' => 'Khach hang', 'name' => 'Quoc Huy', 'content' => 'Bo nuong vua do, thit ngot va nhan vien phuc vu nhanh. Trai nghiem rat dang quay lai.'],
-            ['avatar' => '/image/Rectangle 2.png', 'role' => 'Khach hang', 'name' => 'Thanh Mai', 'content' => 'Toi thich cach Vaca Maxi tu van phan thit phu hop. Chat luong moi lan ghe deu rat on dinh.'],
+            ['avatar' => '/image/Rectangle 2.png', 'role' => 'Khach hang', 'name' => 'Thanh Mai', 'content' => 'Toi thich cach VACAMAXI tu van phan thit phu hop. Chat luong moi lan ghe deu rat on dinh.'],
             ['avatar' => '/image/Rectangle 3.png', 'role' => 'Khach hang', 'name' => 'Duc Nam', 'content' => 'Nha hang co chat luong thit tot, muc che bien dung yeu cau va bo tri khong gian thoai mai.'],
             ['avatar' => '/image/Rectangle 4.png', 'role' => 'Khach hang', 'name' => 'Lan Phuong', 'content' => 'Phan ruou sam 369 goi y trong bua an rat hop. Mot dia chi nen thu khi thich steak.'],
             ['avatar' => '/image/Rectangle 5.png', 'role' => 'Khach hang', 'name' => 'Gia Bao', 'content' => 'Toi danh gia cao nguyen lieu va cach phuc vu. Moi thu rat gon gang, chuyen nghiep.'],

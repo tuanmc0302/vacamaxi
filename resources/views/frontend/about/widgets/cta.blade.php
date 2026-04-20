@@ -2,7 +2,7 @@
     <div class="container">
         <div class="about-cta-inline__inner">
             <div>
-                <h2>{{ $widget->title ?: 'Tìm hiểu thêm về VACA MAXI' }}</h2>
+                <h2>{{ $widget->title ?: 'Tìm hiểu thêm về VACAMAXI' }}</h2>
                 @if ($widget->description)
                     <p>{{ $widget->description }}</p>
                 @endif

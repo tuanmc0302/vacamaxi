@@ -8,7 +8,7 @@
     <nav class="navbar navbar-expand-lg navbar-dark container">
         <div class="container-fluid">
             <a class="navbar-brand brand-link" href="/">
-                <img class="brand-logo brand-mark" src="/image/logo.png" alt="VACA MAXI">
+                <img class="brand-logo brand-mark" src="/image/logo.png" alt="VACAMAXI">
             </a>
 
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">

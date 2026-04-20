@@ -5,7 +5,7 @@
 <section class="about-scale-section">
     <div class="container about-scale-split">
         <div class="about-scale-split__image">
-            <img src="{{ $farmImage }}" alt="Mô hình trang trại VACA MAXI">
+            <img src="{{ $farmImage }}" alt="Mô hình trang trại VACAMAXI">
         </div>
         <div class="about-scale-split__content">
             <div class="about-scale-section-title">

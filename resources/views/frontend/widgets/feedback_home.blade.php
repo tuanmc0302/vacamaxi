@@ -6,7 +6,7 @@
             'avatar' => '/image/Rectangle 2.png',
             'role' => 'KhÃ¡ch hÃ ng',
             'name' => 'HoÃ ng Trang',
-            'content' => 'Thá»‹t bÃ² Vaca Maxi tháº­t sá»± cháº¥t lÆ°á»£ng. BÃ² má»m, tÆ°Æ¡i vÃ  Ä‘Æ°á»£c nÃªm náº¿m ráº¥t vá»«a miá»‡ng.',
+            'content' => 'Thá»‹t bÃ² VACAMAXI tháº­t sá»± cháº¥t lÆ°á»£ng. BÃ² má»m, tÆ°Æ¡i vÃ  Ä‘Æ°á»£c nÃªm náº¿m ráº¥t vá»«a miá»‡ng.',
         ],
         [
             'avatar' => '/image/Rectangle 3.png',

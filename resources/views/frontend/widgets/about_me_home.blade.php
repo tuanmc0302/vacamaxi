@@ -1,6 +1,6 @@
 @php
-    $title = data_get($widget, 'title', 'VỀ VACA MAXI');
-    $description = data_get($widget, 'description', 'VACA MAXI tiên phong kiến tạo hệ sinh thái chăn nuôi công nghệ cao tại Việt Nam.');
+    $title = data_get($widget, 'title', 'VỀ VACAMAXI');
+    $description = data_get($widget, 'description', 'VACAMAXI tiên phong kiến tạo hệ sinh thái chăn nuôi công nghệ cao tại Việt Nam.');
     $buttonText = data_get($widget, 'settings.button_text', 'Tìm hiểu thêm');
     $buttonUrl = data_get($widget, 'settings.button_url', '/gioi-thieu');
     $images = collect(data_get($widget, 'settings.images', ['/image/Rectangle 2.png', '/image/Rectangle 3.png', '/image/Rectangle 4.png', '/image/Rectangle 5.png']))
@@ -27,7 +27,7 @@
                     </div>
                     <p class="about-text">{!! nl2br(e($description)) !!}</p>
                     <div class="about-more">
-                        <a href="{{ $buttonUrl }}" class="about-action">{{ $buttonText }}</a>
+                        <a href="{{ $buttonUrl }}" class="btn-vaca">{{ $buttonText }}</a>
                     </div>
                 </div>
             </div>

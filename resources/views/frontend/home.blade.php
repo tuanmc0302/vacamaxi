@@ -12,7 +12,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;700;800&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-    <title>VACA MAXI</title>
+    <title>VACAMAXI</title>
     <link rel="stylesheet" href="{{ asset('css/frontend/app.css') }}">
     @include('frontend.partials.base-layout-styles')
     <link rel="stylesheet" href="{{ asset('css/frontend/home.css') }}">

@@ -1,5 +1,5 @@
 @php
-    $title = data_get($widget, 'title', 'VACA MAXI');
+    $title = data_get($widget, 'title', 'VACAMAXI');
     $subTitle = data_get($widget, 'sub_title');
     $description = data_get($widget, 'description');
     $highlight = data_get($widget, 'settings.highlight');

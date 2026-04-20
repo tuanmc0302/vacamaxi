@@ -3,9 +3,8 @@
 namespace App\Presentation\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
-use App\Models\Category;
 use App\Models\FrontendWidget;
-use App\Models\Product;
+use App\Models\Expert;
 use App\Services\MenuService;
 use Illuminate\Support\Collection;
 use Illuminate\View\View;
@@ -13,6 +12,10 @@ use Throwable;
 
 class AboutController extends Controller
 {
+    public function __construct(
+        private readonly MenuService $menuService
+    ) {}
+
     private const ABOUT_WIDGET_KEYS = [
         'about_page_hero',
         'about_page_intro',
@@ -38,7 +41,7 @@ class AboutController extends Controller
         return view('frontend.about', [
             'frontendData' => $this->frontendData(),
             'widgets' => $this->widgetsFor(self::ABOUT_WIDGET_KEYS),
-            'expertProducts' => $this->latestExpertProducts(),
+            'experts' => Expert::where('is_active', true)->orderBy('sort_order')->take(4)->get(),
         ]);
     }
 
@@ -47,7 +50,7 @@ class AboutController extends Controller
         return view('frontend.about-scale', [
             'frontendData' => $this->frontendData(),
             'widgets' => $this->widgetsFor(self::ABOUT_SCALE_WIDGET_KEYS),
-            'expertProducts' => $this->latestExpertProducts(8),
+            'experts' => Expert::where('is_active', true)->orderBy('sort_order')->take(8)->get(),
         ]);
     }
 
@@ -56,14 +59,21 @@ class AboutController extends Controller
         return view('frontend.about-scale-figma', [
             'frontendData' => $this->frontendData(),
             'widgets' => $this->widgetsFor(self::ABOUT_SCALE_WIDGET_KEYS),
-            'expertProducts' => $this->latestExpertProducts(8),
+            'experts' => Expert::where('is_active', true)->orderBy('sort_order')->take(8)->get(),
+        ]);
+    }
+
+    public function contact(): View
+    {
+        return view('frontend.contact', [
+            'frontendData' => $this->frontendData(),
         ]);
     }
 
     private function frontendData(): array
     {
         $frontendData = json_decode(file_get_contents(resource_path('data/frontend.json')), true) ?: [];
-        $frontendData['nav'] = app(MenuService::class)->getFrontendMenu();
+        $frontendData['nav'] = $this->menuService->getFrontendMenu();
 
         return $frontendData;
     }
@@ -78,24 +88,6 @@ class AboutController extends Controller
                 ->orderBy('id')
                 ->get()
                 ->keyBy('key');
-        } catch (Throwable) {
-            return new Collection();
-        }
-    }
-
-    private function latestExpertProducts(int $limit = 8): Collection
-    {
-        try {
-            return Product::query()
-                ->with('category')
-                ->where('is_active', true)
-                ->whereHas('category', function ($query) {
-                    $query->where('module', Category::MODULE_PRODUCT)
-                        ->where('slug', 'chuyen-gia');
-                })
-                ->orderByDesc('id')
-                ->take($limit)
-                ->get();
         } catch (Throwable) {
             return new Collection();
         }

@@ -10,6 +10,6 @@
         <button class="partner-submit" type="submit">Gửi thư</button>
     </form>
     <div class="partner-note">
-        Liên Hệ Hợp Tác Của Bạn Đã Được Gửi Đến Bộ Phận Chăm Sóc Khách Hàng Của Vaca Maxi.
+        Liên Hệ Hợp Tác Của Bạn Đã Được Gửi Đến Bộ Phận Chăm Sóc Khách Hàng Của VACAMAXI.
     </div>
 </div>

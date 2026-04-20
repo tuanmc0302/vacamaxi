@@ -8,22 +8,27 @@ use App\Models\Post;
 use App\Services\MenuService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class NewsController extends Controller
 {
+    public function __construct(
+        private readonly MenuService $menuService
+    ) {}
+
     public function index(): View
     {
         $frontendData = $this->frontendData();
         $categories = $this->newsCategories();
 
-        $firstCategoryId = $categories->first()?->id;
         $postsByCategory = $categories->mapWithKeys(fn (Category $category): array => [
-            $category->id => $this->postsForCategory($category->id, $firstCategoryId)
+            $category->id => Post::query()
+                ->where('category_id', $category->id)
+                ->where('is_active', true)
                 ->with('category')
                 ->orderByDesc('published_at')
-                ->orderByDesc('id')
                 ->limit(8)
                 ->get(),
         ]);
@@ -38,12 +43,13 @@ class NewsController extends Controller
     public function category(string $categorySlug): View
     {
         $frontendData = $this->frontendData();
-        $category = $this->newsCategories()->firstWhere('slug', $categorySlug) ?? abort(404);
+        $category = Category::where('slug', $categorySlug)->where('module', 'news')->firstOrFail();
 
-        $posts = $this->postsForCategory($category->id, $this->newsCategories()->first()?->id)
+        $posts = Post::query()
+            ->where('category_id', $category->id)
+            ->where('is_active', true)
             ->with('category')
             ->orderByDesc('published_at')
-            ->orderByDesc('id')
             ->paginate(12);
 
         return view('frontend.news-category', [
@@ -56,30 +62,14 @@ class NewsController extends Controller
     public function show(string $slug): View
     {
         $frontendData = $this->frontendData();
+        $post = Post::where('slug', $slug)->where('is_active', true)->with(['category', 'author'])->firstOrFail();
 
-        $post = $this->publishedPosts()
-            ->with(['category', 'author'])
-            ->where('slug', $slug)
-            ->firstOrFail();
-
-        $relatedPosts = $this->publishedPosts()
-            ->with('category')
-            ->whereKeyNot($post->getKey())
-            ->when($post->category_id, fn (Builder $query) => $query->where('category_id', $post->category_id))
+        $relatedPosts = Post::where('category_id', $post->category_id)
+            ->where('id', '!=', $post->id)
+            ->where('is_active', true)
             ->orderByDesc('published_at')
-            ->orderByDesc('id')
             ->limit(4)
             ->get();
-
-        if ($relatedPosts->isEmpty()) {
-            $relatedPosts = $this->publishedPosts()
-                ->with('category')
-                ->whereKeyNot($post->getKey())
-                ->orderByDesc('published_at')
-                ->orderByDesc('id')
-                ->limit(4)
-                ->get();
-        }
 
         return view('frontend.news-detail', [
             'frontendData' => $frontendData,
@@ -88,72 +78,27 @@ class NewsController extends Controller
         ]);
     }
 
-    private function publishedPosts(): Builder
-    {
-        return Post::query()
-            ->where('is_active', true)
-            ->where(function (Builder $query): void {
-                $query->whereNull('published_at')
-                    ->orWhere('published_at', '<=', now());
-            });
-    }
-
-    private function postsForCategory(int $categoryId, ?int $firstCategoryId): Builder
-    {
-        return $this->publishedPosts()
-            ->where(function (Builder $query) use ($categoryId, $firstCategoryId): void {
-                $query->where('category_id', $categoryId);
-
-                if ($firstCategoryId === $categoryId) {
-                    $query->orWhereNull('category_id');
-                }
-            });
-    }
-
     private function newsCategories(): Collection
     {
-        return Category::query()
-            ->where('module', Category::MODULE_NEWS)
-            ->where('is_active', true)
-            ->withCount(['posts' => function (Builder $query): void {
-                $this->publishedPostsConstraint($query);
-            }])
-            ->orderBy('sort_order')
-            ->orderBy('name')
-            ->get();
-    }
-
-    private function publishedPostsConstraint(Builder $query): void
-    {
-        $query->where('is_active', true)
-            ->where(function (Builder $subQuery): void {
-                $subQuery->whereNull('published_at')
-                    ->orWhere('published_at', '<=', now());
-            });
+        return Category::where('module', 'news')->where('is_active', true)->orderBy('sort_order')->get();
     }
 
     private function frontendData(): array
     {
         $path = resource_path('data/frontend.json');
-
-        if (! is_file($path)) {
-            return [];
-        }
-
-        $frontendData = json_decode(file_get_contents($path), true) ?: [];
-        $frontendData['nav'] = app(MenuService::class)->getFrontendMenu();
-
+        $frontendData = File::exists($path) ? json_decode(File::get($path), true) : [];
+        $frontendData['nav'] = $this->menuService->getFrontendMenu();
         return $frontendData;
     }
 
     public static function imageUrl(?string $path, string $fallback = 'image/Rectangle 5.png'): string
     {
-        $path = $path ?: $fallback;
+        if (!$path) return asset($fallback);
 
         if (Str::startsWith($path, ['http://', 'https://', '/'])) {
             return $path;
         }
 
-        return asset($path);
+        return asset('storage/' . $path);
     }
 }

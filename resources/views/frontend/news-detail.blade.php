@@ -1,7 +1,7 @@
 @extends('frontend.master')
 
 @php
-    $pageTitle = ($post->seo_title ?: $post->title) . ' - VACA MAXI';
+    $pageTitle = ($post->seo_title ?: $post->title) . ' - VACAMAXI';
     $metaDescription = $post->seo_description ?: $post->description;
     $active = 'news';
     $image = \App\Presentation\Http\Controllers\Frontend\NewsController::imageUrl($post->image, 'image/Rectangle 4.png');
@@ -17,7 +17,7 @@
     <section class="page-hero">
         <div class="container">
             <h1>{{ $post->title }}</h1>
-            <p>{{ optional($post->category)->name ?: 'Tin tức VACA MAXI' }}</p>
+            <p>{{ optional($post->category)->name ?: 'Tin tức VACAMAXI' }}</p>
         </div>
     </section>
 
@@ -32,7 +32,7 @@
                         <p class="article-meta">
                             {{ optional($post->published_at)->format('d/m/Y') ?: $post->created_at->format('d/m/Y') }}
                             @if ($post->category)
-                                Â· {{ $post->category->name }}
+                                &bull; {{ $post->category->name }}
                             @endif
                         </p>
                         <p>{{ $description }}</p>
@@ -41,9 +41,9 @@
 
                 @if ($description)
                     <div class="article-note">
-                        <strong>Ná»™i dung bÃ i viáº¿t</strong>
+                        <strong>Nội dung bài viết</strong>
                         <ul>
-                            <li>{{ \Illuminate\Support\Str::limit($description, 90) }}</li>
+                            <li>{{ \Illuminate\Support\Str::limit($description, 150) }}</li>
                         </ul>
                     </div>
                 @endif
@@ -58,17 +58,24 @@
 
                 @if ($relatedPosts->isNotEmpty())
                     <section class="related-section">
-                        <h2 class="related-title">BÃ i viáº¿t <span>liÃªn quan</span></h2>
-                        <div class="related-grid">
+                        <div class="related-title">
+                            <h2>Bài viết liên quan</h2>
+                            <span></span>
+                        </div>
+                        <div class="news-grid">
                             @foreach ($relatedPosts as $relatedPost)
                                 @php
                                     $relatedImage = \App\Presentation\Http\Controllers\Frontend\NewsController::imageUrl($relatedPost->image, 'image/Rectangle 5.png');
                                 @endphp
-                                <a class="related-card" href="{{ route('frontend.news.show', $relatedPost->slug) }}">
+                                <a class="news-card" href="{{ route('frontend.news.show', $relatedPost->slug) }}">
                                     <img src="{{ $relatedImage }}" alt="{{ $relatedPost->title }}">
-                                    <div class="related-card-body">
+                                    <div class="news-card-body">
                                         <h3>{{ $relatedPost->title }}</h3>
-                                        <p>{{ $relatedPost->description ?: \Illuminate\Support\Str::limit(strip_tags($relatedPost->content), 90) }}</p>
+                                        <p>{{ $relatedPost->description ?: \Illuminate\Support\Str::limit(strip_tags($relatedPost->content), 100) }}</p>
+                                        <div class="news-meta">
+                                            <span>{{ optional($relatedPost->published_at)->format('d/m/Y') ?: $relatedPost->created_at->format('d/m/Y') }}</span>
+                                            <strong>Xem thêm</strong>
+                                        </div>
                                     </div>
                                 </a>
                             @endforeach
@@ -79,4 +86,3 @@
         </div>
     </section>
 @endsection
-

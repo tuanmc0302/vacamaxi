@@ -4,12 +4,6 @@
     --restaurant-muted: #666666;
 }
 
-.restaurant-container {
-    max-width: 1180px;
-    margin: 0 auto;
-    padding: 0 15px;
-}
-
 .restaurant-intro {
     padding: 80px 0;
     background: #ffffff;
@@ -209,7 +203,7 @@
 .restaurant-diamonds span {
     width: 10px;
     height: 10px;
-    background: #dddddd;
+    background: rgb(243, 178, 26);
     transform: rotate(45deg);
 }
 
@@ -232,6 +226,25 @@
     color: var(--restaurant-muted);
     font-size: 18px;
     line-height: 1.6;
+}
+
+.restaurant-product-grid {
+    margin-bottom: 50px;
+}
+
+.restaurant-more {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-top: 40px;
+}
+
+.restaurant-empty {
+    padding: 40px;
+    text-align: center;
+    color: var(--restaurant-muted);
+    border: 1px dashed #dddddd;
+    border-radius: 12px;
 }
 
 @media (max-width: 991.98px) {

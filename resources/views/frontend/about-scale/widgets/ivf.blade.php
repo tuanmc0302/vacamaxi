@@ -1,7 +1,7 @@
 @php
     $ivfImage = $widgetImages($widget, ['/image/Rectangle 3.png'])->first();
     $ivfLead = 'IVF (thụ tinh trong ống nghiệm): tạo phôi bò chất lượng cao trong phòng thí nghiệm';
-    $ivfSub = 'Tại VACA MAXI, chúng tôi không chỉ dừng lại ở “phôi giống thành công”. Chúng tôi chủ động kiểm soát chất lượng ngay từ gốc – từ phôi';
+    $ivfSub = 'Tại VACAMAXI, chúng tôi không chỉ dừng lại ở “phôi giống thành công”. Chúng tôi chủ động kiểm soát chất lượng ngay từ gốc – từ phôi';
     $ivfBullets = [
         'IVF (In Vitro Fertilization)',
         'hay còn gọi là thụ tinh ống nghiệm',
@@ -19,7 +19,7 @@
 <section class="about-scale-ivf">
     <div class="container">
         <div class="about-scale-ivf__intro">
-            <h2>IVF – Giải pháp VACA MAXI lựa chọn</h2>
+            <h2>IVF – Giải pháp VACAMAXI lựa chọn</h2>
             <p>{{ $ivfLead }}</p>
             <p>{{ $ivfSub }}</p>
         </div>
@@ -36,7 +36,7 @@
                 @endforeach
             </div>
             <div class="about-scale-split__image">
-                <img src="{{ $ivfImage }}" alt="IVF tại VACA MAXI">
+                <img src="{{ $ivfImage }}" alt="IVF tại VACAMAXI">
             </div>
         </div>
     </div>

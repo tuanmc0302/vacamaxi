@@ -3,7 +3,7 @@
 @endphp
 
 <section class="restaurant-gallery">
-    <div class="restaurant-container">
+    <div class="container">
         <div class="restaurant-section-heading">
             <h2>{{ data_get($widget, 'title', 'Không gian nhà hàng') }}</h2>
             <span></span>
@@ -14,7 +14,7 @@
 
         <div class="restaurant-gallery-grid">
             @foreach ($images->take(4) as $image)
-                <img src="{{ $imageUrl($image) }}" alt="{{ data_get($widget, 'title', 'Nhà hàng Vaca Maxi') }}">
+                <img src="{{ $imageUrl($image) }}" alt="{{ data_get($widget, 'title', 'Nhà hàng VACAMAXI') }}">
             @endforeach
         </div>
 

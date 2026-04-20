@@ -57,6 +57,10 @@ class ProductController extends Controller
 
     public function category(Request $request, string $categorySlug): View
     {
+        if ($categorySlug === 'bo') {
+            return redirect()->route('frontend.products.breeds');
+        }
+
         $frontendData = $this->frontendData();
         $categories = $this->productCategories();
         $category = $categories->firstWhere('slug', $categorySlug) ?? abort(404);
@@ -79,6 +83,25 @@ class ProductController extends Controller
                 'search' => $search,
                 'sort' => $sort,
             ],
+        ]);
+    }
+
+    public function breeds(Request $request): View
+    {
+        $frontendData = $this->frontendData();
+        $breedCategory = Category::where('module', Category::MODULE_PRODUCT)
+            ->where('slug', 'bo')
+            ->firstOrFail();
+
+        $breeds = Product::query()
+            ->where('category_id', $breedCategory->id)
+            ->where('is_active', true)
+            ->orderBy('sort_order')
+            ->get();
+
+        return view('frontend.products.breeds', [
+            'frontendData' => $frontendData,
+            'breeds' => $breeds,
         ]);
     }
 
@@ -155,6 +178,7 @@ class ProductController extends Controller
         return Category::query()
             ->where('module', Category::MODULE_PRODUCT)
             ->where('is_active', true)
+            ->where('slug', '!=', 'bo')
             ->withCount(['products' => fn (Builder $query) => $query->where('is_active', true)])
             ->orderBy('sort_order')
             ->orderBy('name')

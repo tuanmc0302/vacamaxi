@@ -52,18 +52,6 @@ class User extends Authenticatable
         ];
     }
 
-    public function roles(): BelongsToMany
-    {
-        return $this->belongsToMany(Role::class, 'role_user');
-    }
-
-    public function hasPermission(string $permission): bool
-    {
-        return $this->roles()
-            ->whereHas('permissions', fn ($query) => $query->where('name', $permission))
-            ->exists();
-    }
-
     public function isTwoFactorEnabled(): bool
     {
         return $this->google_two_factor_enabled === true

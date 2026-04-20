@@ -8,7 +8,7 @@
             <div class="row g-5">
                 <div class="col-lg-4 col-md-6">
                     <div class="footer-brand">
-                        <img class="footer-logo" src="/image/logo.png" alt="VACA MAXI">
+                        <img class="footer-logo" src="/image/logo.png" alt="VACAMAXI">
                         <p class="footer-about">{{ $footer['intro'] ?? '' }}</p>
                     </div>
                 </div>
@@ -64,7 +64,7 @@
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-md-6">
-                    <p class="copyright mb-md-0">© {{ date('Y') }} Vaca Maxi. Tất cả quyền được bảo lưu.</p>
+                    <p class="copyright mb-md-0">© {{ date('Y') }} VACAMAXI. Tất cả quyền được bảo lưu.</p>
                 </div>
                 <div class="col-md-6 text-md-end">
                     <p class="design-by mb-0">Phát triển bởi Embera</p>

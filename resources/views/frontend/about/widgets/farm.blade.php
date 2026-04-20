@@ -7,7 +7,7 @@
     <div class="container">
         <div class="about-feature__grid">
             <div class="about-feature__image">
-                <img src="{{ $farmImage }}" alt="Mô hình trang trại VACA MAXI">
+                <img src="{{ $farmImage }}" alt="Mô hình trang trại VACAMAXI">
             </div>
 
             <div class="about-feature__content">

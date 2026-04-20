@@ -1,5 +1,5 @@
 @php
-    $title = data_get($widget, 'title', 'NHÀ HÀNG 5 SAO VACA MAXI');
+    $title = data_get($widget, 'title', 'NHÀ HÀNG 5 SAO VACAMAXI');
     $description = data_get($widget, 'description');
     $images = collect(data_get($widget, 'settings.images', ['/image/Rectangle 5.png', '/image/Rectangle 3.png', '/image/Rectangle 2.png', '/image/Rectangle 11.png']))
         ->filter()
@@ -10,7 +10,6 @@
 <style>
     .restaurant-dots i {
         background: rgb(243, 178, 26);
-;
     }
 </style>
 

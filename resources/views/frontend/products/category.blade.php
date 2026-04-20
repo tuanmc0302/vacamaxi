@@ -1,9 +1,9 @@
 @extends('frontend.master')
 
 @php
-    $pageTitle = $category->name . ' - VACA MAXI';
-    $metaDescription = $category->description ?: 'Danh sách sản phẩm ' . $category->name;
-    $active = 'product-' . $category->slug;
+    $pageTitle = $category->name . ' - VACAMAXI';
+    $metaDescription = 'Danh sách sản phẩm thuộc danh mục ' . $category->name;
+    $active = 'product';
 @endphp
 
 @push('styles')
@@ -20,36 +20,35 @@
 
     <section class="product-page">
         <div class="container">
-            <h2 class="category-title mt-0">{{ $category->name }}</h2>
-
-            <form class="filter-row" action="{{ route('frontend.products.category', $category->slug) }}" method="get">
-                <select name="sort" onchange="this.form.submit()">
-                    <option value="newest" @selected(($filters['sort'] ?? '') === 'newest')>Sắp xếp</option>
-                    <option value="name_asc" @selected(($filters['sort'] ?? '') === 'name_asc')>Tên A-Z</option>
-                    <option value="name_desc" @selected(($filters['sort'] ?? '') === 'name_desc')>Tên Z-A</option>
-                </select>
-
-                <select name="category" onchange="if (this.value) window.location.href = this.value">
-                    @foreach ($categories as $item)
-                        <option value="{{ route('frontend.products.category', $item->slug) }}" @selected($item->id === $category->id)>{{ $item->name }}</option>
-                    @endforeach
-                </select>
-
-                <div class="search-box">
-                    <input type="search" name="search" value="{{ $filters['search'] ?? '' }}" placeholder="Tìm kiếm sản phẩm">
+            @if ($categories->isNotEmpty())
+                <div class="category-filter">
+                    <ul class="category-filter__list">
+                        <li>
+                            <a href="{{ route('frontend.products.index') }}" class="category-filter__link">
+                                Tất cả
+                            </a>
+                        </li>
+                        @foreach ($categories as $cat)
+                            <li>
+                                <a href="{{ route('frontend.products.category', $cat->slug) }}" class="category-filter__link {{ $category->id === $cat->id ? 'active' : '' }}">
+                                    {{ $cat->name }}
+                                </a>
+                            </li>
+                        @endforeach
+                    </ul>
                 </div>
-            </form>
+            @endif
+
+            <div class="product-grid">
+                @foreach ($products as $product)
+                    @include('frontend.products._card', ['product' => $product])
+                @endforeach
+            </div>
 
             @if ($products->isEmpty())
-                <div class="empty-state">Chưa có sản phẩm trong danh mục này.</div>
-            @else
-                <div class="product-grid">
-                    @foreach ($products as $product)
-                        @include('frontend.products._card', ['product' => $product])
-                    @endforeach
+                <div class="empty-state text-center py-5">
+                    <p class="text-muted">Chưa có sản phẩm nào trong danh mục này.</p>
                 </div>
-
-                {{ $products->links() }}
             @endif
         </div>
     </section>

@@ -2,19 +2,17 @@
     $backendUser = auth()->user();
     $productMenuCategories = collect();
 
-    if ($backendUser?->hasPermission('admin.products.view')) {
-        try {
-            $productMenuCategories = \App\Models\Category::query()
-                ->where('module', \App\Models\Category::MODULE_PRODUCT)
-                ->where('is_active', true)
-                ->has('products', '>=', 4)
-                ->withCount('products')
-                ->orderBy('sort_order')
-                ->orderBy('name')
-                ->get();
-        } catch (\Throwable) {
-            $productMenuCategories = collect();
-        }
+    try {
+        $productMenuCategories = \App\Models\Category::query()
+            ->where('module', \App\Models\Category::MODULE_PRODUCT)
+            ->where('is_active', true)
+            ->has('products', '>=', 4)
+            ->withCount('products')
+            ->orderBy('sort_order')
+            ->orderBy('name')
+            ->get();
+    } catch (\Throwable) {
+        $productMenuCategories = collect();
     }
 
     $menuItems = collect(config('menu_aside_backend', []))
@@ -25,14 +23,12 @@
                         'title' => $category->name . ' (' . $category->products_count . ')',
                         'route' => 'admin.products.index',
                         'params' => ['category_id' => $category->id],
-                        'permission' => 'admin.products.view',
                     ])
                     ->all();
             }
 
             return $item;
         })
-        ->filter(fn (array $item) => ! isset($item['permission']) || $backendUser?->hasPermission($item['permission']))
         ->values();
 
     $iconMap = [
@@ -103,9 +99,7 @@
                 <nav class="space-y-1 px-4 py-4">
                     @foreach ($menuItems as $item)
                         @php
-                            $children = collect($item['children'] ?? [])
-                                ->filter(fn (array $child) => ! isset($child['permission']) || $backendUser?->hasPermission($child['permission']))
-                                ->values();
+                            $children = collect($item['children'] ?? []);
                             $routePrefix = str($item['route'])->beforeLast('.')->append('.*')->toString();
                             $itemActive = request()->routeIs($item['route']) || request()->routeIs($routePrefix);
                             $childActive = $children->contains(function (array $child) {

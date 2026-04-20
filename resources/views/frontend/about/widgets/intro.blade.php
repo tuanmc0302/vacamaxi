@@ -9,13 +9,13 @@
             <div class="about-story__gallery">
                 @foreach ($galleryImages as $image)
                     <div class="about-story__media">
-                        <img src="{{ $image }}" alt="VACA MAXI">
+                        <img src="{{ $image }}" alt="VACAMAXI">
                     </div>
                 @endforeach
             </div>
 
             <div class="about-story__content">
-                <p class="about-story__eyebrow">{{ $widget->title ?: 'VACA MAXI' }}</p>
+                <p class="about-story__eyebrow">{{ $widget->title ?: 'VACAMAXI' }}</p>
                 @if ($widget->sub_title)
                     <p class="about-story__quote">{{ $widget->sub_title }}</p>
                 @endif

@@ -1,8 +1,8 @@
 @extends('frontend.master')
 
 @php
-    $pageTitle = 'Giới thiệu - VACA MAXI';
-    $metaDescription = 'Giới thiệu về VACA MAXI';
+    $pageTitle = 'Giới thiệu - VACAMAXI';
+    $metaDescription = 'Giới thiệu về VACAMAXI';
     $active = 'about';
 
     $splitLines = function (?string $text) {

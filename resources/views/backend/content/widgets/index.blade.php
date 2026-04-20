@@ -53,22 +53,16 @@
                             <td class="px-5 py-4">{{ $widget->sub_title }}</td>
                             <td class="sort-order-cell px-5 py-4">{{ $widget->sort_order }}</td>
                             <td class="px-5 py-4">
-                                @if (auth()->user()?->hasPermission('admin.widgets.edit'))
-                                    <label class="inline-flex cursor-pointer items-center gap-3">
-                                        <input type="checkbox" class="widget-toggle peer sr-only" data-action="{{ route('admin.widgets.toggle', $widget) }}" @checked($widget->is_active)>
-                                        <span class="h-6 w-11 rounded-full bg-slate-200 p-1 transition peer-checked:bg-emerald-500">
-                                            <span class="block h-4 w-4 rounded-full bg-white shadow transition peer-checked:translate-x-5"></span>
-                                        </span>
-                                        <span class="toggle-label text-sm font-medium {{ $widget->is_active ? 'text-emerald-700' : 'text-slate-500' }}">{{ $widget->is_active ? 'Hiển thị' : 'Ẩn' }}</span>
-                                    </label>
-                                @else
-                                    {{ $widget->is_active ? 'Hiển thị' : 'Ẩn' }}
-                                @endif
+                                <label class="inline-flex cursor-pointer items-center gap-3">
+                                    <input type="checkbox" class="widget-toggle peer sr-only" data-action="{{ route('admin.widgets.toggle', $widget) }}" @checked($widget->is_active)>
+                                    <span class="h-6 w-11 rounded-full bg-slate-200 p-1 transition peer-checked:bg-emerald-500">
+                                        <span class="block h-4 w-4 rounded-full bg-white shadow transition peer-checked:translate-x-5"></span>
+                                    </span>
+                                    <span class="toggle-label text-sm font-medium {{ $widget->is_active ? 'text-emerald-700' : 'text-slate-500' }}">{{ $widget->is_active ? 'Hiển thị' : 'Ẩn' }}</span>
+                                </label>
                             </td>
                             <td class="px-5 py-4 text-right">
-                                @if (auth()->user()?->hasPermission('admin.widgets.edit'))
-                                    <a href="{{ route('admin.widgets.edit', ['widget' => $widget, 'page' => $currentPage]) }}" class="inline-flex items-center rounded-lg border border-slate-300 px-3 py-2 text-xs font-semibold text-slate-700 transition hover:bg-slate-100">Sửa</a>
-                                @endif
+                                <a href="{{ route('admin.widgets.edit', ['widget' => $widget, 'page' => $currentPage]) }}" class="inline-flex items-center rounded-lg border border-slate-300 px-3 py-2 text-xs font-semibold text-slate-700 transition hover:bg-slate-100">Sửa</a>
                             </td>
                         </tr>
                     @endforeach

@@ -2,19 +2,20 @@
   "nav": [
     {"label": "Trang chủ", "url": "/", "key": "home"},
     {"label": "Giới thiệu", "url": "/gioi-thieu", "key": "about", "children": [
-      {"label": "Về Vaca Maxi", "url": "/gioi-thieu", "key": "about"},
+      {"label": "Về VACAMAXI", "url": "/gioi-thieu", "key": "about"},
       {"label": "Quy mô phát triển", "url": "/gioi-thieu-quy-mo", "key": "about-scale"}
     ]},
     {"label": "Sản phẩm", "url": "/san-pham", "key": "product", "children": [
+      {"label": "Giống bò", "url": "/san-pham/giong-bo-vacamaxi", "key": "breeds"},
       {"label": "Rượu", "url": "/san-pham/ruou", "key": "wine"},
       {"label": "Thịt bò", "url": "/san-pham/thit-bo", "key": "beef"}
     ]},
     {"label": "Dịch vụ - Nhà hàng", "url": "/dich-vu-nha-hang", "key": "restaurant"},
     {"label": "Tin Tức", "url": "/tin-tuc", "key": "news"},
-    {"label": "Liên hệ", "url": "/gioi-thieu#footer", "key": "contact"}
+    {"label": "Liên hệ", "url": "/lien-he", "key": "contact"}
   ],
   "footer": {
-    "intro": "VACA MAXI ra đời với khát vọng thay đổi cục diện ngành chăn nuôi Việt Nam. Trong bối cảnh người tiêu dùng ngày càng đòi hỏi cao về chất lượng thịt bò, ngành chăn nuôi trong nước vẫn còn nhiều hạn chế về giống, quy trình và năng suất.",
+    "intro": "VACAMAXI ra đời với khát vọng thay đổi cục diện ngành chăn nuôi Việt Nam. Trong bối cảnh người tiêu dùng ngày càng đòi hỏi cao về chất lượng thịt bò, ngành chăn nuôi trong nước vẫn còn nhiều hạn chế về giống, quy trình và năng suất.",
     "address": "Địa chỉ: 166 Phạm Văn Đồng, P. Đông Ngạc, TP. Hà Nội",
     "hotlines": ["0983 38 1900 - Hỗ trợ Rượu", "098 08 1900 - Hỗ trợ về Bò"],
     "email": "Email: info@vacamaxivn",
@@ -39,26 +40,26 @@
     {"image": "/image/Rectangle 11.png", "title": "Vaca – B", "description": "Thịt chắc, mọng nước\nlý tưởng cho chế biến công nghiệp", "url": "/san-pham"}
   ],
   "wineProducts": [
-    {"image": "/image/Rectangle 4.png", "title": "Rượu sâm 369 - 750ml", "description": "Dòng rượu Sâm do VACA MAXI phát triển, được nấu từ các loại ngũ cốc quen thuộc với người Việt", "url": "/san-pham"},
-    {"image": "/image/Rectangle 4.png", "title": "Rượu sâm 369 - 750ml", "description": "Dòng rượu Sâm do VACA MAXI phát triển, được nấu từ các loại ngũ cốc quen thuộc với người Việt", "url": "/san-pham"},
-    {"image": "/image/Rectangle 4.png", "title": "Rượu sâm 369 - 750ml", "description": "Dòng rượu Sâm do VACA MAXI phát triển, được nấu từ các loại ngũ cốc quen thuộc với người Việt", "url": "/san-pham"},
-    {"image": "/image/Rectangle 4.png", "title": "Rượu sâm 369 - 750ml", "description": "Dòng rượu Sâm do VACA MAXI phát triển, được nấu từ các loại ngũ cốc quen thuộc với người Việt", "url": "/san-pham"}
+    {"image": "/image/Rectangle 4.png", "title": "Rượu sâm 369 - 750ml", "description": "Dòng rượu Sâm do VACAMAXI phát triển, được nấu từ các loại ngũ cốc quen thuộc với người Việt", "url": "/san-pham"},
+    {"image": "/image/Rectangle 4.png", "title": "Rượu sâm 369 - 750ml", "description": "Dòng rượu Sâm do VACAMAXI phát triển, được nấu từ các loại ngũ cốc quen thuộc với người Việt", "url": "/san-pham"},
+    {"image": "/image/Rectangle 4.png", "title": "Rượu sâm 369 - 750ml", "description": "Dòng rượu Sâm do VACAMAXI phát triển, được nấu từ các loại ngũ cốc quen thuộc với người Việt", "url": "/san-pham"},
+    {"image": "/image/Rectangle 4.png", "title": "Rượu sâm 369 - 750ml", "description": "Dòng rượu Sâm do VACAMAXI phát triển, được nấu từ các loại ngũ cốc quen thuộc với người Việt", "url": "/san-pham"}
   ],
   "news": [
-    {"image": "/image/Rectangle 5.png", "title": "Nhà hàng Vaca Maxi", "summary": "Nhà hàng steak & grill cao cấp, nơi ẩm thực không chỉ được thưởng thức bằng vị giác...", "date": "25-02-2026", "url": "/tin-tuc/ruou-trang-tam-coc"},
-    {"image": "/image/Rectangle 11.png", "title": "Nhà hàng Vaca Maxi", "summary": "Nhà hàng steak & grill cao cấp, nơi ẩm thực không chỉ được thưởng thức bằng vị giác...", "date": "25-02-2026", "url": "/tin-tuc/ruou-trang-tam-coc"},
-    {"image": "/image/Rectangle 11.png", "title": "Nhà hàng Vaca Maxi", "summary": "Nhà hàng steak & grill cao cấp, nơi ẩm thực không chỉ được thưởng thức bằng vị giác...", "date": "25-02-2026", "url": "/tin-tuc/ruou-trang-tam-coc"},
-    {"image": "/image/Rectangle 11.png", "title": "Nhà hàng Vaca Maxi", "summary": "Nhà hàng steak & grill cao cấp, nơi ẩm thực không chỉ được thưởng thức bằng vị giác...", "date": "25-02-2026", "url": "/tin-tuc/ruou-trang-tam-coc"},
-    {"image": "/image/Rectangle 5.png", "title": "Nhà hàng Vaca Maxi", "summary": "Nhà hàng steak & grill cao cấp, nơi ẩm thực không chỉ được thưởng thức bằng vị giác...", "date": "25-02-2026", "url": "/tin-tuc/ruou-trang-tam-coc"},
-    {"image": "/image/Rectangle 11.png", "title": "Nhà hàng Vaca Maxi", "summary": "Nhà hàng steak & grill cao cấp, nơi ẩm thực không chỉ được thưởng thức bằng vị giác...", "date": "25-02-2026", "url": "/tin-tuc/ruou-trang-tam-coc"},
-    {"image": "/image/Rectangle 11.png", "title": "Nhà hàng Vaca Maxi", "summary": "Nhà hàng steak & grill cao cấp, nơi ẩm thực không chỉ được thưởng thức bằng vị giác...", "date": "25-02-2026", "url": "/tin-tuc/ruou-trang-tam-coc"},
-    {"image": "/image/Rectangle 11.png", "title": "Nhà hàng Vaca Maxi", "summary": "Nhà hàng steak & grill cao cấp, nơi ẩm thực không chỉ được thưởng thức bằng vị giác...", "date": "25-02-2026", "url": "/tin-tuc/ruou-trang-tam-coc"}
+    {"image": "/image/Rectangle 5.png", "title": "Nhà hàng VACAMAXI", "summary": "Nhà hàng steak & grill cao cấp, nơi ẩm thực không chỉ được thưởng thức bằng vị giác...", "date": "25-02-2026", "url": "/tin-tuc/ruou-trang-tam-coc"},
+    {"image": "/image/Rectangle 11.png", "title": "Nhà hàng VACAMAXI", "summary": "Nhà hàng steak & grill cao cấp, nơi ẩm thực không chỉ được thưởng thức bằng vị giác...", "date": "25-02-2026", "url": "/tin-tuc/ruou-trang-tam-coc"},
+    {"image": "/image/Rectangle 11.png", "title": "Nhà hàng VACAMAXI", "summary": "Nhà hàng steak & grill cao cấp, nơi ẩm thực không chỉ được thưởng thức bằng vị giác...", "date": "25-02-2026", "url": "/tin-tuc/ruou-trang-tam-coc"},
+    {"image": "/image/Rectangle 11.png", "title": "Nhà hàng VACAMAXI", "summary": "Nhà hàng steak & grill cao cấp, nơi ẩm thực không chỉ được thưởng thức bằng vị giác...", "date": "25-02-2026", "url": "/tin-tuc/ruou-trang-tam-coc"},
+    {"image": "/image/Rectangle 5.png", "title": "Nhà hàng VACAMAXI", "summary": "Nhà hàng steak & grill cao cấp, nơi ẩm thực không chỉ được thưởng thức bằng vị giác...", "date": "25-02-2026", "url": "/tin-tuc/ruou-trang-tam-coc"},
+    {"image": "/image/Rectangle 11.png", "title": "Nhà hàng VACAMAXI", "summary": "Nhà hàng steak & grill cao cấp, nơi ẩm thực không chỉ được thưởng thức bằng vị giác...", "date": "25-02-2026", "url": "/tin-tuc/ruou-trang-tam-coc"},
+    {"image": "/image/Rectangle 11.png", "title": "Nhà hàng VACAMAXI", "summary": "Nhà hàng steak & grill cao cấp, nơi ẩm thực không chỉ được thưởng thức bằng vị giác...", "date": "25-02-2026", "url": "/tin-tuc/ruou-trang-tam-coc"},
+    {"image": "/image/Rectangle 11.png", "title": "Nhà hàng VACAMAXI", "summary": "Nhà hàng steak & grill cao cấp, nơi ẩm thực không chỉ được thưởng thức bằng vị giác...", "date": "25-02-2026", "url": "/tin-tuc/ruou-trang-tam-coc"}
   ],
   "relatedWines": [
-    {"image": "/image/Rectangle 4.png", "title": "Rượu sâm 369 - 750ml", "brand": "Mã: 01 | Vaca maxi", "status": "Liên hệ", "url": "/san-pham"},
-    {"image": "/image/Rectangle 4.png", "title": "Rượu sâm 369 - 750ml", "brand": "Mã: 01 | Vaca maxi", "status": "Liên hệ", "url": "/san-pham"},
-    {"image": "/image/Rectangle 4.png", "title": "Rượu sâm 369 - 750ml", "brand": "Mã: 01 | Vaca maxi", "status": "Liên hệ", "url": "/san-pham"},
-    {"image": "/image/Rectangle 4.png", "title": "Rượu sâm 369 - 750ml", "brand": "Mã: 01 | Vaca maxi", "status": "Liên hệ", "url": "/san-pham"}
+    {"image": "/image/Rectangle 4.png", "title": "Rượu sâm 369 - 750ml", "brand": "Mã: 01 | VACAMAXI", "status": "Liên hệ", "url": "/san-pham"},
+    {"image": "/image/Rectangle 4.png", "title": "Rượu sâm 369 - 750ml", "brand": "Mã: 01 | VACAMAXI", "status": "Liên hệ", "url": "/san-pham"},
+    {"image": "/image/Rectangle 4.png", "title": "Rượu sâm 369 - 750ml", "brand": "Mã: 01 | VACAMAXI", "status": "Liên hệ", "url": "/san-pham"},
+    {"image": "/image/Rectangle 4.png", "title": "Rượu sâm 369 - 750ml", "brand": "Mã: 01 | VACAMAXI", "status": "Liên hệ", "url": "/san-pham"}
   ],
   "comparison": {
     "headers": ["Tiêu chí", "Vaca - A", "Vaca - B", "Vaca - G", "Vaca - I"],

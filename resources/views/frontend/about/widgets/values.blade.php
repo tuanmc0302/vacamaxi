@@ -18,7 +18,7 @@
         <div class="container">
             <div class="core-values__wrap">
                 <div class="core-values__center">
-                    <img src="{{ $centerImage }}" alt="Giá trị cốt lõi VACA MAXI">
+                    <img src="{{ $centerImage }}" alt="Giá trị cốt lõi VACAMAXI">
                 </div>
             </div>
         </div>

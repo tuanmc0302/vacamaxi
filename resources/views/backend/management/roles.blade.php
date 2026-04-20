@@ -10,9 +10,7 @@
         <x-backend.alert class="mb-6" type="error" :message="$errors->first()" />
 
         <x-backend.page-header kicker="Vai trò hiện có" title="Danh sách vai trò">
-            @if (auth()->user()?->hasPermission('admin.roles.create'))
-                <a href="{{ route('admin.roles.create') }}" class="inline-flex items-center rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-700">Thêm mới vai trò</a>
-            @endif
+            <a href="{{ route('admin.roles.create') }}" class="inline-flex items-center rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-700">Thêm mới vai trò</a>
         </x-backend.page-header>
 
         <form method="GET" action="{{ route('admin.roles.index') }}" class="mt-8 grid gap-4 rounded-2xl border border-slate-200 bg-slate-50 p-5 md:grid-cols-[minmax(0,1fr),auto]">
@@ -52,13 +50,9 @@
                             </td>
                             <td class="px-5 py-4 text-right">
                                 <div class="flex justify-end gap-2">
-                                    @if (auth()->user()?->hasPermission('admin.roles.create'))
-                                        <a href="{{ route('admin.roles.edit', $role) }}" class="inline-flex items-center rounded-lg border border-slate-300 px-3 py-2 text-xs font-semibold text-slate-700 transition hover:bg-slate-100">Sửa vai trò</a>
-                                    @endif
+                                    <a href="{{ route('admin.roles.edit', $role) }}" class="inline-flex items-center rounded-lg border border-slate-300 px-3 py-2 text-xs font-semibold text-slate-700 transition hover:bg-slate-100">Sửa vai trò</a>
 
-                                    @if (auth()->user()?->hasPermission('admin.roles.delete') && $role->name !== 'super_admin')
-                                        <x-backend.confirm-delete-button :action="route('admin.roles.destroy', $role)" title="Xóa vai trò" :message="'Bạn có chắc chắn muốn xóa vai trò '.$role->title.' không?'" />
-                                    @endif
+                                    <x-backend.confirm-delete-button :action="route('admin.roles.destroy', $role)" title="Xóa vai trò" :message="'Bạn có chắc chắn muốn xóa vai trò '.$role->title.' không?'" />
                                 </div>
                             </td>
                         </tr>

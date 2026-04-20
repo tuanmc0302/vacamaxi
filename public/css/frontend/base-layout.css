@@ -78,6 +78,43 @@ h1, h2, h3, h4, h5, h6 {
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* Premium Button System */
+.btn-vaca {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 200px;
+    min-height: 52px;
+    padding: 12px 36px;
+    border-radius: 50px;
+    background: #250900;
+    color: #f3b21a !important;
+    border: 2px solid #f3b21a;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    text-decoration: none;
+    letter-spacing: 1.5px;
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+    cursor: pointer;
+}
+
+.btn-vaca:hover {
+    color: #ffffff !important;
+    background: #f3b21a;
+    border-color: #f3b21a;
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(243, 178, 26, 0.3);
+}
+
+.btn-vaca:active {
+    transform: translateY(-2px);
+}
+
 .site-header.is-home {
     background: transparent;
     backdrop-filter: blur(0px);

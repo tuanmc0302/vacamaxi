@@ -1,8 +1,8 @@
 @extends('frontend.master')
 
 @php
-    $pageTitle = 'Tất cả sản phẩm - VACA MAXI';
-    $metaDescription = 'Danh sách tất cả sản phẩm VACA MAXI';
+    $pageTitle = 'Tất cả sản phẩm - VACAMAXI';
+    $metaDescription = 'Danh sách tất cả sản phẩm VACAMAXI';
     $active = 'product';
 @endphp
 
@@ -14,40 +14,30 @@
     <section class="page-hero">
         <div class="container">
             <h1>Tất cả các sản phẩm</h1>
-            <p>Trang chủ / Tất cả sản phẩm</p>
+            <p>Khám phá hệ sinh thái sản phẩm cao cấp từ VACAMAXI</p>
         </div>
     </section>
 
     <section class="product-page">
         <div class="container">
-            <h2 class="section-title">Sản phẩm mới ra mắt</h2>
-
-            @if ($featuredProducts->isNotEmpty())
-                <div class="product-grid">
-                    @foreach ($featuredProducts as $product)
-                        @include('frontend.products._card', ['product' => $product])
-                    @endforeach
+            @if ($categories->isNotEmpty())
+                <div class="category-filter">
+                    <ul class="category-filter__list">
+                        <li>
+                            <a href="{{ route('frontend.products.index') }}" class="category-filter__link {{ request()->routeIs('frontend.products.index') ? 'active' : '' }}">
+                                Tất cả
+                            </a>
+                        </li>
+                        @foreach ($categories as $cat)
+                            <li>
+                                <a href="{{ route('frontend.products.category', $cat->slug) }}" class="category-filter__link">
+                                    {{ $cat->name }}
+                                </a>
+                            </li>
+                        @endforeach
+                    </ul>
                 </div>
             @endif
-
-            <form class="filter-row" action="{{ route('frontend.products.index') }}" method="get">
-                <select name="sort" onchange="this.form.submit()">
-                    <option value="newest" @selected(($filters['sort'] ?? '') === 'newest')>Sắp xếp</option>
-                    <option value="name_asc" @selected(($filters['sort'] ?? '') === 'name_asc')>Tên A-Z</option>
-                    <option value="name_desc" @selected(($filters['sort'] ?? '') === 'name_desc')>Tên Z-A</option>
-                </select>
-
-                <select name="category" onchange="this.form.submit()">
-                    <option value="">Danh mục</option>
-                    @foreach ($categories as $category)
-                        <option value="{{ $category->slug }}">{{ $category->name }}</option>
-                    @endforeach
-                </select>
-
-                <div class="search-box">
-                    <input type="search" name="search" value="{{ $filters['search'] ?? '' }}" placeholder="Tìm kiếm sản phẩm">
-                </div>
-            </form>
 
             @foreach ($categories as $category)
                 @php
@@ -56,7 +46,11 @@
 
                 @continue($categoryProducts->isEmpty())
 
-                <h2 class="category-title">{{ $category->name }}</h2>
+                <div class="related-title mt-5">
+                    <h2>{{ $category->name }}</h2>
+                    <span></span>
+                </div>
+                
                 <div class="product-grid">
                     @foreach ($categoryProducts as $product)
                         @include('frontend.products._card', ['product' => $product])
@@ -65,7 +59,9 @@
             @endforeach
 
             @if ($categories->isEmpty())
-                <div class="empty-state">Chưa có danh mục sản phẩm.</div>
+                <div class="empty-state text-center py-5">
+                    <p class="text-muted">Chưa có danh mục sản phẩm nào được cập nhật.</p>
+                </div>
             @endif
         </div>
     </section>

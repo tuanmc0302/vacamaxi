@@ -1,6 +1,6 @@
 @php
     $strategyTop = 'Vì sao chúng tôi chọn IVF?';
-    $strategyLead = $widgets->get('about_scale_page_ivf')?->description ?: 'IVF đòi hỏi đầu tư lớn về thiết bị chuyên dụng và đội ngũ kỹ thuật có trình độ cao. Nhưng với Vaca Maxi, đó là con đường cần thiết để tạo ra một đàn bò đồng đều – khỏe mạnh – hiệu suất cao, phục vụ cho chuỗi chăn nuôi – chế biến – thương mại khép kín của VACA MAXI';
+    $strategyLead = $widgets->get('about_scale_page_ivf')?->description ?: 'IVF đòi hỏi đầu tư lớn về thiết bị chuyên dụng và đội ngũ kỹ thuật có trình độ cao. Nhưng với VACAMAXI, đó là con đường cần thiết để tạo ra một đàn bò đồng đều – khỏe mạnh – hiệu suất cao, phục vụ cho chuỗi chăn nuôi – chế biến – thương mại khép kín của VACAMAXI';
     $strategyTitle = $widget->title ?: 'Chiến lược phát triển từ phôi giống chọn lọc giới tính gồm 2 hướng phát triển';
     $strategyImages = $widgetImages($widget, ['/image/Rectangle 2.png', '/image/Rectangle 11.png']);
     $strategyCards = [

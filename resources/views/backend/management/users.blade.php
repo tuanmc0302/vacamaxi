@@ -14,11 +14,9 @@
                 Tổng số: <span class="font-semibold text-slate-900">{{ $users->total() }}</span>
             </div>
 
-            @if (auth()->user()?->hasPermission('admin.users.create'))
-                <a href="{{ route('admin.users.create') }}" class="inline-flex items-center rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-700">
-                    Thêm mới
-                </a>
-            @endif
+            <a href="{{ route('admin.users.create') }}" class="inline-flex items-center rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-700">
+                Thêm mới
+            </a>
         </x-backend.page-header>
 
         <form method="GET" action="{{ route('admin.users.index') }}" class="mt-8 grid gap-4 rounded-2xl border border-slate-200 bg-slate-50 p-5 md:grid-cols-[minmax(0,1fr),240px,auto]">
@@ -57,13 +55,9 @@
                             <td class="px-5 py-4">{{ $user->roles->pluck('title')->join(', ') ?: 'Chưa gán' }}</td>
                             <td class="px-5 py-4">
                                 <div class="flex justify-end gap-2">
-                                    @if (auth()->user()?->hasPermission('admin.users.edit'))
-                                        <a href="{{ route('admin.users.edit', $user) }}" class="inline-flex items-center rounded-lg border border-slate-300 px-3 py-2 text-xs font-semibold text-slate-700 transition hover:bg-slate-100">Sửa</a>
-                                    @endif
+                                    <a href="{{ route('admin.users.edit', $user) }}" class="inline-flex items-center rounded-lg border border-slate-300 px-3 py-2 text-xs font-semibold text-slate-700 transition hover:bg-slate-100">Sửa</a>
 
-                                    @if (auth()->user()?->hasPermission('admin.users.delete') && auth()->id() !== $user->id)
-                                        <x-backend.confirm-delete-button :action="route('admin.users.destroy', $user)" title="Xóa người dùng" :message="'Bạn có chắc chắn muốn xóa tài khoản '.$user->username.' không?'" />
-                                    @endif
+                                    <x-backend.confirm-delete-button :action="route('admin.users.destroy', $user)" title="Xóa người dùng" :message="'Bạn có chắc chắn muốn xóa tài khoản '.$user->username.' không?'" />
                                 </div>
                             </td>
                         </tr>

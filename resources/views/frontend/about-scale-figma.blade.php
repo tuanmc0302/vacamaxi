@@ -1,8 +1,8 @@
 @extends('frontend.master')
 
 @php
-    $pageTitle = 'Giới thiệu quy mô Figma - VACA MAXI';
-    $metaDescription = 'Bản dựng đối chiếu Figma cho trang quy mô phát triển VACA MAXI';
+    $pageTitle = 'Giới thiệu quy mô Figma - VACAMAXI';
+    $metaDescription = 'Bản dựng đối chiếu Figma cho trang quy mô phát triển VACAMAXI';
     $active = 'about-scale';
 
     $wHero = $widgets->get('about_scale_page_hero');
@@ -58,7 +58,7 @@
         <div class="container">
             <div class="about-figma-grid">
                 <div class="about-figma-image-stack">
-                    <img src="{{ $widgetImages($wFarm, ['/image/Rectangle 11.png'])->first() }}" alt="Trang trại VACA MAXI">
+                    <img src="{{ $widgetImages($wFarm, ['/image/Rectangle 11.png'])->first() }}" alt="Trang trại VACAMAXI">
                     <img src="{{ $widgetImages($wCare, ['/image/Rectangle 2.png'])->first() }}" alt="Chăm sóc đàn bò">
                 </div>
 

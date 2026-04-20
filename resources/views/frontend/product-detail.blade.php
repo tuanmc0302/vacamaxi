@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Thá»‹t bÃ² Vaca - A - VACA MAXI</title>
+    <title>Thá»‹t bÃ² Vaca - A - VACAMAXI</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" href="{{ asset('css/frontend/app.css') }}">
     <link rel="stylesheet" href="{{ asset('css/frontend/base-layout.css') }}">
@@ -49,7 +49,7 @@
                         <div class="product-info">
                             <h2>Thá»‹t BÃ² Vaca - A</h2>
                             <div class="meta-line">
-                                MÃ£: 006 | ThÆ°Æ¡ng hiá»‡u Vaca Maxi
+                                MÃ£: 006 | ThÆ°Æ¡ng hiá»‡u VACAMAXI
                                 <span class="rating">â˜…â˜…â˜…â˜…â˜…</span>
                                 0 ÄÃ¡nh giÃ¡
                             </div>
@@ -89,7 +89,7 @@
                     <p>KhÃ´ng cháº¥t táº¡o mÃ¹i - táº¡o ngá»t</p>
                     <p>ÄÆ°á»£c kiá»ƒm nghiá»‡m Ä‘á»‹nh ká»³ theo tiÃªu chuáº©n an toÃ n thá»±c pháº©m</p>
                     <p>
-                        TRÄ‚NG TÃ‚M Cá»C lÃ  dÃ²ng rÆ°á»£u tráº¯ng truyá»n thá»‘ng do VACA MAXI phÃ¡t triá»ƒn, Ä‘Æ°á»£c náº¥u tá»« 3 loáº¡i ngÅ©
+                        TRÄ‚NG TÃ‚M Cá»C lÃ  dÃ²ng rÆ°á»£u tráº¯ng truyá»n thá»‘ng do VACAMAXI phÃ¡t triá»ƒn, Ä‘Æ°á»£c náº¥u tá»« 3 loáº¡i ngÅ©
                         cá»‘c quen thuá»™c vá»›i ngÆ°á»i Viá»‡t: RÆ°á»£u Ä‘Æ°á»£c náº¥u theo cÃ´ng thá»©c gia truyá»n, nhÆ°ng sáº£n xuáº¥t trÃªn dÃ¢y
                         chuyá»n hiá»‡n Ä‘áº¡i, giÃºp giá»¯ Ä‘Æ°á»£c cháº¥t rÆ°á»£u truyá»n thá»‘ng mÃ  váº«n Ä‘áº£m báº£o Ä‘á»™ trong, an toÃ n vÃ  á»•n Ä‘á»‹nh.
                     </p>
@@ -101,7 +101,7 @@
 
         <section class="related-products" aria-labelledby="relatedProductsTitle">
             <div class="container">
-                <h2 class="related-title" id="relatedProductsTitle">RÆ°á»£u Vaca Maxi</h2>
+                <h2 class="related-title" id="relatedProductsTitle">RÆ°á»£u VACAMAXI</h2>
                 <div class="related-grid">
                     @foreach ($frontendData['relatedWines'] as $item)
                         @include('frontend.components.related-card', ['item' => $item])
@@ -113,7 +113,7 @@
         <section class="comparison-contact" aria-labelledby="comparisonTitle">
             <div class="container">
                 <div class="comparison-box">
-                    <h2 class="comparison-title" id="comparisonTitle">Táº¡i Vaca maxi, ChÃºng TÃ´i Chá»n Lá»c VÃ  NhÃ¢n Giá»‘ng 4 DÃ²ng BÃ² Chá»§ Lá»±c</h2>
+                    <h2 class="comparison-title" id="comparisonTitle">Táº¡i VACAMAXI, ChÃºng TÃ´i Chá»n Lá»c VÃ  NhÃ¢n Giá»‘ng 4 DÃ²ng BÃ² Chá»§ Lá»±c</h2>
                     @include('frontend.components.comparison-table', ['comparison' => $frontendData['comparison']])
                 </div>
 

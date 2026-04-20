@@ -5,6 +5,7 @@ namespace App\Presentation\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use App\Models\FrontendWidget;
 use App\Models\Product;
+use App\Models\Expert;
 use App\Services\MenuService;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
@@ -51,9 +52,12 @@ class HomeController extends Controller
             $widgets = new Collection();
         }
 
+        $experts = Expert::where('is_active', true)->orderBy('sort_order')->take(4)->get();
+
         return view('frontend.home', [
             'frontendData' => $frontendData,
             'widgets' => $widgets,
+            'experts' => $experts,
             'productOptionItems' => $this->productOptionItems($widgets),
         ]);
     }
@@ -93,5 +97,4 @@ class HomeController extends Controller
 
         return $items;
     }
-
 }

@@ -23,9 +23,7 @@
                 </select>
                 <div class="flex gap-3">
                     <button type="submit" class="inline-flex h-12 items-center justify-center rounded-xl bg-blue-600 px-5 text-sm font-semibold text-white transition hover:bg-blue-700">Lọc</button>
-                    @if (auth()->user()?->hasPermission('admin.posts.create'))
-                        <a href="{{ route('admin.posts.create') }}" class="inline-flex h-12 items-center justify-center rounded-xl bg-slate-900 px-5 text-sm font-semibold text-white transition hover:bg-slate-800">Thêm mới</a>
-                    @endif
+                    <a href="{{ route('admin.posts.create') }}" class="inline-flex h-12 items-center justify-center rounded-xl bg-slate-900 px-5 text-sm font-semibold text-white transition hover:bg-slate-800">Thêm mới</a>
                 </div>
             </form>
         </div>
@@ -66,12 +64,8 @@
                             </td>
                             <td class="px-5 py-4 text-right">
                                 <div class="inline-flex items-center gap-2">
-                                    @if (auth()->user()?->hasPermission('admin.posts.edit'))
-                                        <a href="{{ route('admin.posts.edit', $post) }}" class="rounded-lg border border-slate-200 px-3 py-2 text-xs font-semibold text-slate-700 transition hover:bg-slate-100">Sửa</a>
-                                    @endif
-                                    @if (auth()->user()?->hasPermission('admin.posts.delete'))
-                                        <button type="button" data-confirm-delete="true" data-action="{{ route('admin.posts.destroy', $post) }}" data-title="Xóa bài viết" data-message="Bạn có chắc chắn muốn xóa bài viết {{ $post->title }}?" class="rounded-lg border border-red-200 px-3 py-2 text-xs font-semibold text-red-600 transition hover:bg-red-50">Xóa</button>
-                                    @endif
+                                    <a href="{{ route('admin.posts.edit', $post) }}" class="rounded-lg border border-slate-200 px-3 py-2 text-xs font-semibold text-slate-700 transition hover:bg-slate-100">Sửa</a>
+                                    <button type="button" data-confirm-delete="true" data-action="{{ route('admin.posts.destroy', $post) }}" data-title="Xóa bài viết" data-message="Bạn có chắc chắn muốn xóa bài viết {{ $post->title }}?" class="rounded-lg border border-red-200 px-3 py-2 text-xs font-semibold text-red-600 transition hover:bg-red-50">Xóa</button>
                                 </div>
                             </td>
                         </tr>

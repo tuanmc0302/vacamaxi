@@ -20,17 +20,13 @@
                     </p>
 
                     <div class="mt-6 flex flex-wrap gap-3">
-                        @if (auth()->user()?->hasPermission('admin.users.view'))
-                            <a href="{{ route('admin.users.index') }}" class="inline-flex items-center rounded-xl bg-slate-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-700">
-                                Quản lý người dùng
-                            </a>
-                        @endif
+                        <a href="{{ route('admin.users.index') }}" class="inline-flex items-center rounded-xl bg-slate-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-700">
+                            Quản lý người dùng
+                        </a>
 
-                        @if (auth()->user()?->hasPermission('admin.roles.view'))
-                            <a href="{{ route('admin.roles.index') }}" class="inline-flex items-center rounded-xl border border-slate-300 px-5 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50">
-                                Quản lý vai trò
-                            </a>
-                        @endif
+                        <a href="{{ route('admin.roles.index') }}" class="inline-flex items-center rounded-xl border border-slate-300 px-5 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50">
+                            Quản lý vai trò
+                        </a>
 
                         <a href="{{ route('admin.two-factor.settings') }}" class="inline-flex items-center rounded-xl border border-blue-200 bg-blue-50 px-5 py-3 text-sm font-semibold text-blue-700 transition hover:bg-blue-100">
                             Cấu hình Google 2FA

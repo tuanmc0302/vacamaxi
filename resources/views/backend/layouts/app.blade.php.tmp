@@ -1,0 +1,42 @@
+@php
+    $backendUser = auth()->user();
+    $productMenuCategories = collect();
+
+    try {
+        $productMenuCategories = \App\Models\Category::query()
+            ->where('module', \App\Models\Category::MODULE_PRODUCT)
+            ->where('is_active', true)
+            ->has('products', '>=', 4)
+            ->withCount('products')
+            ->orderBy('sort_order')
+            ->orderBy('name')
+            ->get();
+    } catch (\Throwable) {
+        $productMenuCategories = collect();
+    }
+
+    $menuItems = collect(config('menu_aside_backend', []))
+        ->map(function (array $item) use ($productMenuCategories) {
+            if (($item['route'] ?? null) === 'admin.products.index' && $productMenuCategories->isNotEmpty()) {
+                $item['children'] = $productMenuCategories
+                    ->map(fn ($category) => [
+                        'title' => $category->name . ' (' . $category->products_count . ')',
+                        'route' => 'admin.products.index',
+                        'params' => ['category_id' => $category->id],
+                    ])
+                    ->all();
+            }
+
+            return $item;
+        })
+        ->values();
+
+    $iconMap = [
+        'home' => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="h-5 w-5"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10.5 12 3l9 7.5"/><path stroke-linecap="round" stroke-linejoin="round" d="M5.25 9.75V21h13.5V9.75"/></svg>',
+        'users' => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="h-5 w-5"><path stroke-linecap="round" stroke-linejoin="round" d="M16 19a4 4 0 0 0-8 0"/><circle cx="12" cy="11" r="3"/><path stroke-linecap="round" stroke-linejoin="round" d="M20 19a4 4 0 0 0-3-3.87"/><path stroke-linecap="round" stroke-linejoin="round" d="M17 8a3 3 0 1 1 0 6"/></svg>',
+        'shield' => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="h-5 w-5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3l7 3v6c0 4.5-2.9 7.74-7 9-4.1-1.26-7-4.5-7-9V6l7-3Z"/><path stroke-linecap="round" stroke-linejoin="round" d="m9.5 12 1.7 1.7L14.8 10"/></svg>',
+        'box' => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="h-5 w-5"><path stroke-linecap="round" stroke-linejoin="round" d="m21 8.5-9-5-9 5 9 5 9-5Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M3 8.5v7l9 5 9-5v-7"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 13.5v7"/></svg>',
+        'file' => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="h-5 w-5"><path stroke-linecap="round" stroke-linejoin="round" d="M7 3.75h6.25L17 7.5v12.75H7V3.75Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M13 3.75V8h4"/><path stroke-linecap="round" stroke-linejoin="round" d="M9.5 12h5M9.5 15h5"/></svg>',
+        'grid' => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="h-5 w-5"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4h6v6H4V4Zm10 0h6v6h-6V4ZM4 14h6v6H4v-6Zm10 0h6v6h-6v-6Z"/></svg>',
+    ];
+@endphp

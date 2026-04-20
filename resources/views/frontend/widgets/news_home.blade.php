@@ -33,7 +33,7 @@
             @endforeach
         </div>
         <div class="news-more">
-            <a href="{{ $buttonUrl }}" class="about-action">{{ $buttonText }}</a>
+            <a href="{{ $buttonUrl }}" class="btn-vaca">{{ $buttonText }}</a>
         </div>
     </div>
 </section>

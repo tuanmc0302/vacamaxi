@@ -18,9 +18,7 @@
         <x-backend.alert class="mb-6" :message="session('status')" />
         <x-backend.alert class="mb-6" type="error" :message="$errors->first()" />
         <x-backend.page-header kicker="{{ $isNews ? 'News' : 'Product' }}" :title="$heading">
-            @if (auth()->user()?->hasPermission('admin.categories.create'))
-                <a href="{{ route($createRoute) }}" class="inline-flex items-center rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-700">Thêm danh mục</a>
-            @endif
+            <a href="{{ route($createRoute) }}" class="inline-flex items-center rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-700">Thêm danh mục</a>
         </x-backend.page-header>
 
         <form method="GET" action="{{ route($indexRoute) }}" class="mt-8 grid gap-4 rounded-2xl border border-slate-200 bg-slate-50 p-5 md:grid-cols-[minmax(0,1fr),auto]">
@@ -51,12 +49,8 @@
                             <td class="px-5 py-4">{{ $category->is_active ? 'Hiển thị' : 'Ẩn' }}</td>
                             <td class="px-5 py-4 text-right">
                                 <div class="flex justify-end gap-2">
-                                    @if (auth()->user()?->hasPermission('admin.categories.edit'))
-                                        <a href="{{ route($editRoute, $category) }}" class="inline-flex items-center rounded-lg border border-slate-300 px-3 py-2 text-xs font-semibold text-slate-700 transition hover:bg-slate-100">Sửa</a>
-                                    @endif
-                                    @if (auth()->user()?->hasPermission('admin.categories.delete'))
-                                        <x-backend.confirm-delete-button :action="route($destroyRoute, $category)" title="Xóa danh mục" :message="'Bạn có chắc chắn muốn xóa danh mục '.$category->name.' không?'" />
-                                    @endif
+                                    <a href="{{ route($editRoute, $category) }}" class="inline-flex items-center rounded-lg border border-slate-300 px-3 py-2 text-xs font-semibold text-slate-700 transition hover:bg-slate-100">Sửa</a>
+                                    <x-backend.confirm-delete-button :action="route($destroyRoute, $category)" title="Xóa danh mục" :message="'Bạn có chắc chắn muốn xóa danh mục '.$category->name.' không?'" />
                                 </div>
                             </td>
                         </tr>

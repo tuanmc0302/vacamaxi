@@ -12,17 +12,16 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        User::query()->firstOrCreate(
-            ['email' => 'test@example.com'],
+        User::query()->updateOrCreate(
+            ['username' => 'admin'],
             [
-                'full_name' => 'Test User',
-                'username' => 'testuser',
-                'password' => bcrypt('password'),
+                'full_name' => 'Administrator',
+                'email' => 'admin@vacamaxi.com',
+                'password' => bcrypt('admin123'),
             ]
         );
 
         $this->call([
-            BackendAccessSeeder::class,
             FrontendWidgetSeeder::class,
             ContentSeeder::class,
         ]);
