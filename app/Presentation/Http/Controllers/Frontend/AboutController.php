@@ -41,15 +41,6 @@ class AboutController extends Controller
         ]);
     }
 
-    public function figma(): View
-    {
-        return view('frontend.about-figma', [
-            'frontendData' => $this->frontendData(),
-            'widgets' => $this->widgetsFor(self::ABOUT_WIDGET_KEYS),
-            'expertProducts' => $this->latestExpertProducts(),
-        ]);
-    }
-
     public function scale(): View
     {
         return view('frontend.about-scale', [

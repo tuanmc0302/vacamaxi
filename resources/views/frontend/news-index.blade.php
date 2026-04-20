@@ -12,7 +12,7 @@
 
 @section('content')
     <section class="page-hero">
-        <div>
+        <div class="container">
             <h1>Tin tức</h1>
             <p>Góc nhìn và xu hướng từ VACA MAXI</p>
         </div>

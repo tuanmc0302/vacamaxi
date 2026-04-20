@@ -1,20 +1,20 @@
 @php
     $heroParagraphs = $splitLines($widget->description);
-    $heroBackground = $widgetImages($widget, ['/image/bg_gioithieu.png'])->first();
 @endphp
 
-<section class="intro-overview" style="background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.985), rgba(255, 255, 255, 0.95)), url('{{ $heroBackground }}');">
+<section class="page-hero">
     <div class="container">
-        <div class="intro-overview__panel">
-            <p class="intro-overview__title">{{ $widget->title ?: 'GIỚI THIỆU' }}</p>
-            <div class="intro-overview__subtitle">{{ $widget->sub_title ?: 'VỀ VACA MAXI' }}</div>
-            <div class="intro-overview__rule" aria-hidden="true"><span></span></div>
-
-            <div class="intro-overview__copy">
+        <h1>{{ $widget->title ?: 'GIỚI THIỆU' }}</h1>
+        @if($widget->sub_title)
+            <p>{{ $widget->sub_title }}</p>
+        @endif
+        
+        @if($heroParagraphs->isNotEmpty())
+            <div class="mt-4" style="max-width: 800px; margin: 0 auto; font-size: 16px;">
                 @foreach ($heroParagraphs as $line)
-                    <p>{!! nl2br(e($line)) !!}</p>
+                    <p class="mb-2">{!! nl2br(e($line)) !!}</p>
                 @endforeach
             </div>
-        </div>
+        @endif
     </div>
 </section>

@@ -15,9 +15,9 @@
 
 @section('content')
     <section class="page-hero">
-        <div>
+        <div class="container">
             <h1>{{ $product->name }}</h1>
-            <p class="breadcrumb-line">Trang chủ / Sản phẩm / {{ $product->category?->name ?? 'VACA MAXI' }}</p>
+            <p>Trang chủ / Sản phẩm / {{ $product->category?->name ?? 'VACA MAXI' }}</p>
         </div>
     </section>
 

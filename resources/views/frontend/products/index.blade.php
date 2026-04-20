@@ -12,9 +12,9 @@
 
 @section('content')
     <section class="page-hero">
-        <div>
+        <div class="container">
             <h1>Tất cả các sản phẩm</h1>
-            <p class="breadcrumb-line">Trang chủ / Tất cả sản phẩm</p>
+            <p>Trang chủ / Tất cả sản phẩm</p>
         </div>
     </section>
 

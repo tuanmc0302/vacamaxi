@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', HomeController::class)->name('frontend.home');
 Route::get('/gioi-thieu', [AboutController::class, 'show'])->name('frontend.about');
-Route::get('/gioi-thieu-figma', [AboutController::class, 'figma'])->name('frontend.about.figma');
 Route::get('/gioi-thieu-quy-mo', [AboutController::class, 'scale'])->name('frontend.about.scale');
 Route::get('/gioi-thieu-quy-mo-figma', [AboutController::class, 'scaleFigma'])->name('frontend.about.scale.figma');
 Route::get('/dich-vu-nha-hang', RestaurantController::class)->name('frontend.restaurant');

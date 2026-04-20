@@ -12,9 +12,9 @@
 
 @section('content')
     <section class="page-hero">
-        <div>
+        <div class="container">
             <h1>{{ $category->name }}</h1>
-            <p class="breadcrumb-line">Trang chủ / Sản phẩm / {{ $category->name }}</p>
+            <p>Trang chủ / Sản phẩm / {{ $category->name }}</p>
         </div>
     </section>
 

@@ -19,7 +19,7 @@
             @endif
         </div>
     </div>
-    <div class="restaurant-slider-markers" aria-hidden="true">
+    <div class="restaurant-diamonds" aria-hidden="true">
         <span></span><span></span><span></span><i></i><span></span>
     </div>
 </section>

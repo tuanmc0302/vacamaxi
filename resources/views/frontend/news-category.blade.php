@@ -12,7 +12,7 @@
 
 @section('content')
     <section class="page-hero">
-        <div>
+        <div class="container">
             <h1>{{ $category->name }}</h1>
             <p>Trang chủ / Tin tức / {{ $category->name }}</p>
         </div>

@@ -25,7 +25,15 @@ return Application::configure(basePath: dirname(__DIR__))
                 return route('admin.login');
             }
 
-            return route('frontend.master');
+            return route('frontend.home');
+        });
+
+        $middleware->redirectUsersTo(function (Request $request) {
+            if ($request->is('admin') || $request->is('admin/*')) {
+                return route('admin.dashboard');
+            }
+
+            return route('frontend.home');
         });
 
         $middleware->alias([
