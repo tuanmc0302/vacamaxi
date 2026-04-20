@@ -7,7 +7,6 @@
         <div class="about-scale-split__content">
             <div class="about-scale-section-title">
                 <h2>{{ strtoupper($widget->title ?: 'CHẾ ĐỘ CHĂM SÓC VÀ DINH DƯỠNG CHUYÊN BIỆT') }}</h2>
-                <span></span>
             </div>
             @foreach ($splitLines($widget->description) as $line)
                 <p>{{ $line }}</p>

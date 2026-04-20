@@ -5,6 +5,7 @@ namespace App\Presentation\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Product;
+use App\Services\MenuService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -173,29 +174,8 @@ class ProductController extends Controller
     {
         $path = resource_path('data/frontend.json');
         $frontendData = is_file($path) ? (json_decode(file_get_contents($path), true) ?: []) : [];
-        $frontendData['nav'] = $this->withProductNav($frontendData['nav'] ?? []);
+        $frontendData['nav'] = app(MenuService::class)->getFrontendMenu();
 
         return $frontendData;
-    }
-
-    private function withProductNav(array $nav): array
-    {
-        $children = $this->productCategories()
-            ->map(fn (Category $category): array => [
-                'label' => $category->name,
-                'url' => route('frontend.products.category', $category->slug),
-                'key' => 'product-' . $category->slug,
-            ])
-            ->values()
-            ->all();
-
-        foreach ($nav as &$item) {
-            if (($item['key'] ?? '') === 'product') {
-                $item['url'] = route('frontend.products.index');
-                $item['children'] = $children;
-            }
-        }
-
-        return $nav;
     }
 }

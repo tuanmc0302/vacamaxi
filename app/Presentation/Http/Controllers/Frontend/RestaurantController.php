@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\FrontendWidget;
 use App\Models\Product;
+use App\Services\MenuService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use Illuminate\View\View;
@@ -148,12 +149,7 @@ class RestaurantController extends Controller
     {
         $path = resource_path('data/frontend.json');
         $frontendData = is_file($path) ? (json_decode(file_get_contents($path), true) ?: []) : [];
-
-        foreach ($frontendData['nav'] ?? [] as &$item) {
-            if (($item['key'] ?? '') === 'restaurant') {
-                $item['url'] = route('frontend.restaurant');
-            }
-        }
+        $frontendData['nav'] = app(MenuService::class)->getFrontendMenu();
 
         return $frontendData;
     }

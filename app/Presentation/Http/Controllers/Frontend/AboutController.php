@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\FrontendWidget;
 use App\Models\Product;
+use App\Services\MenuService;
 use Illuminate\Support\Collection;
 use Illuminate\View\View;
 use Throwable;
@@ -61,7 +62,10 @@ class AboutController extends Controller
 
     private function frontendData(): array
     {
-        return json_decode(file_get_contents(resource_path('data/frontend.json')), true) ?: [];
+        $frontendData = json_decode(file_get_contents(resource_path('data/frontend.json')), true) ?: [];
+        $frontendData['nav'] = app(MenuService::class)->getFrontendMenu();
+
+        return $frontendData;
     }
 
     private function widgetsFor(array $keys): Collection

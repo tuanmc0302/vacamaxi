@@ -5,11 +5,11 @@ namespace App\Presentation\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Post;
+use App\Services\MenuService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
-use Throwable;
 
 class NewsController extends Controller
 {
@@ -141,34 +141,9 @@ class NewsController extends Controller
         }
 
         $frontendData = json_decode(file_get_contents($path), true) ?: [];
-        $frontendData['nav'] = $this->withNewsNav($frontendData['nav'] ?? []);
+        $frontendData['nav'] = app(MenuService::class)->getFrontendMenu();
 
         return $frontendData;
-    }
-
-    private function withNewsNav(array $nav): array
-    {
-        try {
-            $children = $this->newsCategories()
-                ->map(fn (Category $category): array => [
-                    'label' => $category->name,
-                    'url' => route('frontend.news.category', $category->slug),
-                    'key' => 'news-' . $category->slug,
-                ])
-                ->values()
-                ->all();
-        } catch (Throwable) {
-            return $nav;
-        }
-
-        foreach ($nav as &$item) {
-            if (($item['key'] ?? '') === 'news') {
-                $item['url'] = route('frontend.news.index');
-                $item['children'] = $children;
-            }
-        }
-
-        return $nav;
     }
 
     public static function imageUrl(?string $path, string $fallback = 'image/Rectangle 5.png'): string

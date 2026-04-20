@@ -21,12 +21,10 @@
                 @endif
 
                 <div class="about-story__block">
-                    <h2>Tầm nhìn đến 2035</h2>
                     <p>{{ $introParagraphs->get(0) }}</p>
                 </div>
 
                 <div class="about-story__block">
-                    <h2>Sứ mệnh</h2>
                     <p>{{ $introParagraphs->get(1) }}</p>
                 </div>
             </div>

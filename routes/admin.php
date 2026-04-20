@@ -52,6 +52,23 @@ Route::prefix('admin')->name('admin.')->group(function () {
                 ->middleware('permission:admin.dashboard.view')
                 ->name('dashboard');
 
+            // Quản lý Menu
+            Route::get('/menu', [\App\Http\Controllers\Backend\MenuController::class, 'index'])
+                ->middleware('permission:admin.menu.view')
+                ->name('menu.index');
+            Route::post('/menu', [\App\Http\Controllers\Backend\MenuController::class, 'store'])
+                ->middleware('permission:admin.menu.edit')
+                ->name('menu.store');
+            Route::put('/menu/{menuItem}', [\App\Http\Controllers\Backend\MenuController::class, 'update'])
+                ->middleware('permission:admin.menu.edit')
+                ->name('menu.update');
+            Route::post('/menu/reorder', [\App\Http\Controllers\Backend\MenuController::class, 'reorder'])
+                ->middleware('permission:admin.menu.edit')
+                ->name('menu.reorder');
+            Route::delete('/menu/{menuItem}', [\App\Http\Controllers\Backend\MenuController::class, 'destroy'])
+                ->middleware('permission:admin.menu.delete')
+                ->name('menu.destroy');
+
             Route::get('/widgets', [WidgetController::class, 'index'])
                 ->middleware('permission:admin.widgets.view')
                 ->name('widgets.index');

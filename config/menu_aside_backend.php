@@ -14,6 +14,12 @@ return [
         'permission' => 'admin.widgets.view',
     ],
     [
+        'title' => 'Quản lý Menu',
+        'route' => 'admin.menu.index',
+        'icon' => 'grid',
+        'permission' => 'admin.menu.view',
+    ],
+    [
         'title' => 'Danh mục sản phẩm',
         'route' => 'admin.product-categories.index',
         'icon' => 'box',

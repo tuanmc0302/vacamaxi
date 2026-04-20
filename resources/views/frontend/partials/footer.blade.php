@@ -67,7 +67,7 @@
                     <p class="copyright mb-md-0">© {{ date('Y') }} Vaca Maxi. Tất cả quyền được bảo lưu.</p>
                 </div>
                 <div class="col-md-6 text-md-end">
-                    <p class="design-by mb-0">Phát triển bởi Vaca Maxi Team</p>
+                    <p class="design-by mb-0">Phát triển bởi Embera</p>
                 </div>
             </div>
         </div>

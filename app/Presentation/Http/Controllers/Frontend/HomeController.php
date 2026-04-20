@@ -3,9 +3,9 @@
 namespace App\Presentation\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
-use App\Models\Category;
 use App\Models\FrontendWidget;
 use App\Models\Product;
+use App\Services\MenuService;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
@@ -13,6 +13,10 @@ use Throwable;
 
 class HomeController extends Controller
 {
+    public function __construct(
+        private readonly MenuService $menuService
+    ) {}
+
     private const HOME_WIDGET_KEYS = [
         'banner_home',
         'about_me_home',
@@ -34,7 +38,7 @@ class HomeController extends Controller
     public function __invoke(): View
     {
         $frontendData = json_decode(file_get_contents(resource_path('data/frontend.json')), true) ?: [];
-        $frontendData['nav'] = $this->withProductNav($frontendData['nav'] ?? []);
+        $frontendData['nav'] = $this->menuService->getFrontendMenu();
 
         try {
             $widgets = FrontendWidget::query()
@@ -90,33 +94,4 @@ class HomeController extends Controller
         return $items;
     }
 
-    private function withProductNav(array $nav): array
-    {
-        try {
-            $children = Category::query()
-                ->where('module', Category::MODULE_PRODUCT)
-                ->where('is_active', true)
-                ->orderBy('sort_order')
-                ->orderBy('name')
-                ->get()
-                ->map(fn (Category $category): array => [
-                    'label' => $category->name,
-                    'url' => route('frontend.products.category', $category->slug),
-                    'key' => 'product-' . $category->slug,
-                ])
-                ->values()
-                ->all();
-        } catch (Throwable) {
-            return $nav;
-        }
-
-        foreach ($nav as &$item) {
-            if (($item['key'] ?? '') === 'product') {
-                $item['url'] = route('frontend.products.index');
-                $item['children'] = $children;
-            }
-        }
-
-        return $nav;
-    }
 }
