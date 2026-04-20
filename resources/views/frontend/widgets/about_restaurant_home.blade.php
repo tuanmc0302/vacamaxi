@@ -7,6 +7,12 @@
         ->values();
     $imageSrc = fn ($path) => str_starts_with($path, 'http') || str_starts_with($path, '/') ? $path : asset($path);
 @endphp
+<style>
+    .restaurant-dots i {
+        background: rgb(243, 178, 26);
+;
+    }
+</style>
 
 <section class="restaurant-section" id="restaurant">
     <div class="container">
@@ -23,5 +29,6 @@
                 </div>
             @endforeach
         </div>
+        <div class="restaurant-dots"><i></i><i></i><i></i><span></span><i></i></div>
     </div>
 </section>

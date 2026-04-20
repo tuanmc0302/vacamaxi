@@ -172,55 +172,83 @@
 
 
 .site-footer {
-    padding: 46px 0 42px;
-    color: #ffffff;
     background: #250900;
+    color: #ffffff;
+    padding: 80px 0 0;
+}
+
+.footer-top {
+    padding-bottom: 60px;
 }
 
 .footer-logo {
     width: 180px;
-    max-height: 68px;
-    object-fit: contain;
-    margin-bottom: 15px;
+    height: auto;
+    margin-bottom: 25px;
+    display: block;
 }
 
-.footer-about,
-.footer-contact p {
-    max-width: 420px;
-    margin: 0 0 10px;
-    font-size: 14px;
-    line-height: 1.55;
+.footer-about {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 15px;
+    line-height: 1.6;
+    margin-bottom: 0;
+}
+
+.footer-title {
+    color: #ffffff;
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 25px;
+    position: relative;
+    padding-bottom: 12px;
+}
+
+.footer-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 40px;
+    height: 2px;
+    background: #f3b21a;
 }
 
 .footer-menu {
-    margin: 0;
-    padding: 0;
     list-style: none;
+    padding: 0;
+    margin: 0;
 }
 
 .footer-menu li {
-    margin-bottom: 13px;
+    margin-bottom: 12px;
 }
 
 .footer-menu a {
-    color: #ffffff;
-    font-size: 14px;
+    color: rgba(255, 255, 255, 0.7);
     text-decoration: none;
+    font-size: 15px;
+    transition: all 0.3s ease;
 }
 
-.footer-map {
-    width: 100%;
-    min-height: 120px;
-    border-radius: 8px;
-    background: rgba(255, 255, 255, 0.82);
-    margin-bottom: 18px;
+.footer-menu a:hover {
+    color: #f3b21a;
+    padding-left: 5px;
 }
 
-.footer-social-title {
-    margin-bottom: 10px;
-    font-size: 14px;
-    font-weight: 700;
-    text-transform: uppercase;
+.footer-contact p {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 15px;
+    line-height: 1.6;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: flex-start;
+}
+
+.footer-contact i {
+    color: #f3b21a;
+    font-size: 16px;
+    margin-top: 3px;
 }
 
 .footer-social {
@@ -229,17 +257,105 @@
     flex-wrap: wrap;
 }
 
-.footer-social a {
-    min-width: 36px;
-    height: 32px;
+.social-link {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    border-radius: 6px;
-    color: #0b4fe8;
-    background: #ffffff;
-    font-size: 12px;
+    width: 46px;
+    height: 42px;
+    background: linear-gradient(145deg, #632a0d, #4a1d00);
+    color: #f3b21a;
+    border-radius: 42% 58% 70% 30% / 45% 45% 55% 55%;
     text-decoration: none;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    font-size: 20px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(243, 178, 26, 0.1);
+}
+
+/* Hiệu ứng vân nướng (Grill Marks) */
+.social-link::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 8px,
+        rgba(0, 0, 0, 0.2) 8px,
+        rgba(0, 0, 0, 0.2) 10px
+    );
+    pointer-events: none;
+}
+
+.social-link:hover {
+    background: linear-gradient(145deg, #7a3512, #5c2401);
+    color: #ffffff;
+    transform: scale(1.15) rotate(5deg);
+    box-shadow: 4px 8px 15px rgba(0, 0, 0, 0.5);
+    border-radius: 58% 42% 30% 70% / 55% 55% 45% 45%; /* Biến đổi hình dạng nhẹ khi hover */
+}
+
+/* Tùy chỉnh riêng cho từng miếng steak để trông tự nhiên hơn */
+.footer-social a:nth-child(2) {
+    border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+    transform: rotate(-5deg);
+}
+
+.footer-social a:nth-child(2):hover {
+    transform: scale(1.15) rotate(0deg);
+}
+
+.footer-social a:nth-child(3) {
+    border-radius: 30% 70% 70% 30% / 50% 60% 40% 50%;
+    transform: rotate(10deg);
+}
+
+.footer-social a:nth-child(3):hover {
+    transform: scale(1.15) rotate(15deg);
+}
+
+.zalo-text {
+    font-size: 9px;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.footer-map-placeholder {
+    width: 100%;
+    height: 120px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.footer-map-placeholder::before {
+    content: 'Google Maps Loading...';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: rgba(255, 255, 255, 0.3);
+    font-size: 13px;
+}
+
+.footer-bottom {
+    background: #1a0600;
+    padding: 25px 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.footer-bottom p {
+    margin-bottom: 0;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 14px;
 }
 
 .float-contact {
