@@ -7,9 +7,41 @@
 .article-summary .title-rule::after { content: ""; width: 60px; height: 3px; background: #f3b21a; border-radius: 50px; }
 .article-meta { margin: 0 0 20px; color: #f3b21a; font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
 .article-summary p { margin: 0; font-size: 18px; line-height: 1.7; color: #555555; }
-.article-note { max-width: 600px; margin: 30px 0; padding: 24px; border-radius: 12px; background: rgba(37, 9, 0, 0.05); border-left: 4px solid #f3b21a; color: #250900; }
-.article-note strong { display: block; margin-bottom: 10px; font-size: 16px; text-transform: uppercase; }
-.article-note ul { margin: 0; padding-left: 20px; font-size: 16px; line-height: 1.6; }
+
+/* Table of Contents Styles */
+.article-toc {
+    background: #fcfcfc;
+    border-radius: 12px;
+    padding: 25px;
+    margin: 40px 0;
+    border: 1px solid #eee;
+    max-width: 600px;
+}
+.toc-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+    color: #250900;
+}
+.toc-header i { font-size: 20px; color: #f3b21a; }
+.toc-header strong { font-size: 18px; text-transform: uppercase; letter-spacing: 1px; }
+.article-toc ul { list-style: none; padding: 0; margin: 0; }
+.toc-item { margin-bottom: 10px; }
+.toc-item a {
+    text-decoration: none;
+    color: #555;
+    font-size: 15px;
+    transition: all 0.3s;
+    display: block;
+    line-height: 1.4;
+}
+.toc-item a:hover { color: #f3b21a; padding-left: 5px; }
+.toc-h2 { font-weight: 700; margin-top: 15px; }
+.toc-h3 { padding-left: 20px; font-size: 14px; color: #777; }
+
 .article-content { max-width: 900px; font-size: 17px; line-height: 1.8; color: #333333; }
 .article-content h2, .article-content h3 { margin: 40px 0 20px; font-weight: 800; color: #111111; }
 .article-content img { max-width: 100%; height: auto; border-radius: 12px; margin: 20px 0; }
@@ -100,4 +132,100 @@
     .article-shell { padding: 30px; }
     .article-top { grid-template-columns: 1fr; gap: 30px; }
     .article-summary h2 { font-size: 28px; }
+}
+
+/* Share Section */
+.article-share {
+    margin-top: 50px;
+    padding-top: 30px;
+    border-top: 1px solid #eee;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+.share-label {
+    font-weight: 700;
+    color: #250900;
+    text-transform: uppercase;
+    font-size: 14px;
+}
+.share-links {
+    display: flex;
+    gap: 12px;
+}
+.share-link {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    text-decoration: none;
+    transition: all 0.3s;
+    font-size: 18px;
+}
+.share-link.fb { background: #1877F2; }
+.share-link.zalo { background: #0068FF; font-weight: 800; font-size: 12px; }
+.share-link.yt { background: #FF0000; }
+.share-link:hover { transform: translateY(-3px); opacity: 0.9; color: #fff; }
+
+/* Comment Form Section */
+.comment-section {
+    margin-top: 60px;
+}
+.comment-card {
+    background: #250900;
+    border-radius: 20px;
+    padding: 40px;
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+}
+.comment-card h3 {
+    font-size: 24px;
+    font-weight: 800;
+    color: #f3b21a;
+    margin-bottom: 25px;
+    text-transform: uppercase;
+}
+.comment-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+.comment-form .full-width { grid-column: span 2; }
+.comment-form input, .comment-form textarea {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(243, 178, 26, 0.3);
+    border-radius: 8px;
+    padding: 12px 15px;
+    color: #fff;
+    outline: none;
+}
+.comment-form input:focus, .comment-form textarea:focus {
+    border-color: #f3b21a;
+}
+.btn-submit-comment {
+    grid-column: span 2;
+    background: #f3b21a;
+    color: #250900;
+    border: none;
+    border-radius: 50px;
+    padding: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+.btn-submit-comment:hover { background: #fff; transform: translateY(-2px); }
+.comment-success {
+    display: none;
+    background: rgba(40, 167, 69, 0.2);
+    border: 1px solid #28a745;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    text-align: center;
 }

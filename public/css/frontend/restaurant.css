@@ -40,6 +40,12 @@
 .restaurant-image-mosaic img:nth-child(2) { margin-top: 40px; }
 .restaurant-image-mosaic img:nth-child(3) { margin-bottom: 40px; }
 
+/* Chỉ thêm height 100% cho ảnh 1 và 4 */
+.restaurant-image-mosaic img:nth-child(1),
+.restaurant-image-mosaic img:nth-child(4) {
+    height: 100%;
+}
+
 .restaurant-copy .restaurant-heading-wrap,
 .restaurant-section-heading,
 .restaurant-products-head {
