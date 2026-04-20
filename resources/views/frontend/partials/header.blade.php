@@ -43,6 +43,11 @@
                                 @endif
                             >
                                 {{ $item['label'] }}
+                                @if($hasChildren)
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" stroke="currentColor" stroke-width="1" class="bi bi-chevron-down ms-2 dropdown-chevron" viewBox="0 0 16 16">
+                                      <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+                                    </svg>
+                                @endif
                             </a>
 
                             @if($hasChildren)
@@ -63,3 +68,21 @@
         </div>
     </nav>
 </header>
+
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const header = document.querySelector('.site-header');
+        const handleScroll = () => {
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        handleScroll(); // Check on load
+    });
+</script>
+@endpush
