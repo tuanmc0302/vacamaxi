@@ -20,8 +20,6 @@ class StoreUserController extends BackendController
             'password' => $validated['password'],
         ]);
 
-        $user->roles()->sync($validated['role_ids'] ?? []);
-
         return $this->redirectWithSuccess('admin.users.index', 'Đã tạo người dùng mới thành công.');
     }
 }

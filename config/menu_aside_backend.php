@@ -17,6 +17,11 @@ return [
         'icon' => 'grid',
     ],
     [
+        'title' => 'Cấu hình website',
+        'route' => 'admin.settings.edit',
+        'icon' => 'settings',
+    ],
+    [
         'title' => 'Danh mục sản phẩm',
         'route' => 'admin.product-categories.index',
         'icon' => 'box',
@@ -45,6 +50,16 @@ return [
         'title' => 'Người dùng',
         'route' => 'admin.users.index',
         'icon' => 'users',
+    ],
+    [
+        'title' => 'Liên hệ khách hàng',
+        'route' => 'admin.contacts.index',
+        'icon' => 'file',
+    ],
+    [
+        'title' => 'Bình luận bài viết',
+        'route' => 'admin.comments.index',
+        'icon' => 'grid',
     ],
     [
         'title' => 'Google 2FA',

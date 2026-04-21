@@ -147,18 +147,18 @@ h1, h2, h3, h4, h5, h6 {
     transition: all 0.3s ease;
 }
 
-.brand-mark,
+/* .brand-mark,
 .brand-logo {
     width: 130px;
     max-height: 48px;
     object-fit: contain;
-}
+} */
 
-.site-header.scrolled .brand-mark,
+/* .site-header.scrolled .brand-mark,
 .site-header.scrolled .brand-logo {
     width: 110px;
     max-height: 40px;
-}
+} */
 
 .site-header .navbar-nav {
     gap: 4px;
@@ -293,7 +293,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .footer-logo {
-    width: 180px;
+    /* width: 180px; */
     height: auto;
     margin-bottom: 25px;
     display: block;
@@ -435,6 +435,12 @@ h1, h2, h3, h4, h5, h6 {
     font-size: 9px;
     font-weight: 800;
     text-transform: uppercase;
+}
+
+.footer-map iframe {
+    width: 100% !important;
+    height: 160px !important;
+    border-radius: 12px;
 }
 
 .footer-map-placeholder {

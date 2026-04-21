@@ -5,7 +5,9 @@ namespace App\Presentation\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use App\Models\FrontendWidget;
 use App\Models\Expert;
+use App\Models\Contact;
 use App\Services\MenuService;
+use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\View\View;
 use Throwable;
@@ -68,6 +70,21 @@ class AboutController extends Controller
         return view('frontend.contact', [
             'frontendData' => $this->frontendData(),
         ]);
+    }
+
+    public function submitContact(Request $request)
+    {
+        $validated = $request->validate([
+            'full_name' => 'required|string|max:255',
+            'email' => 'nullable|email|max:255',
+            'phone' => 'required|string|max:20',
+            'title' => 'nullable|string|max:255',
+            'content' => 'required|string',
+        ]);
+
+        Contact::create($validated);
+
+        return response()->json(['message' => 'Cảm ơn bạn đã liên hệ. Chúng tôi sẽ phản hồi sớm nhất!']);
     }
 
     private function frontendData(): array

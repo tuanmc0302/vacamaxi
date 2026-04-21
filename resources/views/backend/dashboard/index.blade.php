@@ -16,43 +16,36 @@
                         Xin chào, {{ $currentUser?->full_name ?: $currentUser?->username }}.
                     </h2>
                     <p class="mt-4 max-w-3xl text-base leading-8 text-slate-600">
-                        Đây là khu vực điều hành backend. Bạn có thể quản lý người dùng, vai trò, quyền truy cập và bảo mật tài khoản từ các mục ở thanh điều hướng bên trái.
+                       Đây là khu vực điều hành backend. Bạn có thể quản lý sản phẩm, tin tức, liên hệ khách hàng và bảo mật tài khoản từ các mục ở thanh điều hướng bên trái.
                     </p>
 
                     <div class="mt-6 flex flex-wrap gap-3">
-                        <a href="{{ route('admin.users.index') }}" class="inline-flex items-center rounded-xl bg-slate-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-700">
-                            Quản lý người dùng
-                        </a>
+                       <a href="{{ route('admin.users.index') }}" class="inline-flex items-center rounded-xl bg-slate-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-700">
+                           Quản lý người dùng
+                       </a>
 
-                        <a href="{{ route('admin.roles.index') }}" class="inline-flex items-center rounded-xl border border-slate-300 px-5 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50">
-                            Quản lý vai trò
-                        </a>
-
-                        <a href="{{ route('admin.two-factor.settings') }}" class="inline-flex items-center rounded-xl border border-blue-200 bg-blue-50 px-5 py-3 text-sm font-semibold text-blue-700 transition hover:bg-blue-100">
-                            Cấu hình Google 2FA
-                        </a>
+                       <a href="{{ route('admin.two-factor.settings') }}" class="inline-flex items-center rounded-xl border border-blue-200 bg-blue-50 px-5 py-3 text-sm font-semibold text-blue-700 transition hover:bg-blue-100">
+                           Cấu hình Google 2FA
+                       </a>
                     </div>
-                </div>
+                    </div>
 
-                <div class="rounded-2xl border border-slate-200 bg-slate-50 p-6">
+                    <div class="rounded-2xl border border-slate-200 bg-slate-50 p-6">
                     <p class="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">Tài khoản hiện tại</p>
 
                     <dl class="mt-6 space-y-5">
-                        <div>
-                            <dt class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Họ và tên</dt>
-                            <dd class="mt-2 text-lg font-semibold text-slate-900">{{ $currentUser?->full_name ?: 'Chưa cập nhật' }}</dd>
-                        </div>
-                        <div>
-                            <dt class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Tên đăng nhập</dt>
-                            <dd class="mt-2 text-lg font-semibold text-slate-900">{{ $currentUser?->username }}</dd>
-                        </div>
-                        <div>
-                            <dt class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Vai trò</dt>
-                            <dd class="mt-2 text-base font-semibold text-blue-700">{{ $currentUser?->roles->pluck('title')->join(', ') ?: 'Chưa gán vai trò' }}</dd>
-                        </div>
-                        <div>
-                            <dt class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Trạng thái bảo mật</dt>
-                            <dd class="mt-2">
+                       <div>
+                           <dt class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Họ và tên</dt>
+                           <dd class="mt-2 text-lg font-semibold text-slate-900">{{ $currentUser?->full_name ?: 'Chưa cập nhật' }}</dd>
+                       </div>
+                       <div>
+                           <dt class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Tên đăng nhập</dt>
+                           <dd class="mt-2 text-lg font-semibold text-slate-900">{{ $currentUser?->username }}</dd>
+                       </div>
+                       <div>
+                           <dt class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Trạng thái bảo mật</dt>
+                           <dd class="mt-2">
+
                                 @if ($currentUser?->isTwoFactorEnabled())
                                     <span class="inline-flex items-center rounded-full bg-emerald-100 px-3 py-1 text-sm font-semibold text-emerald-700">Đã bật Google 2FA</span>
                                 @else

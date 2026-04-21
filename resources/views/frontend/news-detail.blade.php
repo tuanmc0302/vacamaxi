@@ -76,19 +76,42 @@
                         <div id="comment-success" class="comment-success">
                             Bình luận của bạn đã được gửi và đang chờ kiểm duyệt. Cảm ơn bạn!
                         </div>
-                        <form id="news-comment-form" class="comment-form">
+                        <form id="news-comment-form" class="comment-form" action="{{ route('frontend.news.comment.submit', $post) }}" method="POST">
+                            @csrf
                             <div class="form-group">
-                                <input type="text" placeholder="Họ và Tên" required>
+                                <input type="text" name="full_name" placeholder="Họ và Tên" required>
                             </div>
                             <div class="form-group">
-                                <input type="email" placeholder="Gmail" required>
+                                <input type="email" name="email" placeholder="Gmail">
                             </div>
                             <div class="form-group full-width">
-                                <textarea rows="4" placeholder="Nội dung bình luận" required></textarea>
+                                <textarea name="content" rows="4" placeholder="Nội dung bình luận" required></textarea>
                             </div>
-                            <button type="submit" class="btn-submit-comment">GỬI BÌNH LUẬN</button>
+                            <button type="submit" class="btn-submit-comment" id="comment-submit-btn">
+                                <span class="btn-text">GỬI BÌNH LUẬN</span>
+                                <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                            </button>
                         </form>
                     </div>
+
+                    @if($post->approvedComments->isNotEmpty())
+                        <div class="comments-list mt-5">
+                            <h4 class="mb-4" style="color: #250900; font-weight: 800; text-transform: uppercase; font-size: 20px;">
+                                Bình luận ({{ $post->approvedComments->count() }})
+                            </h4>
+                            <div class="d-flex flex-column gap-4">
+                                @foreach($post->approvedComments as $comment)
+                                    <div class="comment-item p-4 rounded-4" style="background: #fff; border: 1px solid #eee;">
+                                        <div class="d-flex justify-content-between align-items-center mb-2">
+                                            <strong style="color: #250900; font-size: 16px;">{{ $comment->full_name }}</strong>
+                                            <span style="color: #999; font-size: 13px;">{{ $comment->created_at->format('d/m/Y') }}</span>
+                                        </div>
+                                        <p class="mb-0" style="color: #555; line-height: 1.6;">{{ $comment->content }}</p>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    @endif
                 </div>
 
                 @if ($relatedPosts->isNotEmpty())
@@ -128,12 +151,41 @@
         // Comment Form Logic
         const form = document.getElementById('news-comment-form');
         const successMsg = document.getElementById('comment-success');
+        const submitBtn = document.getElementById('comment-submit-btn');
+        const btnText = submitBtn ? submitBtn.querySelector('.btn-text') : null;
+        const spinner = submitBtn ? submitBtn.querySelector('.spinner-border') : null;
 
-        if (form && successMsg) {
+        if (form && successMsg && submitBtn) {
             form.addEventListener('submit', function(e) {
                 e.preventDefault();
-                form.style.display = 'none';
-                successMsg.style.display = 'block';
+                
+                // Show loading
+                submitBtn.disabled = true;
+                if(btnText) btnText.textContent = 'ĐANG GỬI...';
+                if(spinner) spinner.classList.remove('d-none');
+
+                const formData = new FormData(form);
+
+                fetch(form.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    form.style.display = 'none';
+                    successMsg.style.display = 'block';
+                    successMsg.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Có lỗi xảy ra, vui lòng thử lại sau.');
+                    submitBtn.disabled = false;
+                    if(btnText) btnText.textContent = 'GỬI BÌNH LUẬN';
+                    if(spinner) spinner.classList.add('d-none');
+                });
             });
         }
 

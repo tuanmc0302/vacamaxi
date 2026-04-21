@@ -12,7 +12,6 @@ class DestroyUserController extends BackendController
     {
         abort_if(auth()->id() === $user->id, 422, 'Bạn không thể tự xóa tài khoản đang đăng nhập.');
 
-        $user->roles()->detach();
         $user->delete();
 
         return $this->redirectWithSuccess('admin.users.index', 'Đã xóa người dùng thành công.');

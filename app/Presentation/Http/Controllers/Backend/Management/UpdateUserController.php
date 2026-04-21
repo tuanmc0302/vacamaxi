@@ -24,7 +24,6 @@ class UpdateUserController extends BackendController
         }
 
         $user->update($attributes);
-        $user->roles()->sync($validated['role_ids'] ?? []);
 
         return $this->redirectWithSuccess('admin.users.index', 'Đã cập nhật người dùng thành công.');
     }

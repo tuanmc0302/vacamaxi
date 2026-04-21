@@ -1,6 +1,13 @@
 @php
     $footer = $footer ?? [];
     $nav = $nav ?? [];
+    $phoneWine = $siteSettings['phone_wine'] ?? '';
+    $phoneBeef = $siteSettings['phone_beef'] ?? '';
+    $socialLinks = [
+        ['label' => 'Zalo', 'url' => $siteSettings['zalo_url'] ?? ''],
+        ['label' => 'Facebook', 'url' => $siteSettings['facebook_url'] ?? ''],
+        ['label' => 'Youtube', 'url' => $siteSettings['youtube_url'] ?? ''],
+    ];
 @endphp
 <footer class="site-footer" id="footer">
     <div class="container">
@@ -8,8 +15,8 @@
             <div class="row g-5">
                 <div class="col-lg-4 col-md-6">
                     <div class="footer-brand">
-                        <img class="footer-logo" src="/image/logo.png" alt="VACAMAXI">
-                        <p class="footer-about">{{ $footer['intro'] ?? '' }}</p>
+                        <img class="footer-logo" src="{{ $siteSettings['logo_url'] ?? asset('image/logo.png') }}" alt="{{ $siteSettings['site_name'] ?? 'VACAMAXI' }}">
+                        <p class="footer-about">{{ $siteSettings['site_description'] ?? ($footer['intro'] ?? '') }}</p>
                     </div>
                 </div>
                 <div class="col-lg-2 col-md-6">
@@ -26,20 +33,43 @@
                     <div class="footer-info">
                         <h4 class="footer-title">THÔNG TIN LIÊN HỆ</h4>
                         <div class="footer-contact">
-                            <p><i class="bi bi-geo-alt-fill me-2"></i>{{ $footer['address'] ?? '' }}</p>
-                            @foreach (($footer['hotlines'] ?? []) as $hotline)
-                                <p><i class="bi bi-telephone-fill me-2"></i>{{ $hotline }}</p>
-                            @endforeach
-                            <p><i class="bi bi-envelope-fill me-2"></i>{{ $footer['email'] ?? '' }}</p>
+                            @if(!empty($siteSettings['address']) || !empty($footer['address']))
+                                <p><i class="bi bi-geo-alt-fill me-2"></i>{{ $siteSettings['address'] ?? $footer['address'] ?? '' }}</p>
+                            @endif
+                            @if($phoneWine)
+                                <p><i class="bi bi-telephone-fill me-2"></i>{{ $phoneWine }}</p>
+                            @endif
+                            @if($phoneBeef)
+                                <p><i class="bi bi-telephone-fill me-2"></i>{{ $phoneBeef }}</p>
+                            @endif
+                            @if(!empty($siteSettings['email']))
+                                <p><i class="bi bi-envelope-fill me-2"></i>{{ $siteSettings['email'] }}</p>
+                            @elseif(!empty($footer['email']))
+                                <p><i class="bi bi-envelope-fill me-2"></i>{{ $footer['email'] }}</p>
+                            @endif
                         </div>
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-6">
                     <div class="footer-social-wrap">
-                        <h4 class="footer-title">MẠNG XÃ HỘI</h4>
+                        @if(!empty($siteSettings['google_map_embed_url']))
+                            <h4 class="footer-title">BẢN ĐỒ</h4>
+                            <div class="footer-map mt-2">
+                                {!! $siteSettings['google_map_embed_url'] !!}
+                            </div>
+                        @endif
+
+                        <h4 class="footer-title {{ !empty($siteSettings['google_map_embed_url']) ? 'mt-4' : '' }}">MẠNG XÃ HỘI</h4>
                         <div class="footer-social">
-                            @foreach (($footer['socials'] ?? []) as $social)
-                                <a href="{{ $social['url'] }}" class="social-link" aria-label="{{ $social['label'] }}">
+                            @php
+                                $socials = $footer['socials'] ?? [
+                                    ['label' => 'Facebook', 'url' => '#'],
+                                    ['label' => 'Youtube', 'url' => '#'],
+                                    ['label' => 'Zalo', 'url' => '#']
+                                ];
+                            @endphp
+                            @foreach ($socials as $social)
+                                <a href="{{ $social['url'] }}" class="social-link" aria-label="{{ $social['label'] }}" target="_blank">
                                     @if(str_contains(strtolower($social['label']), 'facebook'))
                                         <i class="bi bi-facebook"></i>
                                     @elseif(str_contains(strtolower($social['label']), 'youtube'))
@@ -52,9 +82,6 @@
                                 </a>
                             @endforeach
                         </div>
-                        <div class="mt-4">
-                            <div class="footer-map-placeholder"></div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -64,10 +91,10 @@
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-md-6">
-                    <p class="copyright mb-md-0">© {{ date('Y') }} VACAMAXI. Tất cả quyền được bảo lưu.</p>
+                    <p class="copyright mb-md-0">© {{ date('Y') }} {{ $siteSettings['site_name'] ?? 'VACAMAXI' }}. Tất cả quyền được bảo lưu.</p>
                 </div>
                 <div class="col-md-6 text-md-end">
-                    <p class="design-by mb-0">Phát triển bởi Embera</p>
+                    <p class="design-by mb-0">Phát triển bởi Vacamaxi</p>
                 </div>
             </div>
         </div>

@@ -5,8 +5,10 @@ namespace App\Presentation\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Post;
+use App\Models\Comment;
 use App\Services\MenuService;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
@@ -62,7 +64,7 @@ class NewsController extends Controller
     public function show(string $slug): View
     {
         $frontendData = $this->frontendData();
-        $post = Post::where('slug', $slug)->where('is_active', true)->with(['category', 'author'])->firstOrFail();
+        $post = Post::where('slug', $slug)->where('is_active', true)->with(['category', 'author', 'approvedComments' => fn($q) => $q->latest()])->firstOrFail();
 
         $relatedPosts = Post::where('category_id', $post->category_id)
             ->where('id', '!=', $post->id)
@@ -76,6 +78,19 @@ class NewsController extends Controller
             'post' => $post,
             'relatedPosts' => $relatedPosts,
         ]);
+    }
+
+    public function submitComment(Request $request, Post $post)
+    {
+        $validated = $request->validate([
+            'full_name' => 'required|string|max:255',
+            'email' => 'nullable|email|max:255',
+            'content' => 'required|string|max:1000',
+        ]);
+
+        $post->comments()->create($validated);
+
+        return response()->json(['message' => 'Bình luận đã được gửi và đang chờ kiểm duyệt.']);
     }
 
     private function newsCategories(): Collection

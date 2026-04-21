@@ -26,25 +26,9 @@
             </div>
 
             <div class="grid gap-5 md:grid-cols-2">
-                <x-backend.form.input id="password" name="password" type="password" label="Mật khẩu mới" />
+                <x-backend.form.input id="password" name="password" type="password" label="Mật khẩu mới" hint="Để trống nếu không muốn thay đổi." />
                 <x-backend.form.input id="password_confirmation" name="password_confirmation" type="password" label="Xác nhận mật khẩu mới" />
             </div>
-
-            <x-backend.form.select
-                id="role_ids"
-                name="role_ids[]"
-                label="Vai trò"
-                :multiple="true"
-                placeholder="Chọn vai trò"
-                hint="Để trống mật khẩu nếu không muốn thay đổi."
-            >
-                @php
-                    $selectedRoles = collect(old('role_ids', $user->roles->pluck('id')->all()));
-                @endphp
-                @foreach ($roles as $role)
-                    <option value="{{ $role->id }}" @selected($selectedRoles->contains($role->id))>{{ $role->title }}</option>
-                @endforeach
-            </x-backend.form.select>
 
             <button type="submit" class="inline-flex w-full items-center justify-center rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-700">
                 Cập nhật người dùng

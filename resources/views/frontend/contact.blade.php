@@ -247,23 +247,27 @@
                         Liên Hệ Của Bạn Đã Được Gửi Đến Bộ Phận Chăm Sóc Khách Hàng Của VACAMAXI
                     </div>
 
-                    <form id="contact-page-form" class="form-grid">
+                    <form id="contact-page-form" class="form-grid" action="{{ route('frontend.contact.submit') }}" method="POST">
+                        @csrf
                         <div class="form-group">
-                            <input type="text" placeholder="Họ và Tên" required>
+                            <input type="text" name="full_name" placeholder="Họ và Tên" required>
                         </div>
                         <div class="form-group">
-                            <input type="email" placeholder="Gmail" required>
+                            <input type="email" name="email" placeholder="Gmail">
                         </div>
                         <div class="form-group">
-                            <input type="tel" placeholder="Số Điện Thoại" required>
+                            <input type="tel" name="phone" placeholder="Số Điện Thoại" required>
                         </div>
                         <div class="form-group">
-                            <input type="text" placeholder="Tiêu đề">
+                            <input type="text" name="title" placeholder="Tiêu đề">
                         </div>
                         <div class="form-group full-width">
-                            <textarea rows="5" placeholder="Nội dung liên hệ" required></textarea>
+                            <textarea name="content" rows="5" placeholder="Nội dung liên hệ" required></textarea>
                         </div>
-                        <button type="submit" class="btn-send-contact">GỬI THƯ</button>
+                        <button type="submit" class="btn-send-contact" id="submit-btn">
+                            <span class="btn-text">GỬI THƯ</span>
+                            <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                        </button>
                     </form>
                 </div>
             </div>
@@ -285,12 +289,41 @@
     document.addEventListener('DOMContentLoaded', function() {
         const form = document.getElementById('contact-page-form');
         const successMsg = document.getElementById('contact-success');
+        const submitBtn = document.getElementById('submit-btn');
+        const btnText = submitBtn.querySelector('.btn-text');
+        const spinner = submitBtn.querySelector('.spinner-border');
 
         if (form && successMsg) {
             form.addEventListener('submit', function(e) {
                 e.preventDefault();
-                form.style.display = 'none';
-                successMsg.style.display = 'block';
+                
+                // Show loading
+                submitBtn.disabled = true;
+                btnText.textContent = 'ĐANG GỬI...';
+                spinner.classList.remove('d-none');
+
+                const formData = new FormData(form);
+
+                fetch(form.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    form.style.display = 'none';
+                    successMsg.style.display = 'block';
+                    successMsg.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Có lỗi xảy ra, vui lòng thử lại sau.');
+                    submitBtn.disabled = false;
+                    btnText.textContent = 'GỬI THƯ';
+                    spinner.classList.add('d-none');
+                });
             });
         }
     });

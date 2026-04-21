@@ -29,19 +29,6 @@
                 <x-backend.form.input id="password_confirmation" name="password_confirmation" type="password" label="Xác nhận mật khẩu" required />
             </div>
 
-            <x-backend.form.select
-                id="role_ids"
-                name="role_ids[]"
-                label="Vai trò"
-                :multiple="true"
-                placeholder="Chọn vai trò"
-                hint="Có thể chọn nhiều vai trò cho một người dùng."
-            >
-                @foreach ($roles as $role)
-                    <option value="{{ $role->id }}" @selected(collect(old('role_ids', []))->contains($role->id))>{{ $role->title }}</option>
-                @endforeach
-            </x-backend.form.select>
-
             <button type="submit" class="inline-flex w-full items-center justify-center rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-700">
                 Tạo người dùng
             </button>

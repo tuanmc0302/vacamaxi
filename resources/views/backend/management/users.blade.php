@@ -19,15 +19,8 @@
             </a>
         </x-backend.page-header>
 
-        <form method="GET" action="{{ route('admin.users.index') }}" class="mt-8 grid gap-4 rounded-2xl border border-slate-200 bg-slate-50 p-5 md:grid-cols-[minmax(0,1fr),240px,auto]">
+        <form method="GET" action="{{ route('admin.users.index') }}" class="mt-8 grid gap-4 rounded-2xl border border-slate-200 bg-slate-50 p-5 md:grid-cols-[minmax(0,1fr),auto]">
             <x-backend.form.input id="keyword" name="keyword" label="Tìm kiếm" :value="$filters['keyword']" placeholder="Nhập họ tên, tên đăng nhập hoặc email" />
-
-            <x-backend.form.select id="role_id" name="role_id" label="Lọc theo vai trò" placeholder="Chọn vai trò">
-                <option value="">Tất cả vai trò</option>
-                @foreach ($roles as $role)
-                    <option value="{{ $role->id }}" @selected((string) $filters['role_id'] === (string) $role->id)>{{ $role->title }}</option>
-                @endforeach
-            </x-backend.form.select>
 
             <div class="flex items-end gap-3">
                 <button type="submit" class="inline-flex h-12 items-center justify-center rounded-xl bg-slate-900 px-5 text-sm font-semibold text-white transition hover:bg-slate-700">Áp dụng</button>
@@ -42,7 +35,6 @@
                         <th class="px-5 py-4 font-semibold">Họ và tên</th>
                         <th class="px-5 py-4 font-semibold">Tên đăng nhập</th>
                         <th class="px-5 py-4 font-semibold">Email</th>
-                        <th class="px-5 py-4 font-semibold">Vai trò</th>
                         <th class="px-5 py-4 font-semibold text-right">Thao tác</th>
                     </tr>
                 </thead>
@@ -52,8 +44,7 @@
                             <td class="px-5 py-4 font-medium text-slate-900">{{ $user->full_name }}</td>
                             <td class="px-5 py-4">{{ $user->username }}</td>
                             <td class="px-5 py-4">{{ $user->email }}</td>
-                            <td class="px-5 py-4">{{ $user->roles->pluck('title')->join(', ') ?: 'Chưa gán' }}</td>
-                            <td class="px-5 py-4">
+                            <td class="px-5 py-4 text-right">
                                 <div class="flex justify-end gap-2">
                                     <a href="{{ route('admin.users.edit', $user) }}" class="inline-flex items-center rounded-lg border border-slate-300 px-3 py-2 text-xs font-semibold text-slate-700 transition hover:bg-slate-100">Sửa</a>
 
@@ -63,7 +54,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5" class="px-5 py-10 text-center text-slate-500">Chưa có người dùng nào.</td>
+                            <td colspan="4" class="px-5 py-10 text-center text-slate-500">Chưa có người dùng nào.</td>
                         </tr>
                     @endforelse
                 </tbody>
