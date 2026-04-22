@@ -60,7 +60,7 @@
 .restaurant-products-head h2 {
     margin: 0;
     color: var(--restaurant-gold);
-    font-size: 42px;
+    font-size: 40px;
     font-weight: 700;
     line-height: 1.2;
     text-transform: uppercase;
@@ -147,7 +147,7 @@
 
 .restaurant-banner-copy h2 {
     margin: 0 0 24px;
-    font-size: 42px;
+    font-size: 40px;
     font-weight: 800;
     line-height: 1.2;
     letter-spacing: -0.5px;

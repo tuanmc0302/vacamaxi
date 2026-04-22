@@ -18,7 +18,6 @@
                 <div class="expert-content">
                     <div class="expert-title">
                         <h2>{{ $title }}</h2>
-                        <span></span>
                     </div>
                     <p class="expert-lead">{{ $subTitle }}</p>
                     <p class="expert-text">{!! nl2br(e($description)) !!}</p>

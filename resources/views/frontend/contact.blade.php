@@ -21,7 +21,7 @@
         }
         
         .contact-info h2 {
-            font-size: 42px;
+            font-size: 40px;
             font-weight: 800;
             color: #250900;
             margin-bottom: 30px;
