@@ -188,6 +188,8 @@ class ProductController extends Controller
     private function applySort(Builder $query, string $sort): void
     {
         match ($sort) {
+            'newest' => $query->orderByDesc('id'),
+            'oldest' => $query->orderBy('id'),
             'name_asc' => $query->orderBy('name'),
             'name_desc' => $query->orderByDesc('name'),
             default => $query->orderBy('sort_order')->orderByDesc('id'),

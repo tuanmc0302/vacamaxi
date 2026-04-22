@@ -33,27 +33,32 @@
                         @endphp
 
                         <li class="nav-item {{ $hasChildren ? 'dropdown' : '' }}">
-                            <a
-                                class="nav-link {{ $hasChildren ? 'dropdown-toggle' : '' }} {{ $isActive ? 'active' : '' }}"
-                                href="{{ $item['url'] ?? '#' }}"
-                                target="{{ $item['target'] ?? '_self' }}"
+                            <div class="d-flex align-items-center justify-content-between w-100">
+                                <a
+                                    class="nav-link {{ $isActive ? 'active' : '' }} flex-grow-1"
+                                    href="{{ $item['url'] ?? '#' }}"
+                                    target="{{ $item['target'] ?? '_self' }}"
+                                    @if($hasChildren)
+                                        id="dropdown-{{ $item['key'] }}"
+                                    @endif
+                                >
+                                    {{ $item['label'] }}
+                                </a>
                                 @if($hasChildren)
-                                    id="dropdown-{{ $item['key'] }}"
-                                    role="button"
-                                    data-bs-toggle="dropdown"
-                                    aria-expanded="false"
-                                @endif
-                            >
-                                {{ $item['label'] }}
-                                @if($hasChildren)
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" stroke="currentColor" stroke-width="1" class="bi bi-chevron-down ms-2 dropdown-chevron" viewBox="0 0 16 16">
+                                    <span class="dropdown-mobile-toggle d-lg-none px-3" data-target="dropdown-menu-{{ $item['key'] }}">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" stroke="currentColor" stroke-width="1" class="bi bi-chevron-down dropdown-chevron" viewBox="0 0 16 16">
+                                            <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+                                        </svg>
+                                    </span>
+                                    {{-- Desktop-only chevron to maintain visual consistency --}}
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" stroke="currentColor" stroke-width="1" class="bi bi-chevron-down ms-2 dropdown-chevron d-none d-lg-block" viewBox="0 0 16 16">
                                         <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
                                     </svg>
                                 @endif
-                            </a>
+                            </div>
 
                             @if($hasChildren)
-                                <ul class="dropdown-menu" aria-labelledby="dropdown-{{ $item['key'] }}">
+                                <ul class="dropdown-menu" id="dropdown-menu-{{ $item['key'] }}" aria-labelledby="dropdown-{{ $item['key'] }}">
                                     @foreach ($item['children'] as $child)
                                         <li>
                                             <a class="dropdown-item {{ ($child['key'] ?? '') === $active ? 'active' : '' }}" href="{{ $child['url'] }}" target="{{ $child['target'] ?? '_self' }}">
@@ -72,6 +77,25 @@
 </header>
 
 @push('scripts')
+<style>
+    @media (max-width: 991.98px) {
+        .dropdown-menu.show {
+            display: block !important;
+            opacity: 1 !important;
+            visibility: visible !important;
+            transform: none !important;
+        }
+        .dropdown-mobile-toggle {
+            cursor: pointer;
+            color: rgba(255, 255, 255, 0.7);
+            transition: transform 0.3s ease;
+        }
+        .dropdown-mobile-toggle.active {
+            transform: rotate(180deg);
+            color: #f3b21a;
+        }
+    }
+</style>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const header = document.querySelector('.site-header');
@@ -85,6 +109,23 @@
 
         window.addEventListener('scroll', handleScroll);
         handleScroll();
+
+        // Mobile Dropdown Toggle Logic
+        const mobileToggles = document.querySelectorAll('.dropdown-mobile-toggle');
+        mobileToggles.forEach(toggle => {
+            toggle.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                const targetId = this.getAttribute('data-target');
+                const targetMenu = document.getElementById(targetId);
+                
+                if (targetMenu) {
+                    targetMenu.classList.toggle('show');
+                    this.classList.toggle('active');
+                }
+            });
+        });
     });
 </script>
 @endpush
