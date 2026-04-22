@@ -28,7 +28,7 @@
         <section class="product-detail">
             <div class="container">
                 <div class="row g-4 align-items-start">
-                    <div class="col-lg-5">
+                    <div class="col-lg-7">
                         <div class="product-gallery">
                             <img class="main-product-image" src="/image/Rectangle 11.png" alt="Thá»‹t bÃ² Vaca - A">
                             <div class="thumb-grid">
@@ -45,7 +45,7 @@
                             <a class="share-pill share-youtube" href="#">â–¶</a>
                         </div>
                     </div>
-                    <div class="col-lg-7">
+                    <div class="col-lg-5">
                         <div class="product-info">
                             <h2>Thá»‹t BÃ² Vaca - A</h2>
                             <div class="meta-line">

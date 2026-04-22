@@ -20,10 +20,10 @@
             <span class="heading-line"></span>
         </div>
         <div class="row news-intro align-items-start g-4">
-            <div class="col-lg-5">
+            <div class="col-lg-7">
                 <p class="news-kicker">{{ $subTitle }}</p>
             </div>
-            <div class="col-lg-7">
+            <div class="col-lg-5">
                 <p class="news-description">{!! nl2br(e($description)) !!}</p>
             </div>
         </div>

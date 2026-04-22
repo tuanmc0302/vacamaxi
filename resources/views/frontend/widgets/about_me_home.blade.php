@@ -12,14 +12,14 @@
 <section class="about-section" id="about">
     <div class="container">
         <div class="row align-items-center">
-            <div class="col-lg-5">
+            <div class="col-lg-7">
                 <div class="about-gallery">
                     @foreach ($images as $index => $image)
                         <img class="about-photo" src="{{ $imageSrc($image) }}" alt="{{ $title }} {{ $index + 1 }}">
                     @endforeach
                 </div>
             </div>
-            <div class="col-lg-7">
+            <div class="col-lg-5">
                 <div class="about-content">
                     <div class="section-heading">
                         <h2>{{ $title }}</h2>

@@ -10,7 +10,7 @@
 <section class="breeds-section">
     <div class="container">
         <div class="row breeds-intro align-items-start g-4">
-            <div class="col-lg-5">
+            <div class="col-lg-7">
                 @if($subTitle)
                     <p class="breeds-kicker">{{ $subTitle }}</p>
                 @endif
@@ -22,7 +22,7 @@
                     @endif
                 </h2>
             </div>
-            <div class="col-lg-7">
+            <div class="col-lg-5">
                 @if($description)
                     <p class="breeds-description">{!! nl2br(e($description)) !!}</p>
                 @endif
