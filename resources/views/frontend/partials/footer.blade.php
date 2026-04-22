@@ -12,7 +12,7 @@
 <footer class="site-footer" id="footer">
     <div class="container">
         <div class="footer-top">
-            <div class="row g-5">
+            <div class="row">
                 <div class="col-lg-4 col-md-6">
                     <div class="footer-brand">
                         <img class="footer-logo" src="{{ $siteSettings['logo_url'] ?? asset('image/logo.png') }}" alt="{{ $siteSettings['site_name'] ?? 'VACAMAXI' }}">

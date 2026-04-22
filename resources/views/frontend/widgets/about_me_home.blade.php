@@ -11,7 +11,7 @@
 @endphp
 <section class="about-section" id="about">
     <div class="container">
-        <div class="row align-items-center g-5">
+        <div class="row align-items-center">
             <div class="col-lg-5">
                 <div class="about-gallery">
                     @foreach ($images as $index => $image)

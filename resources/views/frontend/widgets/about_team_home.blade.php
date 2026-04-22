@@ -13,7 +13,7 @@
 
 <section class="expert-section">
     <div class="container">
-        <div class="row align-items-center g-5">
+        <div class="row align-items-center">
             <div class="col-lg-6">
                 <div class="expert-content">
                     <div class="expert-title">
