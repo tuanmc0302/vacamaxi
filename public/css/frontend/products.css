@@ -130,7 +130,8 @@
 }
 
 .product-card:hover .product-card__button {
-    background: #250900;
+    background: #ffc642;
+    color: #250900;
 }
 
 @media (max-width: 1199.98px) {

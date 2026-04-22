@@ -87,8 +87,8 @@ h1, h2, h3, h4, h5, h6 {
     min-height: 52px;
     padding: 12px 36px;
     border-radius: 50px;
-    background: #250900;
-    color: #f3b21a !important;
+    background: #f3b21a;
+    color: #250900 !important;
     border: 2px solid #f3b21a;
     font-family: 'Montserrat', sans-serif;
     font-size: 14px;
@@ -104,9 +104,9 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .btn-vaca:hover {
-    color: #ffffff !important;
-    background: #f3b21a;
-    border-color: #f3b21a;
+    color: #250900 !important;
+    background: #ffc642;
+    border-color: #ffc642;
     transform: translateY(-5px);
     box-shadow: 0 15px 30px rgba(243, 178, 26, 0.3);
 }
@@ -658,8 +658,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .back-to-top:hover {
-    background-color: #250900;
-    color: #f3b21a;
+    background-color: #ffc642;
+    color: #250900;
     transform: translateY(-5px);
 }
 

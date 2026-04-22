@@ -147,7 +147,7 @@
             margin-top: 10px;
         }
         .btn-send-contact:hover {
-            background: #fff;
+            background: #ffc642;
             transform: translateY(-3px);
             box-shadow: 0 10px 20px rgba(0,0,0,0.2);
         }

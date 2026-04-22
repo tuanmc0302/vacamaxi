@@ -269,8 +269,8 @@
 }
 
 .about-cta-inline__button:hover {
-    background: #ffffff;
-    color: #f3b21a;
+    background: #ffc642;
+    color: #250900;
     transform: translateY(-3px);
 }
 

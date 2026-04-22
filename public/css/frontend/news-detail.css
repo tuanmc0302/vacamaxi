@@ -219,7 +219,7 @@
     cursor: pointer;
     transition: all 0.3s;
 }
-.btn-submit-comment:hover { background: #fff; transform: translateY(-2px); }
+.btn-submit-comment:hover { background: #ffc642; transform: translateY(-2px); }
 .comment-success {
     display: none;
     background: rgba(40, 167, 69, 0.2);

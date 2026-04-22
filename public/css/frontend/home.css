@@ -59,22 +59,22 @@
             padding: 12px 32px;
             border-radius: 50px;
             background: #f3b21a;
-            color: #ffffff;
+            color: #250900;
             font-size: 16px;
             font-weight: 700;
             line-height: 1;
             letter-spacing: 1px;
             text-decoration: none;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            border: 2px solid transparent;
+            border: 2px solid #f3b21a;
             text-transform: uppercase;
         }
 
         .hero-action:hover,
         .hero-action:focus {
-            color: #ffffff;
-            background: transparent;
-            border-color: #f3b21a;
+            color: #250900;
+            background: #ffc642;
+            border-color: #ffc642;
             transform: translateY(-3px);
             box-shadow: 0 10px 20px rgba(243, 178, 26, 0.3);
         }
@@ -175,12 +175,10 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            min-width: 206px;
-            min-height: 48px;
             padding: 12px 32px;
             border-radius: 50px;
             background: #f3b21a;
-            color: #ffffff;
+            color: #250900;
             font-size: 16px;
             font-weight: 700;
             line-height: 1;
@@ -190,8 +188,8 @@
         }
 
         .about-action:hover {
-            background: #250900;
-            color: #ffffff;
+            background: #ffc642;
+            color: #250900;
             transform: translateY(-3px);
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
         }
@@ -313,7 +311,7 @@
 
         .breed-card:hover .breed-link {
             background: #f3b21a;
-            color: #ffffff;
+            color: #250900;
             border-color: #f3b21a;
         }
 
