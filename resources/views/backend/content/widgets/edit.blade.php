@@ -8,9 +8,22 @@
     @php
         $isProductOption = str($widget->key)->startsWith('product_option_') || str($widget->key)->startsWith('restaurant_product_');
         $isFeedbackWidget = $widget->key === 'feedback_home';
+        $widgetSettings = $widget->settings ?? [];
         $imageConfigCount = $imageConfigCount ?? 0;
         $isImageConfigWidget = $imageConfigCount > 0;
-        $selectedCategoryId = old('category_id', data_get($widget->settings, 'category_id'));
+
+        $selectedCategoryId = old('category_id', data_get($widgetSettings, 'category_id'));
+        if (!$selectedCategoryId && data_get($widgetSettings, 'category_slug')) {
+            $selectedCategoryId = optional($productCategories->firstWhere('slug', data_get($widgetSettings, 'category_slug')))->id;
+        }
+
+        $hasButtonConfig = array_key_exists('button_text', $widgetSettings) || array_key_exists('button_url', $widgetSettings);
+        $buttonText = old('button_text', data_get($widgetSettings, 'button_text'));
+        $buttonUrl = old('button_url', data_get($widgetSettings, 'button_url'));
+
+        $extraScalarSettings = \App\Presentation\Http\Controllers\Backend\Content\WidgetController::extraScalarSettingFields($widgetSettings)
+            ->mapWithKeys(fn ($value, $key) => [$key => old("setting_fields.$key", $value)]);
+
         $defaultFeedbackItems = [
             [
                 'avatar' => '/image/Rectangle 2.png',
@@ -24,18 +37,20 @@
                 'name' => 'Tùng Phan',
                 'content' => 'Đúng chuẩn quán bò cho người mê thịt. Không gian đẹp, nhân viên thân thiện, tư vấn món rất có tâm.',
             ],
-            ['avatar' => '/image/Rectangle 4.png', 'role' => 'Khach hang', 'name' => 'Minh Anh', 'content' => 'Mon an chin chu, ruou dung kem rat hop vi va khong gian phu hop cho bua toi gia dinh.'],
-            ['avatar' => '/image/Rectangle 5.png', 'role' => 'Khach hang', 'name' => 'Quoc Huy', 'content' => 'Bo nuong vua do, thit ngot va nhan vien phuc vu nhanh. Trai nghiem rat dang quay lai.'],
-            ['avatar' => '/image/Rectangle 2.png', 'role' => 'Khach hang', 'name' => 'Thanh Mai', 'content' => 'Toi thich cach VACAMAXI tu van phan thit phu hop. Chat luong moi lan ghe deu rat on dinh.'],
-            ['avatar' => '/image/Rectangle 3.png', 'role' => 'Khach hang', 'name' => 'Duc Nam', 'content' => 'Nha hang co chat luong thit tot, muc che bien dung yeu cau va bo tri khong gian thoai mai.'],
-            ['avatar' => '/image/Rectangle 4.png', 'role' => 'Khach hang', 'name' => 'Lan Phuong', 'content' => 'Phan ruou sam 369 goi y trong bua an rat hop. Mot dia chi nen thu khi thich steak.'],
-            ['avatar' => '/image/Rectangle 5.png', 'role' => 'Khach hang', 'name' => 'Gia Bao', 'content' => 'Toi danh gia cao nguyen lieu va cach phuc vu. Moi thu rat gon gang, chuyen nghiep.'],
-            ['avatar' => '/image/Rectangle 2.png', 'role' => 'Khach hang', 'name' => 'Kim Ngan', 'content' => 'Khong gian am, mon ra dung nhip va chat luong thit tao cam giac rat yen tam.'],
-            ['avatar' => '/image/Rectangle 3.png', 'role' => 'Khach hang', 'name' => 'Anh Tuan', 'content' => 'Da an thu nhieu lan va chat luong van deu. Chat thit ro, nuong ngon, phuc vu lich su.'],
+            ['avatar' => '/image/Rectangle 4.png', 'role' => 'Khách hàng', 'name' => 'Minh Anh', 'content' => 'Món ăn chỉn chu, rượu dùng kèm rất hợp vị và không gian phù hợp cho bữa tối gia đình.'],
+            ['avatar' => '/image/Rectangle 5.png', 'role' => 'Khách hàng', 'name' => 'Quốc Huy', 'content' => 'Bò nướng vừa độ, thịt ngọt và nhân viên phục vụ nhanh. Trải nghiệm rất đáng quay lại.'],
+            ['avatar' => '/image/Rectangle 2.png', 'role' => 'Khách hàng', 'name' => 'Thanh Mai', 'content' => 'Tôi thích cách VACAMAXI tư vấn phần thịt phù hợp. Chất lượng mỗi lần ghé đều rất ổn định.'],
+            ['avatar' => '/image/Rectangle 3.png', 'role' => 'Khách hàng', 'name' => 'Đức Nam', 'content' => 'Nhà hàng có chất lượng thịt tốt, mức chế biến đúng yêu cầu và bố trí không gian thoải mái.'],
+            ['avatar' => '/image/Rectangle 4.png', 'role' => 'Khách hàng', 'name' => 'Lan Phương', 'content' => 'Phần rượu sâm 369 gợi ý trong bữa ăn rất hợp. Một địa chỉ nên thử khi thích steak.'],
+            ['avatar' => '/image/Rectangle 5.png', 'role' => 'Khách hàng', 'name' => 'Gia Bảo', 'content' => 'Tôi đánh giá cao nguyên liệu và cách phục vụ. Mọi thứ rất gọn gàng, chuyên nghiệp.'],
+            ['avatar' => '/image/Rectangle 2.png', 'role' => 'Khách hàng', 'name' => 'Kim Ngân', 'content' => 'Không gian ấm, món ra đúng nhịp và chất lượng thịt tạo cảm giác rất yên tâm.'],
+            ['avatar' => '/image/Rectangle 3.png', 'role' => 'Khách hàng', 'name' => 'Anh Tuấn', 'content' => 'Đã ăn thử nhiều lần và chất lượng vẫn đều. Chất thịt rõ, nướng ngon, phục vụ lịch sự.'],
         ];
-        $feedbackItems = collect(old('feedback_items', data_get($widget->settings, 'items', $defaultFeedbackItems)))
+
+        $feedbackItems = collect(old('feedback_items', data_get($widgetSettings, 'items', $defaultFeedbackItems)))
             ->take(10)
             ->values();
+
         $defaultImageSets = [
             'about_page_hero' => ['/image/bg_gioithieu.png'],
             'about_me_home' => ['/image/Rectangle 2.png', '/image/Rectangle 3.png', '/image/Rectangle 4.png', '/image/Rectangle 5.png'],
@@ -57,7 +72,8 @@
             'restaurant_page_banner' => ['/image/banner.png'],
             'restaurant_page_gallery' => ['/image/Rectangle 5.png', '/image/Rectangle 11.png', '/image/Rectangle 2.png', '/image/Rectangle 3.png'],
         ];
-        $widgetImages = collect(old('widget_images', data_get($widget->settings, 'images', $defaultImageSets[$widget->key] ?? [])))
+
+        $widgetImages = collect(old('widget_images', data_get($widgetSettings, 'images', $defaultImageSets[$widget->key] ?? [])))
             ->pad($imageConfigCount, '')
             ->take($imageConfigCount)
             ->values();
@@ -82,6 +98,30 @@
                 <label for="description" class="mb-2 block text-sm font-medium text-slate-700">Description</label>
                 <textarea id="description" name="description" rows="8" class="block w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900 shadow-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100">{{ old('description', $widget->description) }}</textarea>
             </div>
+
+            @if ($hasButtonConfig)
+                <div class="grid gap-5 md:grid-cols-2">
+                    <x-backend.form.input id="button_text" name="button_text" label="Nút CTA - Text" :value="$buttonText" />
+                    <x-backend.form.input id="button_url" name="button_url" label="Nút CTA - URL" :value="$buttonUrl" />
+                </div>
+            @endif
+
+            @if ($extraScalarSettings->isNotEmpty())
+                <div class="rounded-2xl border border-slate-200 bg-slate-50 p-5">
+                    <h3 class="text-base font-semibold text-slate-900">Cấu hình settings bổ sung</h3>
+                    <p class="mt-1 text-sm text-slate-500">Các key scalar hiện có trong cột <code>settings</code> sẽ hiển thị tại đây.</p>
+                    <div class="mt-5 grid gap-5 md:grid-cols-2">
+                        @foreach ($extraScalarSettings as $settingKey => $settingValue)
+                            <x-backend.form.input
+                                :id="'setting_field_' . $settingKey"
+                                :name="'setting_fields[' . $settingKey . ']'"
+                                :label="str($settingKey)->replace('_', ' ')->title() . ' (' . $settingKey . ')'"
+                                :value="$settingValue"
+                            />
+                        @endforeach
+                    </div>
+                </div>
+            @endif
 
             @if ($isImageConfigWidget)
                 <div class="rounded-2xl border border-slate-200 bg-slate-50 p-5">
@@ -122,7 +162,12 @@
                             </option>
                         @endforeach
                     </select>
-                    <p class="mt-2 text-xs text-slate-500">Widget sẽ lấy 4 sản phẩm mới nhất thuộc danh mục được chọn.</p>
+                    <p class="mt-2 text-xs text-slate-500">
+                        Widget sẽ lấy 4 sản phẩm mới nhất thuộc danh mục được chọn.
+                        @if (data_get($widgetSettings, 'category_slug'))
+                            <span class="mt-1 block">Giá trị cũ trong settings: <code>{{ data_get($widgetSettings, 'category_slug') }}</code></span>
+                        @endif
+                    </p>
                 </div>
             @endif
 

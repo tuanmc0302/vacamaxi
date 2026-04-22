@@ -8,6 +8,7 @@ use App\Models\FrontendWidget;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 
@@ -168,7 +169,11 @@ class WidgetController extends Controller
             'description' => ['nullable', 'string'],
             'sort_order' => ['nullable', 'integer', 'min:0'],
             'is_active' => ['nullable', 'boolean'],
+            'button_text' => ['nullable', 'string', 'max:255'],
+            'button_url' => ['nullable', 'string', 'max:255'],
             'category_id' => ['nullable', 'integer', 'exists:categories,id'],
+            'setting_fields' => ['nullable', 'array'],
+            'setting_fields.*' => ['nullable', 'string', 'max:255'],
             'feedback_items' => ['nullable', 'array', 'max:10'],
             'feedback_items.*.avatar' => ['nullable', 'string', 'max:255'],
             'feedback_items.*.role' => ['nullable', 'string', 'max:80'],
@@ -180,8 +185,22 @@ class WidgetController extends Controller
 
         $settings = $widget->settings ?? [];
 
+        if ($request->hasAny(['button_text', 'button_url'])) {
+            $settings['button_text'] = trim((string) ($validated['button_text'] ?? '')) ?: null;
+            $settings['button_url'] = trim((string) ($validated['button_url'] ?? '')) ?: null;
+        }
+
+        foreach (($validated['setting_fields'] ?? []) as $settingKey => $settingValue) {
+            $settings[$settingKey] = trim((string) $settingValue) ?: null;
+        }
+
         if (Str::startsWith($widget->key, 'product_option_') || Str::startsWith($widget->key, 'restaurant_product_')) {
-            $settings['category_id'] = $validated['category_id'] ?? null;
+            $category = isset($validated['category_id'])
+                ? Category::query()->whereKey($validated['category_id'])->first()
+                : null;
+
+            $settings['category_id'] = $category?->id;
+            $settings['category_slug'] = $category?->slug;
         }
 
         if ($widget->key === 'feedback_home') {
@@ -280,6 +299,21 @@ class WidgetController extends Controller
         }
 
         return response()->json(['message' => 'Đã cập nhật thứ tự widget.']);
+    }
+
+    public static function extraScalarSettingFields(array $settings): Collection
+    {
+        return collect($settings)
+            ->reject(fn ($value, $key) => in_array($key, [
+                'button_text',
+                'button_url',
+                'images',
+                'items',
+                'category_id',
+                'category_slug',
+            ], true))
+            ->filter(fn ($value) => is_scalar($value) || $value === null)
+            ->mapWithKeys(fn ($value, $key) => [$key => $value]);
     }
 
     private function pageKeys(string $page): array
