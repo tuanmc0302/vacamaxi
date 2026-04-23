@@ -6,7 +6,7 @@
 
 <header class="site-header {{ $isHome ? 'is-home' : '' }}">
     <nav class="navbar navbar-expand-lg navbar-dark container-fluid">
-        <div class="container-fluid">
+        <div class="container-header">
             <a class="navbar-brand brand-link" href="/">
                 <img class="brand-logo brand-mark" src="{{ $siteSettings['logo_url'] ?? asset('image/logo.png') }}" alt="{{ $siteSettings['site_name'] ?? 'VACAMAXI' }}">
             </a>
