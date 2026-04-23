@@ -55,9 +55,9 @@ class ProductController extends Controller
         ]);
     }
 
-    public function category(Request $request, string $categorySlug): View
+    public function category(Request $request, string $categorySlug): View|RedirectResponse
     {
-        if ($categorySlug === 'bo') {
+        if (in_array($categorySlug, ['bo', 'giong-bo-vacamaxi'], true)) {
             return redirect()->route('frontend.products.breeds');
         }
 
@@ -90,7 +90,7 @@ class ProductController extends Controller
     {
         $frontendData = $this->frontendData();
         $breedCategory = Category::where('module', Category::MODULE_PRODUCT)
-            ->where('slug', 'bo')
+            ->whereIn('slug', ['giong-bo-vacamaxi', 'bo'])
             ->firstOrFail();
 
         $breeds = Product::query()
@@ -178,7 +178,7 @@ class ProductController extends Controller
         return Category::query()
             ->where('module', Category::MODULE_PRODUCT)
             ->where('is_active', true)
-            ->where('slug', '!=', 'bo')
+            ->whereNotIn('slug', ['bo', 'giong-bo-vacamaxi'])
             ->withCount(['products' => fn (Builder $query) => $query->where('is_active', true)])
             ->orderBy('sort_order')
             ->orderBy('name')
