@@ -8,7 +8,6 @@ use App\Models\Post;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
@@ -80,12 +79,12 @@ class PostController extends Controller
             'upload' => ['required', 'image', 'max:5120'],
         ]);
 
-        $path = $validated['upload']->store('posts/editor', 'public');
+        $path = $this->storeImage($validated['upload'], 'posts/editor');
 
         return response()->json([
             'uploaded' => true,
             'fileName' => basename($path),
-            'url' => Storage::disk('public')->url($path),
+            'url' => '/storage/' . $path,
         ]);
     }
 
@@ -101,7 +100,7 @@ class PostController extends Controller
             'category_id' => ['nullable', 'exists:categories,id'],
             'title' => ['required', 'string', 'max:255'],
             'slug' => ['required', 'string', 'max:255', Rule::unique('posts')->ignore($post?->id)],
-            'image' => ['nullable', 'string', 'max:255'],
+            'image_file' => ['nullable', 'image', 'max:4096'],
             'description' => ['nullable', 'string'],
             'content' => ['nullable', 'string'],
             'seo_title' => ['nullable', 'string', 'max:255'],
@@ -109,6 +108,15 @@ class PostController extends Controller
             'published_at' => ['nullable', 'date'],
             'is_active' => ['nullable', 'boolean'],
         ]);
+
+        unset($validated['image_file']);
+
+        if ($request->hasFile('image_file')) {
+            $path = $this->storeImage($request->file('image_file'), 'posts');
+            $validated['image'] = 'storage/' . $path;
+        } elseif (! $post) {
+            $validated['image'] = null;
+        }
 
         $validated['is_active'] = $request->boolean('is_active');
 
@@ -122,5 +130,15 @@ class PostController extends Controller
             ->orderBy('sort_order')
             ->orderBy('name')
             ->get();
+    }
+
+    private function storeImage($file, string $directory): string
+    {
+        $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+        $extension = $file->getClientOriginalExtension();
+        $safeName = Str::slug($originalName) ?: 'image';
+        $filename = $safeName . '-' . now()->format('YmdHis') . '-' . Str::lower(Str::random(6)) . '.' . $extension;
+
+        return $file->storeAs($directory, $filename, 'public');
     }
 }

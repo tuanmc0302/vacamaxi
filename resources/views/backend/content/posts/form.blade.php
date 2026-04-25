@@ -7,7 +7,7 @@
 @section('page_heading', $isEdit ? 'Sửa bài viết' : 'Thêm bài viết')
 
 @section('content')
-    <form method="POST" action="{{ $isEdit ? route('admin.posts.update', $post) : route('admin.posts.store') }}" class="space-y-6">
+    <form method="POST" action="{{ $isEdit ? route('admin.posts.update', $post) : route('admin.posts.store') }}" enctype="multipart/form-data" class="space-y-6">
         @csrf
         @if ($isEdit)
             @method('PUT')
@@ -36,9 +36,15 @@
                     @error('category_id') <p class="mt-2 text-sm text-red-600">{{ $message }}</p> @enderror
                 </div>
                 <div>
-                    <label class="mb-2 block text-sm font-semibold text-slate-700">Ảnh</label>
-                    <input name="image" value="{{ old('image', $post->image) }}" placeholder="assets/images/Rectangle 2.png" class="h-12 w-full rounded-xl border border-slate-200 px-4 text-sm outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-50">
-                    @error('image') <p class="mt-2 text-sm text-red-600">{{ $message }}</p> @enderror
+                    <label class="mb-2 block text-sm font-semibold text-slate-700">Upload ảnh</label>
+                    <input type="file" name="image_file" accept="image/*" class="block h-12 w-full rounded-xl border border-slate-200 px-4 py-2 text-sm outline-none transition file:mr-4 file:rounded-lg file:border-0 file:bg-slate-900 file:px-3 file:py-2 file:text-sm file:font-semibold file:text-white focus:border-blue-500 focus:ring-4 focus:ring-blue-50">
+                    @error('image_file') <p class="mt-2 text-sm text-red-600">{{ $message }}</p> @enderror
+                    @if ($post->image)
+                        <div class="mt-3 flex items-center gap-3 text-xs text-slate-500">
+                            <img src="{{ \Illuminate\Support\Str::startsWith($post->image, ['http://', 'https://', '/']) ? $post->image : asset($post->image) }}" alt="{{ $post->title }}" class="h-14 w-20 rounded-lg object-cover">
+                            <span>Ảnh hiện tại: {{ $post->image }}</span>
+                        </div>
+                    @endif
                 </div>
                 <div>
                     <label class="mb-2 block text-sm font-semibold text-slate-700">Ngày đăng</label>
@@ -109,10 +115,9 @@
                             'imageStyle:side'
                         ]
                     }
-                })
-                    .catch(function (error) {
-                        console.error(error);
-                    });
+                }).catch(function (error) {
+                    console.error(error);
+                });
             }
         });
     </script>
