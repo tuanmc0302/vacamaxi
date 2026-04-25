@@ -28,7 +28,7 @@
             <div class="news-grid">
                 @foreach ($posts as $post)
                     @php
-                        $image = str_starts_with($post->image, 'http') || str_starts_with($post->image, '/') ? $post->image : asset('storage/'.$post->image);
+                        $image = \App\Presentation\Http\Controllers\Frontend\NewsController::imageUrl($post->image, 'image/Rectangle 5.png');
                     @endphp
                     <a class="news-card" href="{{ route('frontend.news.show', $post->slug) }}">
                         <img src="{{ $image }}" alt="{{ $post->title }}">

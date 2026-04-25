@@ -108,12 +108,18 @@ class NewsController extends Controller
 
     public static function imageUrl(?string $path, string $fallback = 'image/Rectangle 5.png'): string
     {
-        if (!$path) return asset($fallback);
+        if (! $path) {
+            return asset($fallback);
+        }
 
         if (Str::startsWith($path, ['http://', 'https://', '/'])) {
             return $path;
         }
 
-        return asset('storage/' . $path);
+        if (Str::startsWith($path, 'storage/')) {
+            return asset($path);
+        }
+
+        return asset('storage/' . ltrim($path, '/'));
     }
 }
