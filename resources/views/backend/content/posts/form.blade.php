@@ -96,9 +96,23 @@
         document.addEventListener('DOMContentLoaded', function () {
             const editor = document.querySelector('#content');
             if (editor && window.ClassicEditor) {
-                ClassicEditor.create(editor).catch(function (error) {
-                    console.error(error);
-                });
+                ClassicEditor.create(editor, {
+                    ckfinder: {
+                        uploadUrl: '{{ route('admin.posts.editor-upload') }}?_token={{ csrf_token() }}'
+                    },
+                    image: {
+                        toolbar: [
+                            'imageTextAlternative',
+                            'toggleImageCaption',
+                            'imageStyle:inline',
+                            'imageStyle:block',
+                            'imageStyle:side'
+                        ]
+                    }
+                })
+                    .catch(function (error) {
+                        console.error(error);
+                    });
             }
         });
     </script>

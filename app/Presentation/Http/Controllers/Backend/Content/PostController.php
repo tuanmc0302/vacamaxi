@@ -5,8 +5,10 @@ namespace App\Presentation\Http\Controllers\Backend\Content;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Post;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
@@ -72,9 +74,27 @@ class PostController extends Controller
         return redirect()->route('admin.posts.index')->with('status', 'Đã xóa bài viết.');
     }
 
+    public function uploadEditorImage(Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'upload' => ['required', 'image', 'max:5120'],
+        ]);
+
+        $path = $validated['upload']->store('posts/editor', 'public');
+
+        return response()->json([
+            'uploaded' => true,
+            'fileName' => basename($path),
+            'url' => Storage::disk('public')->url($path),
+        ]);
+    }
+
     private function validated(Request $request, ?Post $post = null): array
     {
-        $slug = $request->filled('slug') ? Str::slug((string) $request->string('slug')) : Str::slug((string) $request->string('title'));
+        $slug = $request->filled('slug')
+            ? Str::slug((string) $request->string('slug'))
+            : Str::slug((string) $request->string('title'));
+
         $request->merge(['slug' => $slug]);
 
         $validated = $request->validate([
