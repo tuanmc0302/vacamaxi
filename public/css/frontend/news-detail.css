@@ -1,7 +1,7 @@
 .article-section { padding: 80px 0; background: #fcfcfc; }
 .article-shell { background: #fff; border-radius: 20px; padding: 50px; box-shadow: 0 15px 40px rgba(0,0,0,.05); }
 .article-top { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start; margin-bottom: 50px; }
-.article-cover { width: 100%; aspect-ratio: 16/10; object-fit: cover; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,.1); }
+.article-cover { width: 100%; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,.1); }
 .article-summary h2 { margin: 0 0 15px; font-size: 36px; font-weight: 800; line-height: 1.2; color: #111111; }
 .article-summary .title-rule { display: flex; align-items: center; gap: 10px; margin: 0 0 20px; }
 .article-summary .title-rule::after { content: ""; width: 60px; height: 3px; background: #f3b21a; border-radius: 50px; }

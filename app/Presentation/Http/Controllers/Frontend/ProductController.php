@@ -4,7 +4,10 @@ namespace App\Presentation\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\FrontendWidget;
+use App\Models\Post;
 use App\Models\Product;
+use App\Presentation\Http\Controllers\Frontend\NewsController;
 use App\Services\MenuService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
@@ -12,6 +15,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
+use Throwable;
 
 class ProductController extends Controller
 {
@@ -43,11 +47,69 @@ class ProductController extends Controller
             return [$category->id => $products->limit(4)->get()];
         });
 
+        try {
+            $breedsWidget = FrontendWidget::query()
+                ->where('is_active', true)
+                ->where('key', 'product_option_one')
+                ->first();
+        } catch (Throwable) {
+            $breedsWidget = null;
+        }
+
+        $breedsItems = [];
+        if ($breedsWidget) {
+            $categoryId = data_get($breedsWidget->settings, 'category_id');
+
+            if ($categoryId) {
+                $products = Product::query()
+                    ->with('category')
+                    ->where('is_active', true)
+                    ->where('category_id', $categoryId)
+                    ->latest('id')
+                    ->limit(4)
+                    ->get();
+
+                $breedsItems = $products->map(fn (Product $product): array => [
+                    'image' => $product->image ? asset($product->image) : asset('image/Rectangle 11.png'),
+                    'title' => $product->name,
+                    'description' => $product->short_description ?: Str::limit(strip_tags($product->description ?? ''), 90),
+                    'url' => $product->category
+                        ? route('frontend.product.show', [$product->category->slug, $product->slug])
+                        : route('frontend.products.index'),
+                ])->all();
+            }
+        }
+
+        if (empty($breedsItems)) {
+            $breedsItems = $frontendData['breeds'] ?? [];
+        }
+
+        // Fetch news widget and items
+        try {
+            $newsWidget = FrontendWidget::query()
+                ->where('is_active', true)
+                ->where('key', 'news_home')
+                ->first();
+        } catch (Throwable) {
+            $newsWidget = null;
+        }
+
+        $news = Post::query()
+            ->where('is_active', true)
+            ->with('category')
+            ->latest('published_at')
+            ->limit(8)
+            ->get();
+
         return view('frontend.products.index', [
             'frontendData' => $frontendData,
             'categories' => $categories,
             'featuredProducts' => $featuredProducts,
             'productsByCategory' => $productsByCategory,
+            'breedsWidget' => $breedsWidget,
+            'breedsItems' => $breedsItems,
+            'newsWidget' => $newsWidget,
+            'news' => $news,
             'filters' => [
                 'search' => $search,
                 'sort' => $sort,

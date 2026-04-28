@@ -308,6 +308,7 @@
             border: 1px solid #eeeeee;
             border-radius: 50px;
             transition: all 0.3s ease;
+            text-decoration: none;
         }
 
         .breed-card:hover .breed-link {

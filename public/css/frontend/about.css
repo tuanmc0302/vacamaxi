@@ -23,12 +23,12 @@
 }
 
 .intro-overview__subtitle {
-    margin-top: 12px;
-    color: #333333;
-    font-size: 24px;
-    font-weight: 600;
+    color: #f3b21a;
+    font-size: 30px;
+    /* font-weight: 600; */
     line-height: 1.2;
     text-transform: uppercase;
+    margin:     20px;
 }
 
 .intro-overview__rule {
@@ -55,7 +55,7 @@
 }
 
 .intro-overview__copy {
-    max-width: 900px;
+    max-width: 1000px;
     margin: 0 auto;
 }
 

@@ -8,6 +8,7 @@
 
 @push('styles')
     @include('frontend.products._styles')
+    <link rel="stylesheet" href="{{ asset('css/frontend/home.css') }}">
 @endpush
 
 @section('content')
@@ -105,4 +106,14 @@
             @endif
         </div>
     </section>
+
+    @include('frontend.widgets.product_option_base', [
+        'widget' => $breedsWidget,
+        'items' => $breedsItems
+    ])
+
+    @include('frontend.widgets.news_home', [
+        'widget' => $newsWidget,
+        'news' => $news
+    ])
 @endsection
