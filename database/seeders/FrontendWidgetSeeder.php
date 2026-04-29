@@ -15,7 +15,50 @@ class FrontendWidgetSeeder extends Seeder
                 'title' => 'VACAMAXI là nhà hàng steak & grill cao cấp',
                 'sub_title' => 'Nhà hàng 5 sao VACAMAXI',
                 'description' => 'Nơi ẩm thực không chỉ được thưởng thức bằng vị giác, mà còn được cảm nhận bằng thẩm mỹ, không gian và chiều sâu của chuyện phía sau mỗi lựa chọn.',
-                'settings' => ['button_text' => 'KHÁM PHÁ NGAY', 'button_url' => '#about'],
+                'settings' => [
+                    'slides' => [
+                        [
+                            'title' => 'VACAMAXI là nhà hàng steak & grill cao cấp',
+                            'sub_title' => 'Nhà hàng 5 sao VACAMAXI',
+                            'description' => 'Nơi ẩm thực không chỉ được thưởng thức bằng vị giác, mà còn được cảm nhận bằng thẩm mỹ, không gian và chiều sâu của chuyện phía sau mỗi lựa chọn.',
+                            'button_text' => 'KHÁM PHÁ NGAY',
+                            'button_url' => '#about',
+                            'image' => '/image/banner.png'
+                        ],
+                        [
+                            'title' => 'Hệ sinh thái chăn nuôi công nghệ cao',
+                            'sub_title' => 'Tiên phong tại Việt Nam',
+                            'description' => 'Hợp tác cùng chuyên gia hàng đầu Argentina, chúng tôi phát triển bò giống và thịt bò chất lượng cao theo chuẩn quốc tế.',
+                            'button_text' => 'XEM SẢN PHẨM',
+                            'button_url' => '/san-pham',
+                            'image' => '/image/Rectangle 11.png'
+                        ],
+                        [
+                            'title' => 'Tinh hoa nông nghiệp bền vững',
+                            'sub_title' => 'VACAMAXI Group',
+                            'description' => 'Mang đến giá trị bền vững và trải nghiệm đẳng cấp qua từng sản phẩm từ trang trại đến bàn ăn.',
+                            'button_text' => 'LIÊN HỆ NGAY',
+                            'button_url' => '/lien-he',
+                            'image' => '/image/Rectangle 5.png'
+                        ],
+                        [
+                            'title' => 'Dịch vụ ẩm thực đẳng cấp 5 sao',
+                            'sub_title' => 'Trải nghiệm thượng lưu',
+                            'description' => 'Không gian sang trọng cùng đội ngũ nhân viên chuyên nghiệp, mang đến cho bạn những bữa tiệc steak hoàn hảo nhất.',
+                            'button_text' => 'ĐẶT BÀN NGAY',
+                            'button_url' => '#contact',
+                            'image' => '/image/Rectangle 2.png'
+                        ],
+                        [
+                            'title' => 'Chất lượng từ nguồn gốc nguyên liệu',
+                            'sub_title' => 'Sạch & An toàn',
+                            'description' => 'Mỗi sản phẩm đều trải qua quy trình kiểm soát nghiêm ngặt, đảm bảo độ tươi ngon và dinh dưỡng tối ưu cho sức khỏe.',
+                            'button_text' => 'TÌM HIỂU THÊM',
+                            'button_url' => '/gioi-thieu',
+                            'image' => '/image/Rectangle 3.png'
+                        ]
+                    ]
+                ],
                 'sort_order' => 10,
             ],
             [
