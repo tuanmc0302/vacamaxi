@@ -65,17 +65,17 @@
 
 .about-scale-section-title {
     display: flex;
-    align-items: center;
+    align-items: end;
     gap: 20px;
     margin-bottom: 40px;
 }
 
 .about-scale-section-title h2 {
-    margin: 0;
+    margin: -8px;
     color: #f3b21a;
     font-size: 40px;
     font-weight: 700;
-    line-height: 1.2;
+    line-height: 1;
     text-transform: uppercase;
 }
 
