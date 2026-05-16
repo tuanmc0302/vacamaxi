@@ -8,6 +8,7 @@
     @php
         $isProductOption = str($widget->key)->startsWith('product_option_') || str($widget->key)->startsWith('restaurant_product_');
         $isFeedbackWidget = $widget->key === 'feedback_home';
+        $isBannerWidget = $widget->key === 'banner_home';
         $widgetSettings = $widget->settings ?? [];
         $imageConfigCount = $imageConfigCount ?? 0;
         $isImageConfigWidget = $imageConfigCount > 0;
@@ -49,6 +50,15 @@
 
         $feedbackItems = collect(old('feedback_items', data_get($widgetSettings, 'items', $defaultFeedbackItems)))
             ->take(10)
+            ->values();
+
+        $defaultBannerSlides = [
+            ['title' => $widget->title, 'sub_title' => $widget->sub_title, 'description' => $widget->description, 'button_text' => 'KHÁM PHÁ NGAY', 'button_url' => '#about', 'image' => '/image/banner.png'],
+        ];
+
+        $bannerSlides = collect(old('banner_slides', data_get($widgetSettings, 'slides', $defaultBannerSlides)))
+            ->pad(5, [])
+            ->take(5)
             ->values();
 
         $defaultImageSets = [
@@ -98,6 +108,49 @@
                 <label for="description" class="mb-2 block text-sm font-medium text-slate-700">Description</label>
                 <textarea id="description" name="description" rows="8" class="block w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900 shadow-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100">{{ old('description', $widget->description) }}</textarea>
             </div>
+
+            @if ($isBannerWidget)
+                <div class="rounded-2xl border border-slate-200 bg-slate-50 p-5">
+                    <h3 class="text-base font-semibold text-slate-900">Cấu hình slide banner</h3>
+                    <div class="mt-5 space-y-5">
+                        @foreach ($bannerSlides as $slideIndex => $slide)
+                            @php
+                                $slideImage = data_get($slide, 'image');
+                                $previewSrc = $slideImage
+                                    ? (str_starts_with($slideImage, 'http') || str_starts_with($slideImage, '/') ? $slideImage : (str_starts_with($slideImage, 'image/') ? asset($slideImage) : asset('storage/' . $slideImage)))
+                                    : null;
+                            @endphp
+                            <div class="rounded-xl border border-slate-200 bg-white p-4">
+                                <h4 class="text-sm font-semibold text-slate-800">Slide {{ $slideIndex + 1 }}</h4>
+                                <input type="hidden" name="banner_slides[{{ $slideIndex }}][image]" value="{{ $slideImage }}">
+
+                                <div class="mt-4 grid gap-4 md:grid-cols-2">
+                                    <x-backend.form.input id="banner_slide_title_{{ $slideIndex }}" name="banner_slides[{{ $slideIndex }}][title]" label="Tiêu đề" :value="data_get($slide, 'title')" />
+                                    <x-backend.form.input id="banner_slide_sub_title_{{ $slideIndex }}" name="banner_slides[{{ $slideIndex }}][sub_title]" label="Sub title" :value="data_get($slide, 'sub_title')" />
+                                </div>
+
+                                <div class="mt-4">
+                                    <label for="banner_slide_description_{{ $slideIndex }}" class="mb-2 block text-sm font-medium text-slate-700">Mô tả</label>
+                                    <textarea id="banner_slide_description_{{ $slideIndex }}" name="banner_slides[{{ $slideIndex }}][description]" rows="3" class="block w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900 shadow-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100">{{ data_get($slide, 'description') }}</textarea>
+                                </div>
+
+                                <div class="mt-4 grid gap-4 md:grid-cols-2">
+                                    <x-backend.form.input id="banner_slide_button_text_{{ $slideIndex }}" name="banner_slides[{{ $slideIndex }}][button_text]" label="Nút CTA - Text" :value="data_get($slide, 'button_text')" />
+                                    <x-backend.form.input id="banner_slide_button_url_{{ $slideIndex }}" name="banner_slides[{{ $slideIndex }}][button_url]" label="Nút CTA - URL" :value="data_get($slide, 'button_url')" />
+                                </div>
+
+                                <div class="mt-4">
+                                    <label for="banner_slide_image_{{ $slideIndex }}" class="block text-sm font-medium text-slate-700">Ảnh slide</label>
+                                    <input id="banner_slide_image_{{ $slideIndex }}" name="banner_slide_image_files[{{ $slideIndex }}]" type="file" accept="image/*" class="mt-2 block w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 shadow-sm outline-none transition file:mr-4 file:rounded-lg file:border-0 file:bg-slate-100 file:px-3 file:py-2 file:text-sm file:font-semibold file:text-slate-700 hover:file:bg-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100">
+                                    @if ($previewSrc)
+                                        <img src="{{ $previewSrc }}" alt="Slide {{ $slideIndex + 1 }}" class="mt-3 h-32 w-full rounded-xl object-cover">
+                                    @endif
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            @endif
 
             @if ($hasButtonConfig)
                 <div class="grid gap-5 md:grid-cols-2">

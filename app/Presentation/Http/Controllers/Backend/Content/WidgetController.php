@@ -185,6 +185,15 @@ class WidgetController extends Controller
             'widget_images.*' => ['nullable', 'string', 'max:255'],
             'widget_image_files' => ['nullable', 'array', 'max:' . max($this->imageConfigCount($widget->key), 1)],
             'widget_image_files.*' => ['nullable', 'image', 'max:40960'],
+            'banner_slides' => ['nullable', 'array', 'max:5'],
+            'banner_slides.*.title' => ['nullable', 'string', 'max:255'],
+            'banner_slides.*.sub_title' => ['nullable', 'string', 'max:255'],
+            'banner_slides.*.description' => ['nullable', 'string'],
+            'banner_slides.*.button_text' => ['nullable', 'string', 'max:255'],
+            'banner_slides.*.button_url' => ['nullable', 'string', 'max:255'],
+            'banner_slides.*.image' => ['nullable', 'string', 'max:255'],
+            'banner_slide_image_files' => ['nullable', 'array', 'max:5'],
+            'banner_slide_image_files.*' => ['nullable', 'image', 'max:40960'],
         ]);
 
         $settings = $widget->settings ?? [];
@@ -209,6 +218,13 @@ class WidgetController extends Controller
 
         if ($widget->key === 'feedback_home') {
             $settings['items'] = $this->feedbackItems($validated['feedback_items'] ?? []);
+        }
+
+        if ($widget->key === 'banner_home') {
+            $settings['slides'] = $this->bannerSlides(
+                $validated['banner_slides'] ?? [],
+                $request->file('banner_slide_image_files', [])
+            );
         }
 
         if ($this->hasImageConfig($widget->key)) {
@@ -246,8 +262,35 @@ class WidgetController extends Controller
             ->all();
     }
 
+    private function bannerSlides(array $slides, array $files = []): array
+    {
+        return collect(range(0, 4))
+            ->map(function (int $index) use ($slides, $files): array {
+                $slide = $slides[$index] ?? [];
+                $image = trim((string) ($slide['image'] ?? ''));
+
+                if (isset($files[$index])) {
+                    $image = $files[$index]->store('widgets', 'public');
+                }
+
+                return [
+                    'title' => trim((string) ($slide['title'] ?? '')),
+                    'sub_title' => trim((string) ($slide['sub_title'] ?? '')),
+                    'description' => trim((string) ($slide['description'] ?? '')),
+                    'button_text' => trim((string) ($slide['button_text'] ?? '')),
+                    'button_url' => trim((string) ($slide['button_url'] ?? '')),
+                    'image' => $image,
+                ];
+            })
+            ->filter(fn (array $slide): bool => collect($slide)->filter()->isNotEmpty())
+            ->values()
+            ->all();
+    }
+
     private function validateWidgetUploadErrors(Request $request): void
     {
+        $this->validateBannerUploadErrors($request);
+
         $files = $request->file('widget_image_files', []);
 
         if (! is_array($files)) {
@@ -286,6 +329,27 @@ class WidgetController extends Controller
             UPLOAD_ERR_EXTENSION => 'Một PHP extension đã chặn upload file.' . $runtimeInfo,
             default => 'Upload thất bại với mã lỗi PHP ' . $errorCode . '.' . $runtimeInfo,
         };
+    }
+
+    private function validateBannerUploadErrors(Request $request): void
+    {
+        $files = $request->file('banner_slide_image_files', []);
+
+        if (! is_array($files)) {
+            return;
+        }
+
+        foreach ($files as $index => $file) {
+            if (! $file || $file->isValid()) {
+                continue;
+            }
+
+            $label = 'Slide ' . ((int) $index + 1);
+
+            validator([], [])->after(function ($validator) use ($label, $file): void {
+                $validator->errors()->add('banner_slide_image_files.' . $label, $label . ': ' . $this->uploadErrorMessage($file->getError()));
+            })->validate();
+        }
     }
 
     private function hasImageConfig(string $key): bool

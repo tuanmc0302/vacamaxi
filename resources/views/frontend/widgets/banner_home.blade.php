@@ -13,6 +13,16 @@
             ]
         ];
     }
+
+    $imageUrl = function (?string $image): string {
+        $image = $image ?: '/image/banner.png';
+
+        if (str_starts_with($image, 'http://') || str_starts_with($image, 'https://') || str_starts_with($image, '/')) {
+            return $image;
+        }
+
+        return str_starts_with($image, 'image/') ? asset($image) : asset('storage/' . $image);
+    };
 @endphp
 
 <section id="heroCarousel" class="carousel slide hero-banner-carousel" data-bs-ride="carousel" data-bs-interval="5000">
@@ -27,7 +37,7 @@
     <div class="carousel-inner">
         @foreach($slides as $index => $slide)
             <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
-                <div class="hero-banner" style="background-image: linear-gradient(90deg, rgba(0, 0, 0, 0.75) 0%, rgba(0, 0, 0, 0.45) 45%, rgba(0, 0, 0, 0) 100%), url('{{ asset($slide['image'] ?? '/image/banner.png') }}');">
+                <div class="hero-banner" style="background-image: linear-gradient(90deg, rgba(0, 0, 0, 0.75) 0%, rgba(0, 0, 0, 0.45) 45%, rgba(0, 0, 0, 0) 100%), url('{{ $imageUrl($slide['image'] ?? null) }}');">
                     <div class="container">
                         <div class="hero-overlay"></div>
                         <div class="hero-content">
