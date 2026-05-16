@@ -16,6 +16,13 @@
         return collect(data_get($widget, 'settings.images', $fallback))
             ->map(fn ($image) => trim((string) $image))
             ->filter()
+            ->map(function (string $image): string {
+                if (str_starts_with($image, 'http://') || str_starts_with($image, 'https://') || str_starts_with($image, '/')) {
+                    return $image;
+                }
+
+                return str_starts_with($image, 'image/') ? asset($image) : asset('storage/' . $image);
+            })
             ->values();
     };
 

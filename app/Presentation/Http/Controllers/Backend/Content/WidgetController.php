@@ -269,15 +269,22 @@ class WidgetController extends Controller
 
     private function uploadErrorMessage(int $errorCode): string
     {
+        $runtimeInfo = sprintf(
+            ' PHP runtime: upload_max_filesize=%s, post_max_size=%s, php.ini=%s.',
+            ini_get('upload_max_filesize') ?: 'unknown',
+            ini_get('post_max_size') ?: 'unknown',
+            php_ini_loaded_file() ?: 'unknown'
+        );
+
         return match ($errorCode) {
-            UPLOAD_ERR_INI_SIZE => 'File vượt giới hạn upload_max_filesize trong php.ini.',
-            UPLOAD_ERR_FORM_SIZE => 'File vượt giới hạn MAX_FILE_SIZE của form.',
-            UPLOAD_ERR_PARTIAL => 'File chỉ upload được một phần, vui lòng thử lại.',
-            UPLOAD_ERR_NO_FILE => 'Chưa chọn file upload.',
-            UPLOAD_ERR_NO_TMP_DIR => 'Server thiếu thư mục tạm để upload file.',
-            UPLOAD_ERR_CANT_WRITE => 'Server không ghi được file upload vào ổ đĩa.',
-            UPLOAD_ERR_EXTENSION => 'Một PHP extension đã chặn upload file.',
-            default => 'Upload thất bại với mã lỗi PHP ' . $errorCode . '.',
+            UPLOAD_ERR_INI_SIZE => 'File vượt giới hạn upload_max_filesize trong php.ini.' . $runtimeInfo,
+            UPLOAD_ERR_FORM_SIZE => 'File vượt giới hạn MAX_FILE_SIZE của form.' . $runtimeInfo,
+            UPLOAD_ERR_PARTIAL => 'File chỉ upload được một phần, vui lòng thử lại.' . $runtimeInfo,
+            UPLOAD_ERR_NO_FILE => 'Chưa chọn file upload.' . $runtimeInfo,
+            UPLOAD_ERR_NO_TMP_DIR => 'Server thiếu thư mục tạm để upload file.' . $runtimeInfo,
+            UPLOAD_ERR_CANT_WRITE => 'Server không ghi được file upload vào ổ đĩa.' . $runtimeInfo,
+            UPLOAD_ERR_EXTENSION => 'Một PHP extension đã chặn upload file.' . $runtimeInfo,
+            default => 'Upload thất bại với mã lỗi PHP ' . $errorCode . '.' . $runtimeInfo,
         };
     }
 
