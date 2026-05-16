@@ -51,10 +51,29 @@
     <i class="bi bi-chevron-up"></i>
 </button>
 
+<div id="image-lightbox" class="image-lightbox" aria-hidden="true" role="dialog" aria-label="Xem ảnh">
+    <button type="button" class="image-lightbox__close" aria-label="Đóng">&times;</button>
+    <img class="image-lightbox__image" src="" alt="">
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const backToTop = document.getElementById('back-to-top');
+        const lightbox = document.getElementById('image-lightbox');
+        const lightboxImage = lightbox?.querySelector('.image-lightbox__image');
+        const lightboxClose = lightbox?.querySelector('.image-lightbox__close');
+        const gallerySelector = [
+            '.about-gallery img',
+            '.expert-gallery img',
+            '.restaurant-carousel img',
+            '.about-story__gallery img',
+            '.about-feature__image img',
+            '.core-values__center img',
+            '.about-scale-split__image img',
+            '.about-scale-strategy-card__image img',
+            '.about-scale-expert-card__photo img'
+        ].join(',');
 
         window.addEventListener('scroll', function() {
             if (window.pageYOffset > 300) {
@@ -69,6 +88,45 @@
                 top: 0,
                 behavior: 'smooth'
             });
+        });
+
+        const closeLightbox = function() {
+            if (!lightbox || !lightboxImage) return;
+            lightbox.classList.remove('is-open');
+            lightbox.setAttribute('aria-hidden', 'true');
+            lightboxImage.src = '';
+            lightboxImage.alt = '';
+            document.body.style.overflow = '';
+        };
+
+        document.addEventListener('click', function(event) {
+            const image = event.target.closest(gallerySelector);
+            const galleryBackground = event.target.closest('[data-gallery-src]');
+
+            if (!lightbox || !lightboxImage) return;
+            if (!image && !galleryBackground) return;
+            if (!image && galleryBackground && event.target.closest('a, button')) return;
+
+            event.preventDefault();
+            lightboxImage.src = image ? (image.currentSrc || image.src) : galleryBackground.dataset.gallerySrc;
+            lightboxImage.alt = image ? (image.alt || 'VACAMAXI') : 'VACAMAXI';
+            lightbox.classList.add('is-open');
+            lightbox.setAttribute('aria-hidden', 'false');
+            document.body.style.overflow = 'hidden';
+        });
+
+        lightboxClose?.addEventListener('click', closeLightbox);
+
+        lightbox?.addEventListener('click', function(event) {
+            if (event.target === lightbox) {
+                closeLightbox();
+            }
+        });
+
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeLightbox();
+            }
         });
     });
 </script>

@@ -37,7 +37,7 @@
     <div class="carousel-inner">
         @foreach($slides as $index => $slide)
             <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
-                <div class="hero-banner" style="background-image: linear-gradient(90deg, rgba(0, 0, 0, 0.75) 0%, rgba(0, 0, 0, 0.45) 45%, rgba(0, 0, 0, 0) 100%), url('{{ $imageUrl($slide['image'] ?? null) }}');">
+                <div class="hero-banner" data-gallery-src="{{ $imageUrl($slide['image'] ?? null) }}" style="background-image: linear-gradient(90deg, rgba(0, 0, 0, 0.75) 0%, rgba(0, 0, 0, 0.45) 45%, rgba(0, 0, 0, 0) 100%), url('{{ $imageUrl($slide['image'] ?? null) }}');">
                     <div class="container">
                         <div class="hero-overlay"></div>
                         <div class="hero-content">
