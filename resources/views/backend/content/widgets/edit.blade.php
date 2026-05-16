@@ -57,8 +57,9 @@
         ];
 
         $bannerSlides = collect(old('banner_slides', data_get($widgetSettings, 'slides', $defaultBannerSlides)))
-            ->pad(5, [])
-            ->take(5)
+            ->filter(fn ($slide) => collect($slide)->filter()->isNotEmpty())
+            ->whenEmpty(fn ($collection) => collect($defaultBannerSlides))
+            ->take(10)
             ->values();
 
         $defaultImageSets = [
@@ -111,8 +112,11 @@
 
             @if ($isBannerWidget)
                 <div class="rounded-2xl border border-slate-200 bg-slate-50 p-5">
-                    <h3 class="text-base font-semibold text-slate-900">Cấu hình slide banner</h3>
-                    <div class="mt-5 space-y-5">
+                    <div class="flex flex-wrap items-center justify-between gap-3">
+                        <h3 class="text-base font-semibold text-slate-900">Cấu hình slide banner</h3>
+                        <button type="button" id="add-banner-slide" class="rounded-xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-700">Thêm slide</button>
+                    </div>
+                    <div id="banner-slides" class="mt-5 space-y-5">
                         @foreach ($bannerSlides as $slideIndex => $slide)
                             @php
                                 $slideImage = data_get($slide, 'image');
@@ -120,8 +124,11 @@
                                     ? (str_starts_with($slideImage, 'http') || str_starts_with($slideImage, '/') ? $slideImage : (str_starts_with($slideImage, 'image/') ? asset($slideImage) : asset('storage/' . $slideImage)))
                                     : null;
                             @endphp
-                            <div class="rounded-xl border border-slate-200 bg-white p-4">
-                                <h4 class="text-sm font-semibold text-slate-800">Slide {{ $slideIndex + 1 }}</h4>
+                            <div class="rounded-xl border border-slate-200 bg-white p-4" data-banner-slide>
+                                <div class="flex items-center justify-between gap-3">
+                                    <h4 class="text-sm font-semibold text-slate-800" data-banner-slide-title>Slide {{ $slideIndex + 1 }}</h4>
+                                    <button type="button" class="text-sm font-medium text-red-600 hover:text-red-700" data-remove-banner-slide>Xóa</button>
+                                </div>
                                 <input type="hidden" name="banner_slides[{{ $slideIndex }}][image]" value="{{ $slideImage }}">
 
                                 <div class="mt-4 grid gap-4 md:grid-cols-2">
@@ -290,6 +297,38 @@
             </div>
         </template>
     @endif
+
+    @if ($isBannerWidget)
+        <template id="banner-slide-template">
+            <div class="rounded-xl border border-slate-200 bg-white p-4" data-banner-slide>
+                <div class="flex items-center justify-between gap-3">
+                    <h4 class="text-sm font-semibold text-slate-800" data-banner-slide-title>Slide __NUMBER__</h4>
+                    <button type="button" class="text-sm font-medium text-red-600 hover:text-red-700" data-remove-banner-slide>Xóa</button>
+                </div>
+                <input type="hidden" name="banner_slides[__INDEX__][image]" value="">
+
+                <div class="mt-4 grid gap-4 md:grid-cols-2">
+                    <x-backend.form.input id="banner_slide_title___INDEX__" name="banner_slides[__INDEX__][title]" label="Tiêu đề" value="" />
+                    <x-backend.form.input id="banner_slide_sub_title___INDEX__" name="banner_slides[__INDEX__][sub_title]" label="Sub title" value="" />
+                </div>
+
+                <div class="mt-4">
+                    <label for="banner_slide_description___INDEX__" class="mb-2 block text-sm font-medium text-slate-700">Mô tả</label>
+                    <textarea id="banner_slide_description___INDEX__" name="banner_slides[__INDEX__][description]" rows="3" class="block w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900 shadow-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"></textarea>
+                </div>
+
+                <div class="mt-4 grid gap-4 md:grid-cols-2">
+                    <x-backend.form.input id="banner_slide_button_text___INDEX__" name="banner_slides[__INDEX__][button_text]" label="Nút CTA - Text" value="" />
+                    <x-backend.form.input id="banner_slide_button_url___INDEX__" name="banner_slides[__INDEX__][button_url]" label="Nút CTA - URL" value="" />
+                </div>
+
+                <div class="mt-4">
+                    <label for="banner_slide_image___INDEX__" class="block text-sm font-medium text-slate-700">Ảnh slide</label>
+                    <input id="banner_slide_image___INDEX__" name="banner_slide_image_files[__INDEX__]" type="file" accept="image/*" class="mt-2 block w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 shadow-sm outline-none transition file:mr-4 file:rounded-lg file:border-0 file:bg-slate-100 file:px-3 file:py-2 file:text-sm file:font-semibold file:text-slate-700 hover:file:bg-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100">
+                </div>
+            </div>
+        </template>
+    @endif
 @endsection
 
 @if ($isFeedbackWidget)
@@ -320,6 +359,50 @@
 
                     if (count >= 10) {
                         alert('Tối đa 10 feedback.');
+                        return;
+                    }
+
+                    const index = Date.now();
+                    const html = template.innerHTML
+                        .replaceAll('__INDEX__', index)
+                        .replaceAll('__NUMBER__', count + 1);
+
+                    list.insertAdjacentHTML('beforeend', html);
+                    refreshNumbers();
+                });
+            });
+        </script>
+    @endpush
+@endif
+
+@if ($isBannerWidget)
+    @push('scripts')
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const list = document.getElementById('banner-slides');
+                const addButton = document.getElementById('add-banner-slide');
+                const template = document.getElementById('banner-slide-template');
+
+                if (!list || !addButton || !template) return;
+
+                const refreshNumbers = function () {
+                    list.querySelectorAll('[data-banner-slide]').forEach(function (item, index) {
+                        const title = item.querySelector('[data-banner-slide-title]');
+                        if (title) title.textContent = 'Slide ' + (index + 1);
+                    });
+                };
+
+                list.addEventListener('click', function (event) {
+                    if (!event.target.matches('[data-remove-banner-slide]')) return;
+                    event.target.closest('[data-banner-slide]')?.remove();
+                    refreshNumbers();
+                });
+
+                addButton.addEventListener('click', function () {
+                    const count = list.querySelectorAll('[data-banner-slide]').length;
+
+                    if (count >= 10) {
+                        alert('Tối đa 10 slide.');
                         return;
                     }
 

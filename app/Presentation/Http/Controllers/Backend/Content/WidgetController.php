@@ -185,14 +185,14 @@ class WidgetController extends Controller
             'widget_images.*' => ['nullable', 'string', 'max:255'],
             'widget_image_files' => ['nullable', 'array', 'max:' . max($this->imageConfigCount($widget->key), 1)],
             'widget_image_files.*' => ['nullable', 'image', 'max:40960'],
-            'banner_slides' => ['nullable', 'array', 'max:5'],
+            'banner_slides' => ['nullable', 'array', 'max:10'],
             'banner_slides.*.title' => ['nullable', 'string', 'max:255'],
             'banner_slides.*.sub_title' => ['nullable', 'string', 'max:255'],
             'banner_slides.*.description' => ['nullable', 'string'],
             'banner_slides.*.button_text' => ['nullable', 'string', 'max:255'],
             'banner_slides.*.button_url' => ['nullable', 'string', 'max:255'],
             'banner_slides.*.image' => ['nullable', 'string', 'max:255'],
-            'banner_slide_image_files' => ['nullable', 'array', 'max:5'],
+            'banner_slide_image_files' => ['nullable', 'array', 'max:10'],
             'banner_slide_image_files.*' => ['nullable', 'image', 'max:40960'],
         ]);
 
@@ -264,9 +264,9 @@ class WidgetController extends Controller
 
     private function bannerSlides(array $slides, array $files = []): array
     {
-        return collect(range(0, 4))
-            ->map(function (int $index) use ($slides, $files): array {
-                $slide = $slides[$index] ?? [];
+        return collect($slides)
+            ->take(10)
+            ->map(function (array $slide, int|string $index) use ($files): array {
                 $image = trim((string) ($slide['image'] ?? ''));
 
                 if (isset($files[$index])) {
