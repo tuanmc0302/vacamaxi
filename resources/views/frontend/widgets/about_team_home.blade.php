@@ -4,23 +4,8 @@
     $description = data_get($widget, 'description');
     $buttonText = data_get($widget, 'settings.button_text', 'Xem thêm');
     $buttonUrl = data_get($widget, 'settings.button_url', '/gioi-thieu');
-    $teamImage = collect(data_get($widget, 'settings.images', ['/image/Rectangle 2.png']))
+    $images = collect(data_get($widget, 'settings.images', ['/image/Rectangle 2.png', '/image/Rectangle 3.png', '/image/Rectangle 4.png', '/image/Rectangle 5.png']))
         ->filter()
-        ->first();
-
-    $expertImages = collect($experts ?? [])
-        ->sortBy([
-            ['sort_order', 'asc'],
-            ['id', 'asc'],
-        ])
-        ->take(3)
-        ->map(fn ($expert) => $expert->image)
-        ->filter()
-        ->values();
-
-    $images = collect([$teamImage])
-        ->filter()
-        ->merge($expertImages)
         ->take(4)
         ->values();
 

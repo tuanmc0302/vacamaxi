@@ -56,7 +56,7 @@ class WidgetController extends Controller
 
     private const IMAGE_CONFIG_WIDGETS = [
         'about_me_home' => 4,
-        'about_team_home' => 1,
+        'about_team_home' => 4,
         'about_restaurant_home' => 4,
         'about_page_hero' => 1,
         'about_page_intro' => 4,
@@ -183,7 +183,6 @@ class WidgetController extends Controller
             'widget_images.*' => ['nullable', 'string', 'max:255'],
             'widget_image_files' => ['nullable', 'array', 'max:' . max($this->imageConfigCount($widget->key), 1)],
             'widget_image_files.*' => ['nullable', 'image', 'max:40960'],
-            'team_image_file' => ['nullable', 'image', 'max:40960'],
         ]);
 
         $settings = $widget->settings ?? [];
@@ -211,18 +210,11 @@ class WidgetController extends Controller
         }
 
         if ($this->hasImageConfig($widget->key)) {
-            if ($widget->key === 'about_team_home') {
-                $settings['images'] = $this->teamImage(
-                    $validated['widget_images'][0] ?? null,
-                    $request->file('team_image_file')
-                );
-            } else {
-                $settings['images'] = $this->widgetImages(
-                    $validated['widget_images'] ?? [],
-                    $request->file('widget_image_files', []),
-                    $this->imageConfigCount($widget->key)
-                );
-            }
+            $settings['images'] = $this->widgetImages(
+                $validated['widget_images'] ?? [],
+                $request->file('widget_image_files', []),
+                $this->imageConfigCount($widget->key)
+            );
         }
 
         $widget->update([
@@ -250,17 +242,6 @@ class WidgetController extends Controller
             ->filter()
             ->values()
             ->all();
-    }
-
-    private function teamImage(?string $currentImage, mixed $file): array
-    {
-        if ($file) {
-            return [$file->store('widgets', 'public')];
-        }
-
-        $currentImage = trim((string) $currentImage);
-
-        return $currentImage !== '' ? [$currentImage] : [];
     }
 
     private function hasImageConfig(string $key): bool

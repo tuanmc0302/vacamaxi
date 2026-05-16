@@ -61,11 +61,7 @@ class HomeController extends Controller
             $widgets = new Collection();
         }
 
-        $experts = Expert::where('is_active', true)
-            ->orderBy('sort_order')
-            ->orderBy('id')
-            ->take(3)
-            ->get();
+        $experts = Expert::where('is_active', true)->orderBy('sort_order')->take(4)->get();
 
         return view('frontend.home', [
             'frontendData' => $frontendData,
