@@ -4,10 +4,32 @@
     $description = data_get($widget, 'description');
     $buttonText = data_get($widget, 'settings.button_text', 'Xem thêm');
     $buttonUrl = data_get($widget, 'settings.button_url', '/gioi-thieu');
-    
+    $teamImage = collect(data_get($widget, 'settings.images', ['/image/Rectangle 2.png']))
+        ->filter()
+        ->first();
+
+    $expertImages = collect($experts ?? [])
+        ->sortBy([
+            ['sort_order', 'asc'],
+            ['id', 'asc'],
+        ])
+        ->take(3)
+        ->map(fn ($expert) => $expert->image)
+        ->filter()
+        ->values();
+
+    $images = collect([$teamImage])
+        ->filter()
+        ->merge($expertImages)
+        ->take(4)
+        ->values();
+
     $imageSrc = function ($path) {
-        if (!$path) return asset('image/logo.png');
-        return str_starts_with($path, 'http') || str_starts_with($path, '/') ? $path : asset('storage/' . $path);
+        if (str_starts_with($path, 'http') || str_starts_with($path, '/')) {
+            return $path;
+        }
+
+        return str_starts_with($path, 'image/') ? asset($path) : asset('storage/' . $path);
     };
 @endphp
 
@@ -28,8 +50,8 @@
             </div>
             <div class="col-lg-6">
                 <div class="expert-gallery">
-                    @foreach ($experts as $expert)
-                        <img src="{{ $imageSrc($expert->image) }}" alt="{{ $expert->name }}">
+                    @foreach ($images as $index => $image)
+                        <img src="{{ $imageSrc($image) }}" alt="{{ $title }} {{ $index + 1 }}">
                     @endforeach
                 </div>
             </div>

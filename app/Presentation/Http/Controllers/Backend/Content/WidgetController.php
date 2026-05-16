@@ -56,7 +56,7 @@ class WidgetController extends Controller
 
     private const IMAGE_CONFIG_WIDGETS = [
         'about_me_home' => 4,
-        'about_team_home' => 4,
+        'about_team_home' => 1,
         'about_restaurant_home' => 4,
         'about_page_hero' => 1,
         'about_page_intro' => 4,
@@ -181,6 +181,8 @@ class WidgetController extends Controller
             'feedback_items.*.content' => ['nullable', 'string', 'max:500'],
             'widget_images' => ['nullable', 'array', 'max:' . max($this->imageConfigCount($widget->key), 1)],
             'widget_images.*' => ['nullable', 'string', 'max:255'],
+            'widget_image_files' => ['nullable', 'array', 'max:' . max($this->imageConfigCount($widget->key), 1)],
+            'widget_image_files.*' => ['nullable', 'image', 'max:2048'],
         ]);
 
         $settings = $widget->settings ?? [];
@@ -208,7 +210,11 @@ class WidgetController extends Controller
         }
 
         if ($this->hasImageConfig($widget->key)) {
-            $settings['images'] = $this->widgetImages($validated['widget_images'] ?? [], $this->imageConfigCount($widget->key));
+            $settings['images'] = $this->widgetImages(
+                $validated['widget_images'] ?? [],
+                $request->file('widget_image_files', []),
+                $this->imageConfigCount($widget->key)
+            );
         }
 
         $widget->update([
@@ -223,11 +229,16 @@ class WidgetController extends Controller
         return redirect()->route('admin.widgets.index', ['page' => $page])->with('status', 'Đã cập nhật widget frontend.');
     }
 
-    private function widgetImages(array $images, int $limit = 4): array
+    private function widgetImages(array $images, array $files = [], int $limit = 4): array
     {
-        return collect($images)
-            ->take($limit)
-            ->map(fn ($image): string => trim((string) $image))
+        return collect(range(0, $limit - 1))
+            ->map(function (int $index) use ($images, $files): string {
+                if (isset($files[$index])) {
+                    return $files[$index]->store('widgets', 'public');
+                }
+
+                return trim((string) ($images[$index] ?? ''));
+            })
             ->filter()
             ->values()
             ->all();

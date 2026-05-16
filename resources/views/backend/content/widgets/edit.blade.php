@@ -54,7 +54,7 @@
         $defaultImageSets = [
             'about_page_hero' => ['/image/bg_gioithieu.png'],
             'about_me_home' => ['/image/Rectangle 2.png', '/image/Rectangle 3.png', '/image/Rectangle 4.png', '/image/Rectangle 5.png'],
-            'about_team_home' => ['/image/Rectangle 2.png', '/image/Rectangle 3.png', '/image/Rectangle 4.png', '/image/Rectangle 5.png'],
+            'about_team_home' => ['/image/Rectangle 2.png'],
             'about_restaurant_home' => ['/image/Rectangle 5.png', '/image/Rectangle 3.png', '/image/Rectangle 2.png', '/image/Rectangle 11.png'],
             'about_page_intro' => ['/image/Rectangle 11.png', '/image/Rectangle 2.png', '/image/Rectangle 4.png', '/image/Rectangle 5.png'],
             'about_page_values' => ['/image/GIÁ TRỊ CỐT LÕI-01 1.png'],
@@ -86,7 +86,7 @@
 
         <x-backend.alert class="mt-6" type="error" :message="$errors->first()" />
 
-        <form method="POST" action="{{ route('admin.widgets.update', $widget) }}" class="mt-8 space-y-5">
+        <form method="POST" action="{{ route('admin.widgets.update', $widget) }}" enctype="multipart/form-data" class="mt-8 space-y-5">
             @csrf
             @method('PUT')
             <input type="hidden" name="page" value="{{ $currentPage ?? 'home' }}">
@@ -132,18 +132,31 @@
                     </p>
                     <div class="mt-5 grid gap-4 md:grid-cols-2">
                         @foreach ($widgetImages as $imageIndex => $imagePath)
+                            @php
+                                $imageLabel = $widget->key === 'about_team_home'
+                                    ? 'Ảnh đội ngũ'
+                                    : 'Ảnh ' . ($imageIndex + 1);
+                            @endphp
                             <div>
                                 <x-backend.form.input
                                     id="widget_image_{{ $imageIndex }}"
                                     name="widget_images[{{ $imageIndex }}]"
-                                    label="Ảnh {{ $imageIndex + 1 }}"
+                                    :label="$imageLabel"
                                     :value="$imagePath"
                                 />
+                                <label for="widget_image_file_{{ $imageIndex }}" class="mt-3 block text-sm font-medium text-slate-700">Upload {{ $imageLabel }}</label>
+                                <input
+                                    id="widget_image_file_{{ $imageIndex }}"
+                                    name="widget_image_files[{{ $imageIndex }}]"
+                                    type="file"
+                                    accept="image/*"
+                                    class="mt-2 block w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 shadow-sm outline-none transition file:mr-4 file:rounded-lg file:border-0 file:bg-slate-100 file:px-3 file:py-2 file:text-sm file:font-semibold file:text-slate-700 hover:file:bg-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                                >
                                 @if ($imagePath)
                                     @php
-                                        $previewSrc = str_starts_with($imagePath, 'http') || str_starts_with($imagePath, '/') ? $imagePath : asset($imagePath);
+                                        $previewSrc = str_starts_with($imagePath, 'http') || str_starts_with($imagePath, '/') ? $imagePath : (str_starts_with($imagePath, 'image/') ? asset($imagePath) : asset('storage/' . $imagePath));
                                     @endphp
-                                    <img src="{{ $previewSrc }}" alt="Ảnh {{ $imageIndex + 1 }}" class="mt-3 h-24 w-full rounded-xl object-cover">
+                                    <img src="{{ $previewSrc }}" alt="{{ $imageLabel }}" class="mt-3 h-24 w-full rounded-xl object-cover">
                                 @endif
                             </div>
                         @endforeach
