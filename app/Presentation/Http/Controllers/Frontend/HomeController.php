@@ -4,6 +4,7 @@ namespace App\Presentation\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use App\Models\FrontendWidget;
+use App\Models\Post;
 use App\Models\Product;
 use App\Models\Expert;
 use App\Services\MenuService;
@@ -60,7 +61,18 @@ class HomeController extends Controller
             'widgets' => $widgets,
             'experts' => $experts,
             'productOptionItems' => $this->productOptionItems($widgets),
+            'news' => $this->latestNews(),
         ]);
+    }
+
+    private function latestNews(): Collection
+    {
+        return Post::query()
+            ->where('is_active', true)
+            ->with('category')
+            ->latest('published_at')
+            ->limit(8)
+            ->get();
     }
 
     private function productOptionItems(Collection $widgets): array

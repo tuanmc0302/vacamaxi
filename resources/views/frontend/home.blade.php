@@ -45,7 +45,7 @@
             'feedback_home' => ['view' => 'frontend.widgets.feedback_home'],
             'news_home' => [
                 'view' => 'frontend.widgets.news_home',
-                'news' => $frontendData['news'] ?? [],
+                'news' => $news,
             ],
         ];
     @endphp
