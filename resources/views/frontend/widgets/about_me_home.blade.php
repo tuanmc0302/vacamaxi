@@ -7,7 +7,13 @@
         ->filter()
         ->take(4)
         ->values();
-    $imageSrc = fn ($path) => str_starts_with($path, 'http') || str_starts_with($path, '/') ? $path : asset($path);
+    $imageSrc = function ($path) {
+        if (str_starts_with($path, 'http://') || str_starts_with($path, 'https://') || str_starts_with($path, '/')) {
+            return $path;
+        }
+
+        return str_starts_with($path, 'image/') ? asset($path) : asset('storage/' . $path);
+    };
 @endphp
 <section class="about-section" id="about">
     <div class="container">
