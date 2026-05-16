@@ -126,10 +126,6 @@
             @if ($isImageConfigWidget)
                 <div class="rounded-2xl border border-slate-200 bg-slate-50 p-5">
                     <h3 class="text-base font-semibold text-slate-900">Cấu hình ảnh hiển thị</h3>
-                    <p class="mt-1 text-sm text-slate-500">
-                        Nhập đường dẫn ảnh trong public, ví dụ: /image/Rectangle 2.png.
-                        Widget này dùng {{ $imageConfigCount }} ảnh.
-                    </p>
                     <div class="mt-5 grid gap-4 md:grid-cols-2">
                         @foreach ($widgetImages as $imageIndex => $imagePath)
                             @php
@@ -138,13 +134,8 @@
                                     : 'Ảnh ' . ($imageIndex + 1);
                             @endphp
                             <div>
-                                <x-backend.form.input
-                                    id="widget_image_{{ $imageIndex }}"
-                                    name="widget_images[{{ $imageIndex }}]"
-                                    :label="$imageLabel"
-                                    :value="$imagePath"
-                                />
-                                <label for="widget_image_file_{{ $imageIndex }}" class="mt-3 block text-sm font-medium text-slate-700">Upload {{ $imageLabel }}</label>
+                                <input type="hidden" name="widget_images[{{ $imageIndex }}]" value="{{ $imagePath }}">
+                                <label for="widget_image_file_{{ $imageIndex }}" class="block text-sm font-medium text-slate-700">{{ $imageLabel }}</label>
                                 <input
                                     id="widget_image_file_{{ $imageIndex }}"
                                     name="widget_image_files[{{ $imageIndex }}]"

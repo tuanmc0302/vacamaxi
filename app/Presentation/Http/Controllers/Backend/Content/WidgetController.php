@@ -182,7 +182,7 @@ class WidgetController extends Controller
             'widget_images' => ['nullable', 'array', 'max:' . max($this->imageConfigCount($widget->key), 1)],
             'widget_images.*' => ['nullable', 'string', 'max:255'],
             'widget_image_files' => ['nullable', 'array', 'max:' . max($this->imageConfigCount($widget->key), 1)],
-            'widget_image_files.*' => ['nullable', 'image', 'max:2048'],
+            'widget_image_files.*' => ['nullable', 'image', 'max:8192'],
         ]);
 
         $settings = $widget->settings ?? [];
