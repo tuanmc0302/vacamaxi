@@ -92,7 +92,7 @@
 
             const refreshOrderNumbers = function () {
                 tbody.querySelectorAll('.widget-row').forEach(function (row, index) {
-                    row.querySelector('.sort-order-cell').textContent = index + 1;
+                    row.querySelector('.sort-order-cell').textContent = index;
                 });
             };
 

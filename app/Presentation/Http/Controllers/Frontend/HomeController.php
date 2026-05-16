@@ -47,6 +47,7 @@ class HomeController extends Controller
                 ->where('is_active', true)
                 ->whereIn('key', self::HOME_WIDGET_KEYS)
                 ->orderBy('sort_order')
+                ->orderBy('id')
                 ->get()
                 ->keyBy('key');
         } catch (Throwable) {

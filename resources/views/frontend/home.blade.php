@@ -24,7 +24,6 @@
             'news_home',
         ]);
 
-        $widgetOrder = $widgets->isNotEmpty() ? $widgets->keys() : $defaultWidgetOrder;
         $widgetIncludes = [
             'banner_home' => ['view' => 'frontend.widgets.banner_home'],
             'about_me_home' => ['view' => 'frontend.widgets.about_me_home'],
@@ -50,16 +49,31 @@
         ];
     @endphp
 
-    @foreach ($widgetOrder as $widgetKey)
-        @continue(! isset($widgetIncludes[$widgetKey]))
+    @if ($widgets->isNotEmpty())
+        @foreach ($widgets as $widget)
+            @continue(! isset($widgetIncludes[$widget->key]))
 
-        @php
-            $includeConfig = $widgetIncludes[$widgetKey];
-            $includeData = ['widget' => $widgets->get($widgetKey)] + collect($includeConfig)
-                ->except('view')
-                ->all();
-        @endphp
+            @php
+                $includeConfig = $widgetIncludes[$widget->key];
+                $includeData = ['widget' => $widget] + collect($includeConfig)
+                    ->except('view')
+                    ->all();
+            @endphp
 
-        @include($includeConfig['view'], $includeData)
-    @endforeach
+            @include($includeConfig['view'], $includeData)
+        @endforeach
+    @else
+        @foreach ($defaultWidgetOrder as $widgetKey)
+            @continue(! isset($widgetIncludes[$widgetKey]))
+
+            @php
+                $includeConfig = $widgetIncludes[$widgetKey];
+                $includeData = ['widget' => null] + collect($includeConfig)
+                    ->except('view')
+                    ->all();
+            @endphp
+
+            @include($includeConfig['view'], $includeData)
+        @endforeach
+    @endif
 @endsection

@@ -295,7 +295,7 @@ class WidgetController extends Controller
         foreach ($widgetIds as $index => $widgetId) {
             FrontendWidget::query()
                 ->whereKey($widgetId)
-                ->update(['sort_order' => $index + 1]);
+                ->update(['sort_order' => $index]);
         }
 
         return response()->json(['message' => 'Đã cập nhật thứ tự widget.']);
