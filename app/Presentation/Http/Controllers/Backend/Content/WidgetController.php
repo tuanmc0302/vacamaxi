@@ -161,6 +161,8 @@ class WidgetController extends Controller
 
     public function update(Request $request, FrontendWidget $widget): RedirectResponse
     {
+        $this->validateWidgetUploadErrors($request);
+
         $page = (string) $request->input('page', $this->pageByWidgetKey($widget->key));
         $validated = $request->validate([
             'page' => ['nullable', 'string'],
@@ -242,6 +244,41 @@ class WidgetController extends Controller
             ->filter()
             ->values()
             ->all();
+    }
+
+    private function validateWidgetUploadErrors(Request $request): void
+    {
+        $files = $request->file('widget_image_files', []);
+
+        if (! is_array($files)) {
+            return;
+        }
+
+        foreach ($files as $index => $file) {
+            if (! $file || $file->isValid()) {
+                continue;
+            }
+
+            $label = 'Ảnh ' . ((int) $index + 1);
+
+            validator([], [])->after(function ($validator) use ($label, $file): void {
+                $validator->errors()->add('widget_image_files.' . $label, $label . ': ' . $this->uploadErrorMessage($file->getError()));
+            })->validate();
+        }
+    }
+
+    private function uploadErrorMessage(int $errorCode): string
+    {
+        return match ($errorCode) {
+            UPLOAD_ERR_INI_SIZE => 'File vượt giới hạn upload_max_filesize trong php.ini.',
+            UPLOAD_ERR_FORM_SIZE => 'File vượt giới hạn MAX_FILE_SIZE của form.',
+            UPLOAD_ERR_PARTIAL => 'File chỉ upload được một phần, vui lòng thử lại.',
+            UPLOAD_ERR_NO_FILE => 'Chưa chọn file upload.',
+            UPLOAD_ERR_NO_TMP_DIR => 'Server thiếu thư mục tạm để upload file.',
+            UPLOAD_ERR_CANT_WRITE => 'Server không ghi được file upload vào ổ đĩa.',
+            UPLOAD_ERR_EXTENSION => 'Một PHP extension đã chặn upload file.',
+            default => 'Upload thất bại với mã lỗi PHP ' . $errorCode . '.',
+        };
     }
 
     private function hasImageConfig(string $key): bool
