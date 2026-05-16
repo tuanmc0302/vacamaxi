@@ -91,7 +91,8 @@ class HomeController extends Controller
                 ->with('category')
                 ->where('is_active', true)
                 ->where('category_id', $categoryId)
-                ->latest('id')
+                ->orderBy('sort_order')
+                ->orderBy('id')
                 ->limit(4)
                 ->get();
 
