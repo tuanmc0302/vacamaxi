@@ -58,7 +58,11 @@ class ProductController extends Controller
 
         $breedsItems = [];
         if ($breedsWidget) {
-            $categoryId = data_get($breedsWidget->settings, 'category_id');
+            $categoryId = data_get($breedsWidget->settings, 'category_id') ?: Category::query()
+                ->where('module', Category::MODULE_PRODUCT)
+                ->where('is_active', true)
+                ->where('slug', data_get($breedsWidget->settings, 'category_slug', 'giong-bo-vacamaxi'))
+                ->value('id');
 
             if ($categoryId) {
                 $products = Product::query()

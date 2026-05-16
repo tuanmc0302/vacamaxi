@@ -3,6 +3,7 @@
 namespace App\Presentation\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use App\Models\FrontendWidget;
 use App\Models\Post;
 use App\Models\Product;
@@ -35,6 +36,12 @@ class HomeController extends Controller
         'product_option_one',
         'product_option_two',
         'product_option_three',
+    ];
+
+    private const PRODUCT_OPTION_CATEGORY_SLUGS = [
+        'product_option_one' => 'giong-bo-vacamaxi',
+        'product_option_two' => 'thit-bo',
+        'product_option_three' => 'ruou',
     ];
 
     public function __invoke(): View
@@ -81,7 +88,7 @@ class HomeController extends Controller
         $items = [];
 
         foreach (self::PRODUCT_OPTION_KEYS as $widgetKey) {
-            $categoryId = data_get($widgets->get($widgetKey)?->settings, 'category_id');
+            $categoryId = $this->productOptionCategoryId($widgets, $widgetKey);
 
             if (! $categoryId) {
                 continue;
@@ -111,5 +118,27 @@ class HomeController extends Controller
         }
 
         return $items;
+    }
+
+    private function productOptionCategoryId(Collection $widgets, string $widgetKey): ?int
+    {
+        $settings = $widgets->get($widgetKey)?->settings ?? [];
+        $categoryId = data_get($settings, 'category_id');
+
+        if ($categoryId) {
+            return (int) $categoryId;
+        }
+
+        $categorySlug = data_get($settings, 'category_slug') ?: self::PRODUCT_OPTION_CATEGORY_SLUGS[$widgetKey] ?? null;
+
+        if (! $categorySlug) {
+            return null;
+        }
+
+        return Category::query()
+            ->where('module', Category::MODULE_PRODUCT)
+            ->where('is_active', true)
+            ->where('slug', $categorySlug)
+            ->value('id');
     }
 }
