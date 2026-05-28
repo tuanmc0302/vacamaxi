@@ -19,7 +19,7 @@
         ],
         [
             'image' => $strategyImages->get(1, '/image/Rectangle 11.png'),
-            'title' => 'Cấy phôi vào bò đực để phát triển bò thịt cao cấp',
+            'title' => 'Cấy phôi vào bò cái để phát triển bò thịt cao cấp',
             'body' => [
                 'Sản xuất bò thịt có tốc độ tăng trưởng nhanh, chất lượng thịt vượt trội theo tiêu chuẩn quốc tế',
                 'Đối tượng áp dụng: Các trang trại chăn nuôi bò thịt quy mô lớn, hợp tác xã và doanh nghiệp chế biến thịt.',
