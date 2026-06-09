@@ -251,6 +251,15 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 @media (min-width: 992px) {
+    .site-header .nav-item.dropdown > .d-flex {
+        justify-content: center !important;
+    }
+
+    .site-header .nav-item.dropdown .nav-link {
+        flex-grow: 0 !important;
+        gap: 6px;
+    }
+
     .site-header .dropdown-menu {
         display: block;
         opacity: 0;
