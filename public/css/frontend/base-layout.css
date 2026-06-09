@@ -300,6 +300,10 @@ h1, h2, h3, h4, h5, h6 {
     filter: invert(1);
 }
 
+.navbar-toggler:focus {
+    box-shadow: 0 0 0 3px rgba(243, 178, 26, 0.28);
+}
+
 
 
 .site-footer {
@@ -588,6 +592,16 @@ h1, h2, h3, h4, h5, h6 {
 
     .site-header .navbar {
         min-height: 64px;
+    }
+
+    .site-header .navbar-toggler {
+        border-color: #f3b21a;
+        background: #f3b21a;
+        box-shadow: 0 8px 18px rgba(0, 0, 0, 0.22);
+    }
+
+    .site-header .navbar-toggler-icon {
+        filter: invert(1) brightness(0.2);
     }
 
     .site-header .navbar-collapse {
