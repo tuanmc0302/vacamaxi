@@ -115,7 +115,10 @@ class AboutController extends Controller
                 . "Tiêu đề: " . ($contact->title ?: 'Không có') . "\n"
                 . "Nội dung: " . $contact->content,
                 function ($message) use ($contact) {
-                    $message->to('info@vacamaxi.vn')
+                    $recipient = env('MAIL_RECEIVER', 'info@vacamaxi.vn');
+                    // Hỗ trợ gửi cho nhiều email phân cách bằng dấu phẩy
+                    $emails = array_map('trim', explode(',', $recipient));
+                    $message->to($emails)
                         ->subject('[Vacamaxi] Liên hệ mới từ ' . $contact->full_name);
                 }
             );
