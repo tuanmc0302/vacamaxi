@@ -102,6 +102,10 @@ class AboutController extends Controller
                     'parse_mode' => 'Markdown',
                 ]);
             }
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::error('Gửi thông báo Telegram liên hệ thất bại: ' . $e->getMessage());
+        }
+
         try {
             \Illuminate\Support\Facades\Mail::raw(
                 "Bạn có một liên hệ mới từ khách hàng:\n\n"
