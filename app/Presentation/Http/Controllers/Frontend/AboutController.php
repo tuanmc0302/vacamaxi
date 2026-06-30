@@ -82,7 +82,42 @@ class AboutController extends Controller
             'content' => 'required|string',
         ]);
 
-        Contact::create($validated);
+        $contact = Contact::create($validated);
+
+        try {
+            $token = env('TELEGRAM_BOT_TOKEN');
+            $chatId = env('TELEGRAM_CHAT_ID');
+
+            if ($token && $chatId) {
+                $text = "📩 *Liên hệ mới từ khách hàng*\n\n"
+                    . "👤 *Họ tên:* " . $contact->full_name . "\n"
+                    . "📞 *Số điện thoại:* " . $contact->phone . "\n"
+                    . "📧 *Email:* " . ($contact->email ?: 'Không cung cấp') . "\n"
+                    . "📌 *Tiêu đề:* " . ($contact->title ?: 'Không có') . "\n"
+                    . "💬 *Nội dung:* " . $contact->content;
+
+                \Illuminate\Support\Facades\Http::post("https://api.telegram.org/bot{$token}/sendMessage", [
+                    'chat_id' => $chatId,
+                    'text' => $text,
+                    'parse_mode' => 'Markdown',
+                ]);
+            }
+        try {
+            \Illuminate\Support\Facades\Mail::raw(
+                "Bạn có một liên hệ mới từ khách hàng:\n\n"
+                . "Họ tên: " . $contact->full_name . "\n"
+                . "Số điện thoại: " . $contact->phone . "\n"
+                . "Email: " . ($contact->email ?: 'Không cung cấp') . "\n"
+                . "Tiêu đề: " . ($contact->title ?: 'Không có') . "\n"
+                . "Nội dung: " . $contact->content,
+                function ($message) use ($contact) {
+                    $message->to('info@vacamaxi.vn')
+                        ->subject('[Vacamaxi] Liên hệ mới từ ' . $contact->full_name);
+                }
+            );
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::error('Gửi email thông báo liên hệ thất bại: ' . $e->getMessage());
+        }
 
         return response()->json(['message' => 'Cảm ơn bạn đã liên hệ. Chúng tôi sẽ phản hồi sớm nhất!']);
     }
