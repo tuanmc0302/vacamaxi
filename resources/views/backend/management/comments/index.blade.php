@@ -29,7 +29,7 @@
                             </td>
                             <td class="px-5 py-4">
                                 <div class="max-w-xs truncate" title="{{ $comment->post?->title }}">
-                                    <a href="{{ route('frontend.news.show', $comment->post?->slug ?? '') }}" target="_blank" class="text-blue-600 hover:underline">
+                                    <a href="{{ route('frontend.news.show', ['slug' => $comment->post?->slug ?? '']) }}" target="_blank" class="text-blue-600 hover:underline">
                                         {{ $comment->post?->title }}
                                     </a>
                                 </div>

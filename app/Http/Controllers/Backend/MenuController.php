@@ -28,7 +28,9 @@ class MenuController extends Controller
     {
         $validated = $request->validate([
             'label' => ['required', 'string', 'max:255'],
+            'label_en' => ['nullable', 'string', 'max:255'],
             'url' => ['nullable', 'string', 'max:255'],
+            'url_en' => ['nullable', 'string', 'max:255'],
             'key' => ['nullable', 'string', 'max:80'],
             'parent_id' => ['nullable', 'integer', 'exists:menu_items,id'],
             'target' => ['nullable', Rule::in(['_self', '_blank'])],
@@ -40,7 +42,9 @@ class MenuController extends Controller
 
         $menuItem = MenuItem::query()->create([
             'label' => $validated['label'],
+            'label_en' => $validated['label_en'] ?? null,
             'url' => $validated['url'] ?? '#',
+            'url_en' => $validated['url_en'] ?? null,
             'key' => $validated['key'] ?? null,
             'parent_id' => $parentId,
             'target' => $validated['target'] ?? '_self',
@@ -59,7 +63,9 @@ class MenuController extends Controller
     {
         $validated = $request->validate([
             'label' => ['required', 'string', 'max:255'],
+            'label_en' => ['nullable', 'string', 'max:255'],
             'url' => ['nullable', 'string', 'max:255'],
+            'url_en' => ['nullable', 'string', 'max:255'],
             'key' => ['nullable', 'string', 'max:80'],
             'target' => ['nullable', Rule::in(['_self', '_blank'])],
             'is_active' => ['nullable', 'boolean'],
@@ -67,7 +73,9 @@ class MenuController extends Controller
 
         $menuItem->update([
             'label' => $validated['label'],
+            'label_en' => $validated['label_en'] ?? null,
             'url' => $validated['url'] ?? '#',
+            'url_en' => $validated['url_en'] ?? null,
             'key' => $validated['key'] ?? null,
             'target' => $validated['target'] ?? '_self',
             'is_active' => (bool) ($validated['is_active'] ?? false),

@@ -30,14 +30,14 @@
                     @php
                         $image = \App\Presentation\Http\Controllers\Frontend\NewsController::imageUrl($post->image, 'image/Rectangle 5.png');
                     @endphp
-                    <a class="news-card" href="{{ route('frontend.news.show', $post->slug) }}">
+                    <a class="news-card" href="{{ route('frontend.news.show', ['slug' => $post->slug]) }}">
                         <img src="{{ $image }}" alt="{{ $post->title }}">
                         <div class="news-card-body">
                             <h3>{{ $post->title }}</h3>
                             <p>{{ $post->description ?: \Illuminate\Support\Str::limit(strip_tags($post->content), 100) }}</p>
                             <div class="news-meta">
                                 <span>{{ optional($post->published_at)->format('d/m/Y') ?: $post->created_at->format('d/m/Y') }}</span>
-                                <strong>Xem thêm</strong>
+                                <strong>{{ __('Xem thêm') }}</strong>
                             </div>
                         </div>
                     </a>

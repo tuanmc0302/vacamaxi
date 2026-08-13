@@ -22,7 +22,7 @@ class ProductController extends Controller
     public function index(Request $request): View|RedirectResponse
     {
         if ($request->filled('category')) {
-            return redirect()->route('frontend.products.category', $request->string('category'));
+            return redirect()->route('frontend.products.category', ['categorySlug' => $request->string('category')]);
         }
 
         $frontendData = $this->frontendData();
@@ -79,7 +79,7 @@ class ProductController extends Controller
                     'title' => $product->name,
                     'description' => $product->short_description ?: Str::limit(strip_tags($product->description ?? ''), 90),
                     'url' => $product->category
-                        ? route('frontend.product.show', [$product->category->slug, $product->slug])
+                        ? route('frontend.product.show', ['categorySlug' => $product->category->slug, 'productSlug' => $product->slug])
                         : route('frontend.products.index'),
                 ])->all();
             }
@@ -122,15 +122,15 @@ class ProductController extends Controller
         ]);
     }
 
-    public function category(Request $request, string $categorySlug): View|RedirectResponse
+    public function category(Request $request, string $products, string $categorySlug): View|RedirectResponse
     {
-        if (in_array($categorySlug, ['bo', 'giong-bo-vacamaxi'], true)) {
+        if (in_array($categorySlug, ['bo', 'giong-bo-vacamaxi', 'cattle', 'breeds'], true)) {
             return redirect()->route('frontend.products.breeds');
         }
 
         $frontendData = $this->frontendData();
         $categories = $this->productCategories();
-        $category = $categories->firstWhere('slug', $categorySlug) ?? abort(404);
+        $category = $categories->first(fn($c) => $c->slug === $categorySlug || $c->slug_en === $categorySlug) ?? abort(404);
         $sort = (string) $request->string('sort', 'newest');
         $search = trim((string) $request->string('search'));
 
@@ -153,11 +153,11 @@ class ProductController extends Controller
         ]);
     }
 
-    public function breeds(Request $request): View
+    public function breeds(Request $request, ?string $products = null, ?string $breeds = null): View
     {
         $frontendData = $this->frontendData();
         $breedCategory = Category::where('module', Category::MODULE_PRODUCT)
-            ->whereIn('slug', ['giong-bo-vacamaxi', 'bo'])
+            ->where(fn($q) => $q->whereIn('slug', ['giong-bo-vacamaxi', 'bo'])->orWhereIn('slug_en', ['giong-bo-vacamaxi', 'bo', 'cattle', 'breeds']))
             ->firstOrFail();
 
         $breeds = Product::query()
@@ -172,16 +172,16 @@ class ProductController extends Controller
         ]);
     }
 
-    public function show(string $categorySlug, string $productSlug): View
+    public function show(string $products, string $categorySlug, string $productSlug): View
     {
         $frontendData = $this->frontendData();
 
         $product = $this->products()
             ->with('category')
-            ->where('slug', $productSlug)
+            ->where(fn($q) => $q->where('slug', $productSlug)->orWhere('slug_en', $productSlug))
             ->whereHas('category', function (Builder $query) use ($categorySlug): void {
                 $query->where('module', Category::MODULE_PRODUCT)
-                    ->where('slug', $categorySlug);
+                    ->where(fn($q) => $q->where('slug', $categorySlug)->orWhere('slug_en', $categorySlug));
             })
             ->firstOrFail();
 
@@ -227,7 +227,11 @@ class ProductController extends Controller
             return route('frontend.products.index');
         }
 
-        return route('frontend.product.show', [$product->category->slug, $product->slug]);
+        $locale = \Illuminate\Support\Facades\App::getLocale();
+        $categorySlug = \App\Helpers\SlugHelper::translate($product->category->slug, $locale);
+        $productSlug = \App\Helpers\SlugHelper::translate($product->slug, $locale);
+
+        return route('frontend.product.show', ['categorySlug' => $categorySlug, 'productSlug' => $productSlug]);
     }
 
     private function products(): Builder

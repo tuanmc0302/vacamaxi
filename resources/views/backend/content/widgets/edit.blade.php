@@ -62,6 +62,10 @@
             ->take(10)
             ->values();
 
+        $bannerSlidesEn = collect(old('banner_slides_en', data_get($widget->settings_en ?? [], 'slides', [])))
+            ->take(10)
+            ->values();
+
         $defaultImageSets = [
             'about_page_hero' => ['/image/bg_gioithieu.png'],
             'about_me_home' => ['/image/Rectangle 2.png', '/image/Rectangle 3.png', '/image/Rectangle 4.png', '/image/Rectangle 5.png'],
@@ -88,6 +92,10 @@
             ->pad($imageConfigCount, '')
             ->take($imageConfigCount)
             ->values();
+
+        $feedbackItemsEn = collect(old('feedback_items_en', data_get($widget->settings_en ?? [], 'items', [])))
+            ->take(10)
+            ->values();
     @endphp
 
     <x-backend.panel class="mx-auto max-w-4xl">
@@ -102,12 +110,21 @@
             @method('PUT')
             <input type="hidden" name="page" value="{{ $currentPage ?? 'home' }}">
 
-            <x-backend.form.input id="title" name="title" label="Title" :value="$widget->title" />
-            <x-backend.form.input id="sub_title" name="sub_title" label="Sub title" :value="$widget->sub_title" />
+            <div class="grid gap-5 md:grid-cols-2">
+                <x-backend.form.input id="title" name="title" label="Title (VI)" :value="$widget->title" />
+                <x-backend.form.input id="title_en" name="title_en" label="Title (EN)" :value="$widget->title_en" />
+                <x-backend.form.input id="sub_title" name="sub_title" label="Sub title (VI)" :value="$widget->sub_title" />
+                <x-backend.form.input id="sub_title_en" name="sub_title_en" label="Sub title (EN)" :value="$widget->sub_title_en" />
+            </div>
 
             <div>
-                <label for="description" class="mb-2 block text-sm font-medium text-slate-700">Description</label>
-                <textarea id="description" name="description" rows="8" class="block w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900 shadow-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100">{{ old('description', $widget->description) }}</textarea>
+                <label for="description" class="mb-2 block text-sm font-medium text-slate-700">Description (VI)</label>
+                <textarea id="description" name="description" rows="5" class="block w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900 shadow-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100">{{ old('description', $widget->description) }}</textarea>
+            </div>
+
+            <div>
+                <label for="description_en" class="mb-2 block text-sm font-medium text-slate-700">Description (EN)</label>
+                <textarea id="description_en" name="description_en" rows="5" class="block w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900 shadow-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100">{{ old('description_en', $widget->description_en) }}</textarea>
             </div>
 
             @if ($isBannerWidget)
@@ -132,18 +149,28 @@
                                 <input type="hidden" name="banner_slides[{{ $slideIndex }}][image]" value="{{ $slideImage }}">
 
                                 <div class="mt-4 grid gap-4 md:grid-cols-2">
-                                    <x-backend.form.input id="banner_slide_title_{{ $slideIndex }}" name="banner_slides[{{ $slideIndex }}][title]" label="Tiêu đề" :value="data_get($slide, 'title')" />
-                                    <x-backend.form.input id="banner_slide_sub_title_{{ $slideIndex }}" name="banner_slides[{{ $slideIndex }}][sub_title]" label="Sub title" :value="data_get($slide, 'sub_title')" />
-                                </div>
-
-                                <div class="mt-4">
-                                    <label for="banner_slide_description_{{ $slideIndex }}" class="mb-2 block text-sm font-medium text-slate-700">Mô tả</label>
-                                    <textarea id="banner_slide_description_{{ $slideIndex }}" name="banner_slides[{{ $slideIndex }}][description]" rows="3" class="block w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900 shadow-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100">{{ data_get($slide, 'description') }}</textarea>
+                                    <x-backend.form.input id="banner_slide_title_{{ $slideIndex }}" name="banner_slides[{{ $slideIndex }}][title]" label="Tiêu đề (VI)" :value="data_get($slide, 'title')" />
+                                    <x-backend.form.input id="banner_slide_title_en_{{ $slideIndex }}" name="banner_slides_en[{{ $slideIndex }}][title]" label="Tiêu đề (EN)" :value="data_get($bannerSlidesEn->get($slideIndex), 'title')" />
+                                    <x-backend.form.input id="banner_slide_sub_title_{{ $slideIndex }}" name="banner_slides[{{ $slideIndex }}][sub_title]" label="Sub title (VI)" :value="data_get($slide, 'sub_title')" />
+                                    <x-backend.form.input id="banner_slide_sub_title_en_{{ $slideIndex }}" name="banner_slides_en[{{ $slideIndex }}][sub_title]" label="Sub title (EN)" :value="data_get($bannerSlidesEn->get($slideIndex), 'sub_title')" />
                                 </div>
 
                                 <div class="mt-4 grid gap-4 md:grid-cols-2">
-                                    <x-backend.form.input id="banner_slide_button_text_{{ $slideIndex }}" name="banner_slides[{{ $slideIndex }}][button_text]" label="Nút CTA - Text" :value="data_get($slide, 'button_text')" />
-                                    <x-backend.form.input id="banner_slide_button_url_{{ $slideIndex }}" name="banner_slides[{{ $slideIndex }}][button_url]" label="Nút CTA - URL" :value="data_get($slide, 'button_url')" />
+                                    <div>
+                                        <label for="banner_slide_description_{{ $slideIndex }}" class="mb-2 block text-sm font-medium text-slate-700">Mô tả (VI)</label>
+                                        <textarea id="banner_slide_description_{{ $slideIndex }}" name="banner_slides[{{ $slideIndex }}][description]" rows="3" class="block w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900 shadow-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100">{{ data_get($slide, 'description') }}</textarea>
+                                    </div>
+                                    <div>
+                                        <label for="banner_slide_description_en_{{ $slideIndex }}" class="mb-2 block text-sm font-medium text-slate-700">Mô tả (EN)</label>
+                                        <textarea id="banner_slide_description_en_{{ $slideIndex }}" name="banner_slides_en[{{ $slideIndex }}][description]" rows="3" class="block w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900 shadow-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100">{{ data_get($bannerSlidesEn->get($slideIndex), 'description') }}</textarea>
+                                    </div>
+                                </div>
+
+                                <div class="mt-4 grid gap-4 md:grid-cols-2">
+                                    <x-backend.form.input id="banner_slide_button_text_{{ $slideIndex }}" name="banner_slides[{{ $slideIndex }}][button_text]" label="Nút CTA - Text (VI)" :value="data_get($slide, 'button_text')" />
+                                    <x-backend.form.input id="banner_slide_button_text_en_{{ $slideIndex }}" name="banner_slides_en[{{ $slideIndex }}][button_text]" label="Nút CTA - Text (EN)" :value="data_get($bannerSlidesEn->get($slideIndex), 'button_text')" />
+                                    <x-backend.form.input id="banner_slide_button_url_{{ $slideIndex }}" name="banner_slides[{{ $slideIndex }}][button_url]" label="Nút CTA - URL (VI)" :value="data_get($slide, 'button_url')" />
+                                    <x-backend.form.input id="banner_slide_button_url_en_{{ $slideIndex }}" name="banner_slides_en[{{ $slideIndex }}][button_url]" label="Nút CTA - URL (EN)" :value="data_get($bannerSlidesEn->get($slideIndex), 'button_url')" />
                                 </div>
 
                                 <div class="mt-4">
@@ -160,9 +187,11 @@
             @endif
 
             @if ($hasButtonConfig)
-                <div class="grid gap-5 md:grid-cols-2">
-                    <x-backend.form.input id="button_text" name="button_text" label="Nút CTA - Text" :value="$buttonText" />
-                    <x-backend.form.input id="button_url" name="button_url" label="Nút CTA - URL" :value="$buttonUrl" />
+                <div class="grid gap-5 md:grid-cols-2 border-t pt-4">
+                    <x-backend.form.input id="button_text" name="button_text" label="Nút CTA - Text (VI)" :value="$buttonText" />
+                    <x-backend.form.input id="button_text_en" name="button_text_en" label="Nút CTA - Text (EN)" :value="old('button_text_en', data_get($widget->settings_en, 'button_text'))" />
+                    <x-backend.form.input id="button_url" name="button_url" label="Nút CTA - URL (VI)" :value="$buttonUrl" />
+                    <x-backend.form.input id="button_url_en" name="button_url_en" label="Nút CTA - URL (EN)" :value="old('button_url_en', data_get($widget->settings_en, 'button_url'))" />
                 </div>
             @endif
 
@@ -172,12 +201,20 @@
                     <p class="mt-1 text-sm text-slate-500">Các key scalar hiện có trong cột <code>settings</code> sẽ hiển thị tại đây.</p>
                     <div class="mt-5 grid gap-5 md:grid-cols-2">
                         @foreach ($extraScalarSettings as $settingKey => $settingValue)
-                            <x-backend.form.input
-                                :id="'setting_field_' . $settingKey"
-                                :name="'setting_fields[' . $settingKey . ']'"
-                                :label="str($settingKey)->replace('_', ' ')->title() . ' (' . $settingKey . ')'"
-                                :value="$settingValue"
-                            />
+                            <div class="space-y-4 rounded-xl border border-slate-200 bg-white p-4">
+                                <x-backend.form.input
+                                    :id="'setting_field_' . $settingKey"
+                                    :name="'setting_fields[' . $settingKey . ']'"
+                                    :label="str($settingKey)->replace('_', ' ')->title() . ' (' . $settingKey . ') [VI]'"
+                                    :value="$settingValue"
+                                />
+                                <x-backend.form.input
+                                    :id="'setting_field_en_' . $settingKey"
+                                    :name="'setting_fields_en[' . $settingKey . ']'"
+                                    :label="str($settingKey)->replace('_', ' ')->title() . ' (' . $settingKey . ') [EN]'"
+                                    :value="old('setting_fields_en.' . $settingKey, data_get($widget->settings_en, $settingKey))"
+                                />
+                            </div>
                         @endforeach
                     </div>
                 </div>
@@ -245,19 +282,32 @@
 
                     <div id="feedback-items" class="mt-5 space-y-4">
                         @foreach ($feedbackItems as $index => $item)
+                            @php
+                                $enItem = $feedbackItemsEn->get($index);
+                            @endphp
                             <div class="feedback-item rounded-xl border border-slate-200 bg-white p-4" data-feedback-item>
                                 <div class="mb-4 flex items-center justify-between gap-3">
                                     <p class="text-sm font-semibold text-slate-700">Feedback #{{ $index + 1 }}</p>
                                     <button type="button" class="text-sm font-medium text-red-600 hover:text-red-700" data-remove-feedback>Xóa</button>
                                 </div>
-                                <div class="grid gap-4 md:grid-cols-2">
+                                <div class="grid gap-4 md:grid-cols-3">
                                     <x-backend.form.input id="feedback_avatar_{{ $index }}" name="feedback_items[{{ $index }}][avatar]" label="Avatar" :value="data_get($item, 'avatar')" />
-                                    <x-backend.form.input id="feedback_role_{{ $index }}" name="feedback_items[{{ $index }}][role]" label="Vai trò" :value="data_get($item, 'role')" />
-                                    <x-backend.form.input id="feedback_name_{{ $index }}" name="feedback_items[{{ $index }}][name]" label="Tên khách hàng" :value="data_get($item, 'name')" />
+                                    <x-backend.form.input id="feedback_role_{{ $index }}" name="feedback_items[{{ $index }}][role]" label="Vai trò (VI)" :value="data_get($item, 'role')" />
+                                    <x-backend.form.input id="feedback_role_en_{{ $index }}" name="feedback_items_en[{{ $index }}][role]" label="Vai trò (EN)" :value="data_get($enItem, 'role')" />
                                 </div>
-                                <div class="mt-4">
-                                    <label for="feedback_content_{{ $index }}" class="mb-2 block text-sm font-medium text-slate-700">Nội dung</label>
-                                    <textarea id="feedback_content_{{ $index }}" name="feedback_items[{{ $index }}][content]" rows="3" class="block w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900 shadow-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100">{{ data_get($item, 'content') }}</textarea>
+                                <div class="grid gap-4 md:grid-cols-2 mt-4">
+                                    <x-backend.form.input id="feedback_name_{{ $index }}" name="feedback_items[{{ $index }}][name]" label="Tên khách hàng (VI)" :value="data_get($item, 'name')" />
+                                    <x-backend.form.input id="feedback_name_en_{{ $index }}" name="feedback_items_en[{{ $index }}][name]" label="Tên khách hàng (EN)" :value="data_get($enItem, 'name')" />
+                                </div>
+                                <div class="mt-4 grid gap-4 md:grid-cols-2">
+                                    <div>
+                                        <label for="feedback_content_{{ $index }}" class="mb-2 block text-sm font-medium text-slate-700">Nội dung (VI)</label>
+                                        <textarea id="feedback_content_{{ $index }}" name="feedback_items[{{ $index }}][content]" rows="3" class="block w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900 shadow-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100">{{ data_get($item, 'content') }}</textarea>
+                                    </div>
+                                    <div>
+                                        <label for="feedback_content_en_{{ $index }}" class="mb-2 block text-sm font-medium text-slate-700">Nội dung (EN)</label>
+                                        <textarea id="feedback_content_en_{{ $index }}" name="feedback_items_en[{{ $index }}][content]" rows="3" class="block w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900 shadow-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100">{{ data_get($enItem, 'content') }}</textarea>
+                                    </div>
                                 </div>
                             </div>
                         @endforeach
@@ -285,14 +335,24 @@
                     <p class="text-sm font-semibold text-slate-700">Feedback #__NUMBER__</p>
                     <button type="button" class="text-sm font-medium text-red-600 hover:text-red-700" data-remove-feedback>Xóa</button>
                 </div>
-                <div class="grid gap-4 md:grid-cols-2">
+                <div class="grid gap-4 md:grid-cols-3">
                     <x-backend.form.input id="feedback_avatar___INDEX__" name="feedback_items[__INDEX__][avatar]" label="Avatar" value="/image/Rectangle 2.png" />
-                    <x-backend.form.input id="feedback_role___INDEX__" name="feedback_items[__INDEX__][role]" label="Vai trò" value="Khách hàng" />
-                    <x-backend.form.input id="feedback_name___INDEX__" name="feedback_items[__INDEX__][name]" label="Tên khách hàng" value="" />
+                    <x-backend.form.input id="feedback_role___INDEX__" name="feedback_items[__INDEX__][role]" label="Vai trò (VI)" value="Khách hàng" />
+                    <x-backend.form.input id="feedback_role_en___INDEX__" name="feedback_items_en[__INDEX__][role]" label="Vai trò (EN)" value="" />
                 </div>
-                <div class="mt-4">
-                    <label for="feedback_content___INDEX__" class="mb-2 block text-sm font-medium text-slate-700">Nội dung</label>
-                    <textarea id="feedback_content___INDEX__" name="feedback_items[__INDEX__][content]" rows="3" class="block w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900 shadow-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"></textarea>
+                <div class="grid gap-4 md:grid-cols-2 mt-4">
+                    <x-backend.form.input id="feedback_name___INDEX__" name="feedback_items[__INDEX__][name]" label="Tên khách hàng (VI)" value="" />
+                    <x-backend.form.input id="feedback_name_en___INDEX__" name="feedback_items_en[__INDEX__][name]" label="Tên khách hàng (EN)" value="" />
+                </div>
+                <div class="mt-4 grid gap-4 md:grid-cols-2">
+                    <div>
+                        <label for="feedback_content___INDEX__" class="mb-2 block text-sm font-medium text-slate-700">Nội dung (VI)</label>
+                        <textarea id="feedback_content___INDEX__" name="feedback_items[__INDEX__][content]" rows="3" class="block w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900 shadow-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"></textarea>
+                    </div>
+                    <div>
+                        <label for="feedback_content_en___INDEX__" class="mb-2 block text-sm font-medium text-slate-700">Nội dung (EN)</label>
+                        <textarea id="feedback_content_en___INDEX__" name="feedback_items_en[__INDEX__][content]" rows="3" class="block w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900 shadow-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"></textarea>
+                    </div>
                 </div>
             </div>
         </template>
@@ -308,18 +368,28 @@
                 <input type="hidden" name="banner_slides[__INDEX__][image]" value="">
 
                 <div class="mt-4 grid gap-4 md:grid-cols-2">
-                    <x-backend.form.input id="banner_slide_title___INDEX__" name="banner_slides[__INDEX__][title]" label="Tiêu đề" value="" />
-                    <x-backend.form.input id="banner_slide_sub_title___INDEX__" name="banner_slides[__INDEX__][sub_title]" label="Sub title" value="" />
-                </div>
-
-                <div class="mt-4">
-                    <label for="banner_slide_description___INDEX__" class="mb-2 block text-sm font-medium text-slate-700">Mô tả</label>
-                    <textarea id="banner_slide_description___INDEX__" name="banner_slides[__INDEX__][description]" rows="3" class="block w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900 shadow-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"></textarea>
+                    <x-backend.form.input id="banner_slide_title___INDEX__" name="banner_slides[__INDEX__][title]" label="Tiêu đề (VI)" value="" />
+                    <x-backend.form.input id="banner_slide_title_en___INDEX__" name="banner_slides_en[__INDEX__][title]" label="Tiêu đề (EN)" value="" />
+                    <x-backend.form.input id="banner_slide_sub_title___INDEX__" name="banner_slides[__INDEX__][sub_title]" label="Sub title (VI)" value="" />
+                    <x-backend.form.input id="banner_slide_sub_title_en___INDEX__" name="banner_slides_en[__INDEX__][sub_title]" label="Sub title (EN)" value="" />
                 </div>
 
                 <div class="mt-4 grid gap-4 md:grid-cols-2">
-                    <x-backend.form.input id="banner_slide_button_text___INDEX__" name="banner_slides[__INDEX__][button_text]" label="Nút CTA - Text" value="" />
-                    <x-backend.form.input id="banner_slide_button_url___INDEX__" name="banner_slides[__INDEX__][button_url]" label="Nút CTA - URL" value="" />
+                    <div>
+                        <label for="banner_slide_description___INDEX__" class="mb-2 block text-sm font-medium text-slate-700">Mô tả (VI)</label>
+                        <textarea id="banner_slide_description___INDEX__" name="banner_slides[__INDEX__][description]" rows="3" class="block w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900 shadow-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"></textarea>
+                    </div>
+                    <div>
+                        <label for="banner_slide_description_en___INDEX__" class="mb-2 block text-sm font-medium text-slate-700">Mô tả (EN)</label>
+                        <textarea id="banner_slide_description_en___INDEX__" name="banner_slides_en[__INDEX__][description]" rows="3" class="block w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900 shadow-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"></textarea>
+                    </div>
+                </div>
+
+                <div class="mt-4 grid gap-4 md:grid-cols-2">
+                    <x-backend.form.input id="banner_slide_button_text___INDEX__" name="banner_slides[__INDEX__][button_text]" label="Nút CTA - Text (VI)" value="" />
+                    <x-backend.form.input id="banner_slide_button_text_en___INDEX__" name="banner_slides_en[__INDEX__][button_text]" label="Nút CTA - Text (EN)" value="" />
+                    <x-backend.form.input id="banner_slide_button_url___INDEX__" name="banner_slides[__INDEX__][button_url]" label="Nút CTA - URL (VI)" value="" />
+                    <x-backend.form.input id="banner_slide_button_url_en___INDEX__" name="banner_slides_en[__INDEX__][button_url]" label="Nút CTA - URL (EN)" value="" />
                 </div>
 
                 <div class="mt-4">

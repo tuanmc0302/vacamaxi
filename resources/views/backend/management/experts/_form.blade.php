@@ -24,18 +24,32 @@
             <div class="space-y-6">
                 <div class="grid gap-5 md:grid-cols-2">
                     <x-backend.form.input id="name" name="name" label="Họ và tên" :value="$expert->name" required placeholder="Nhập tên chuyên gia" />
-                    <x-backend.form.input id="role" name="role" label="Vai trò / Chuyên môn" :value="$expert->role" placeholder="Ví dụ: Chuyên gia di truyền Argentina" />
+                    <x-backend.form.input id="role" name="role" label="Vai trò / Chuyên môn (VI)" :value="$expert->role" placeholder="Ví dụ: Chuyên gia di truyền Argentina" />
+                </div>
+                <div>
+                    <x-backend.form.input id="role_en" name="role_en" label="Vai trò / Chuyên môn (EN)" :value="$expert->role_en" placeholder="Example: Argentina Genetic Expert" />
                 </div>
 
                 <div>
-                    <label for="description" class="mb-2 block text-sm font-medium text-slate-700">Giới thiệu ngắn</label>
+                    <label for="description" class="mb-2 block text-sm font-medium text-slate-700">Giới thiệu ngắn (VI)</label>
                     <textarea
                         id="description"
                         name="description"
-                        rows="6"
+                        rows="4"
                         placeholder="Mô tả kinh nghiệm, chuyên môn..."
                         class="block w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900 shadow-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
                     >{{ old('description', $expert->description) }}</textarea>
+                </div>
+
+                <div>
+                    <label for="description_en" class="mb-2 block text-sm font-medium text-slate-700">Giới thiệu ngắn (EN)</label>
+                    <textarea
+                        id="description_en"
+                        name="description_en"
+                        rows="4"
+                        placeholder="Description of experience, expertise in English..."
+                        class="block w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900 shadow-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                    >{{ old('description_en', $expert->description_en) }}</textarea>
                 </div>
 
                 <div class="grid gap-5 md:grid-cols-2">

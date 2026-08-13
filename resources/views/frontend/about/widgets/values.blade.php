@@ -10,7 +10,20 @@
         })
         ->filter(fn ($item) => $item['title'] !== '' || $item['body'] !== '')
         ->values();
-    $centerImage = $widgetImages($widget, ['/image/GIÁ TRỊ CỐT LÕI-01 1.png'])->first();
+
+    $locale = app()->getLocale();
+    $centerImage = null;
+    if ($locale === 'en') {
+        $centerImage = data_get($widget, 'settings.image_en') ?: data_get($widget, 'settings.images_en.0');
+        if ($centerImage) {
+            $centerImage = (str_starts_with($centerImage, 'http://') || str_starts_with($centerImage, 'https://') || str_starts_with($centerImage, '/'))
+                ? $centerImage
+                : (str_starts_with($centerImage, 'image/') ? asset($centerImage) : asset('storage/' . $centerImage));
+        }
+    }
+    if (!$centerImage) {
+        $centerImage = $widgetImages($widget, ['/image/GIÁ TRỊ CỐT LÕI-01 1.png'])->first();
+    }
 @endphp
 
 @if ($valueItems->isNotEmpty())

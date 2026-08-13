@@ -33,7 +33,9 @@
                             class="menu-edit-btn rounded-lg border border-slate-300 px-3 py-2 text-xs font-semibold text-slate-700 transition hover:bg-slate-50"
                             data-id="{{ $item->id }}"
                             data-label="{{ e($item->label) }}"
+                            data-label-en="{{ e($item->label_en) }}"
                             data-url="{{ e($item->url) }}"
+                            data-url-en="{{ e($item->url_en) }}"
                             data-key="{{ e($item->key) }}"
                             data-target="{{ e($item->target) }}"
                             data-active="{{ $item->is_active ? 1 : 0 }}"
@@ -84,13 +86,21 @@
 
             <form id="menu-form" class="mt-6 space-y-4">
                 <div>
-                    <label class="mb-2 block text-sm font-medium text-slate-700">Tiêu đề</label>
+                    <label class="mb-2 block text-sm font-medium text-slate-700">Tiêu đề (VI)</label>
                     <input type="text" name="label" class="block w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900 shadow-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100" placeholder="Trang chủ, Giới thiệu..." required>
+                </div>
+                <div>
+                    <label class="mb-2 block text-sm font-medium text-slate-700">Tiêu đề (EN)</label>
+                    <input type="text" name="label_en" class="block w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900 shadow-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100" placeholder="Home, About Us...">
                 </div>
 
                 <div>
-                    <label class="mb-2 block text-sm font-medium text-slate-700">Đường dẫn</label>
+                    <label class="mb-2 block text-sm font-medium text-slate-700">Đường dẫn (VI)</label>
                     <input type="text" name="url" class="block w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900 shadow-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100" placeholder="/gioi-thieu, https://...">
+                </div>
+                <div>
+                    <label class="mb-2 block text-sm font-medium text-slate-700">Đường dẫn (EN)</label>
+                    <input type="text" name="url_en" class="block w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900 shadow-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100" placeholder="/en/about, https://...">
                 </div>
 
                 <div>
@@ -155,12 +165,20 @@
 
             <form id="menu-edit-form" class="mt-6 space-y-4">
                 <div>
-                    <label class="mb-2 block text-sm font-medium text-slate-700">Tiêu đề</label>
+                    <label class="mb-2 block text-sm font-medium text-slate-700">Tiêu đề (VI)</label>
                     <input type="text" name="label" class="block w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900 shadow-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100" required>
                 </div>
                 <div>
-                    <label class="mb-2 block text-sm font-medium text-slate-700">Đường dẫn</label>
+                    <label class="mb-2 block text-sm font-medium text-slate-700">Tiêu đề (EN)</label>
+                    <input type="text" name="label_en" class="block w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900 shadow-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100">
+                </div>
+                <div>
+                    <label class="mb-2 block text-sm font-medium text-slate-700">Đường dẫn (VI)</label>
                     <input type="text" name="url" class="block w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900 shadow-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100">
+                </div>
+                <div>
+                    <label class="mb-2 block text-sm font-medium text-slate-700">Đường dẫn (EN)</label>
+                    <input type="text" name="url_en" class="block w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900 shadow-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100">
                 </div>
                 <div>
                     <label class="mb-2 block text-sm font-medium text-slate-700">Key active</label>
@@ -313,7 +331,9 @@
                 if (editButton) {
                     editForm.dataset.action = editButton.dataset.action;
                     editForm.elements.label.value = editButton.dataset.label || '';
+                    editForm.elements.label_en.value = editButton.dataset.labelEn || '';
                     editForm.elements.url.value = editButton.dataset.url || '';
+                    editForm.elements.url_en.value = editButton.dataset.urlEn || '';
                     editForm.elements.key.value = editButton.dataset.key || '';
                     editForm.elements.target.value = editButton.dataset.target || '_self';
                     editForm.elements.is_active.checked = editButton.dataset.active === '1';

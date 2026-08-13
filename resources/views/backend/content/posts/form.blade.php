@@ -16,9 +16,14 @@
         <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
             <div class="grid gap-5 md:grid-cols-2">
                 <div>
-                    <label class="mb-2 block text-sm font-semibold text-slate-700">Tiêu đề</label>
+                    <label class="mb-2 block text-sm font-semibold text-slate-700">Tiêu đề (VI)</label>
                     <input name="title" value="{{ old('title', $post->title) }}" class="h-12 w-full rounded-xl border border-slate-200 px-4 text-sm outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-50" required>
                     @error('title') <p class="mt-2 text-sm text-red-600">{{ $message }}</p> @enderror
+                </div>
+                <div>
+                    <label class="mb-2 block text-sm font-semibold text-slate-700">Tiêu đề (EN)</label>
+                    <input name="title_en" value="{{ old('title_en', $post->title_en) }}" class="h-12 w-full rounded-xl border border-slate-200 px-4 text-sm outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-50">
+                    @error('title_en') <p class="mt-2 text-sm text-red-600">{{ $message }}</p> @enderror
                 </div>
                 <div>
                     <label class="mb-2 block text-sm font-semibold text-slate-700">Slug</label>
@@ -61,14 +66,24 @@
         <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
             <div class="space-y-5">
                 <div>
-                    <label class="mb-2 block text-sm font-semibold text-slate-700">Mô tả ngắn</label>
+                    <label class="mb-2 block text-sm font-semibold text-slate-700">Mô tả ngắn (VI)</label>
                     <textarea name="description" rows="3" class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-50">{{ old('description', $post->description) }}</textarea>
                     @error('description') <p class="mt-2 text-sm text-red-600">{{ $message }}</p> @enderror
                 </div>
                 <div>
-                    <label class="mb-2 block text-sm font-semibold text-slate-700">Nội dung</label>
+                    <label class="mb-2 block text-sm font-semibold text-slate-700">Mô tả ngắn (EN)</label>
+                    <textarea name="description_en" rows="3" class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-50">{{ old('description_en', $post->description_en) }}</textarea>
+                    @error('description_en') <p class="mt-2 text-sm text-red-600">{{ $message }}</p> @enderror
+                </div>
+                <div>
+                    <label class="mb-2 block text-sm font-semibold text-slate-700">Nội dung (VI)</label>
                     <textarea id="content" name="content" rows="12" class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-50">{{ old('content', $post->content) }}</textarea>
                     @error('content') <p class="mt-2 text-sm text-red-600">{{ $message }}</p> @enderror
+                </div>
+                <div>
+                    <label class="mb-2 block text-sm font-semibold text-slate-700">Nội dung (EN)</label>
+                    <textarea id="content_en" name="content_en" rows="12" class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-50">{{ old('content_en', $post->content_en) }}</textarea>
+                    @error('content_en') <p class="mt-2 text-sm text-red-600">{{ $message }}</p> @enderror
                 </div>
             </div>
         </div>
@@ -77,14 +92,24 @@
             <h2 class="text-lg font-bold text-slate-900">SEO</h2>
             <div class="mt-5 grid gap-5 md:grid-cols-2">
                 <div>
-                    <label class="mb-2 block text-sm font-semibold text-slate-700">SEO title</label>
+                    <label class="mb-2 block text-sm font-semibold text-slate-700">SEO title (VI)</label>
                     <input name="seo_title" value="{{ old('seo_title', $post->seo_title) }}" class="h-12 w-full rounded-xl border border-slate-200 px-4 text-sm outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-50">
                     @error('seo_title') <p class="mt-2 text-sm text-red-600">{{ $message }}</p> @enderror
                 </div>
                 <div>
-                    <label class="mb-2 block text-sm font-semibold text-slate-700">SEO description</label>
+                    <label class="mb-2 block text-sm font-semibold text-slate-700">SEO title (EN)</label>
+                    <input name="seo_title_en" value="{{ old('seo_title_en', $post->seo_title_en) }}" class="h-12 w-full rounded-xl border border-slate-200 px-4 text-sm outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-50">
+                    @error('seo_title_en') <p class="mt-2 text-sm text-red-600">{{ $message }}</p> @enderror
+                </div>
+                <div>
+                    <label class="mb-2 block text-sm font-semibold text-slate-700">SEO description (VI)</label>
                     <textarea name="seo_description" rows="3" class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-50">{{ old('seo_description', $post->seo_description) }}</textarea>
                     @error('seo_description') <p class="mt-2 text-sm text-red-600">{{ $message }}</p> @enderror
+                </div>
+                <div>
+                    <label class="mb-2 block text-sm font-semibold text-slate-700">SEO description (EN)</label>
+                    <textarea name="seo_description_en" rows="3" class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-50">{{ old('seo_description_en', $post->seo_description_en) }}</textarea>
+                    @error('seo_description_en') <p class="mt-2 text-sm text-red-600">{{ $message }}</p> @enderror
                 </div>
             </div>
         </div>
@@ -100,25 +125,28 @@
     <script src="https://cdn.ckeditor.com/ckeditor5/41.4.2/classic/ckeditor.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            const editor = document.querySelector('#content');
-            if (editor && window.ClassicEditor) {
-                ClassicEditor.create(editor, {
-                    ckfinder: {
-                        uploadUrl: '{{ route('admin.posts.editor-upload') }}?_token={{ csrf_token() }}'
-                    },
-                    image: {
-                        toolbar: [
-                            'imageTextAlternative',
-                            'toggleImageCaption',
-                            'imageStyle:inline',
-                            'imageStyle:block',
-                            'imageStyle:side'
-                        ]
-                    }
-                }).catch(function (error) {
-                    console.error(error);
-                });
-            }
+            const editors = ['#content', '#content_en'];
+            editors.forEach(selector => {
+                const editor = document.querySelector(selector);
+                if (editor && window.ClassicEditor) {
+                    ClassicEditor.create(editor, {
+                        ckfinder: {
+                            uploadUrl: '{{ route('admin.posts.editor-upload') }}?_token={{ csrf_token() }}'
+                        },
+                        image: {
+                            toolbar: [
+                                'imageTextAlternative',
+                                'toggleImageCaption',
+                                'imageStyle:inline',
+                                'imageStyle:block',
+                                'imageStyle:side'
+                            ]
+                        }
+                    }).catch(function (error) {
+                        console.error(error);
+                    });
+                }
+            });
         });
     </script>
 @endpush

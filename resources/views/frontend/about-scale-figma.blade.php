@@ -1,8 +1,8 @@
 @extends('frontend.master')
 
 @php
-    $pageTitle = 'Giới thiệu quy mô Figma - VACAMAXI';
-    $metaDescription = 'Bản dựng đối chiếu Figma cho trang quy mô phát triển VACAMAXI';
+    $pageTitle = __('Quy mô phát triển') . ' - VACAMAXI';
+    $metaDescription = __('Quy mô phát triển và quy trình vận hành của VACAMAXI');
     $active = 'about-scale';
 
     $wHero = $widgets->get('about_scale_page_hero');

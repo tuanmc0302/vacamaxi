@@ -10,7 +10,7 @@
     $date = $isPost
         ? (optional($item->published_at)->format('d/m/Y') ?: $item->created_at->format('d/m/Y'))
         : data_get($item, 'date', '');
-    $url = $isPost ? route('frontend.news.show', $item->slug) : data_get($item, 'url', '#');
+    $url = $isPost ? route('frontend.news.show', ['slug' => $item->slug]) : data_get($item, 'url', '#');
 @endphp
 <article class="news-card">
     <img src="{{ $image }}" alt="{{ $title }}">
@@ -19,7 +19,7 @@
         <p>{{ $description }}</p>
         <div class="news-meta">
             <span>{{ $date }}</span>
-            <a href="{{ $url }}">Xem thêm</a>
+            <a href="{{ $url }}">{{ __('Xem thêm') }}</a>
         </div>
     </div>
 </article>

@@ -9,6 +9,6 @@
             <h3>{{ $item['title'] }}</h3>
             <p>{!! nl2br(e($description)) !!}</p>
         </div>
-        <a class="breed-link" href="{{ $item['url'] ?? '#' }}">XEM THÊM</a>
+        <a class="breed-link" href="{{ $item['url'] ?? '#' }}">{{ __('XEM THÊM') }}</a>
     </div>
 </article>

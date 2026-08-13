@@ -99,12 +99,17 @@ class PostController extends Controller
         $validated = $request->validate([
             'category_id' => ['nullable', 'exists:categories,id'],
             'title' => ['required', 'string', 'max:255'],
+            'title_en' => ['nullable', 'string', 'max:255'],
             'slug' => ['required', 'string', 'max:255', Rule::unique('posts')->ignore($post?->id)],
             'image_file' => ['nullable', 'image', 'max:4096'],
             'description' => ['nullable', 'string'],
+            'description_en' => ['nullable', 'string'],
             'content' => ['nullable', 'string'],
+            'content_en' => ['nullable', 'string'],
             'seo_title' => ['nullable', 'string', 'max:255'],
+            'seo_title_en' => ['nullable', 'string', 'max:255'],
             'seo_description' => ['nullable', 'string'],
+            'seo_description_en' => ['nullable', 'string'],
             'published_at' => ['nullable', 'date'],
             'is_active' => ['nullable', 'boolean'],
         ]);

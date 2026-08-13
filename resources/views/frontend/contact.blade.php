@@ -1,8 +1,8 @@
 @extends('frontend.master')
 
 @php
-    $pageTitle = 'Liên hệ - VACAMAXI';
-    $metaDescription = 'Liên hệ với VACAMAXI để được tư vấn và hỗ trợ về các sản phẩm bò giống, thịt bò và dịch vụ nhà hàng.';
+    $pageTitle = __('Liên hệ') . ' - VACAMAXI';
+    $metaDescription = __('Liên hệ với VACAMAXI để được tư vấn và hỗ trợ về các sản phẩm bò giống, thịt bò và dịch vụ nhà hàng.');
     $active = 'contact';
     $footer = $frontendData['footer'] ?? [];
 @endphp
@@ -180,8 +180,8 @@
 @section('content')
     <section class="page-hero">
         <div class="container">
-            <h1>LIÊN HỆ VỚI CHÚNG TÔI</h1>
-            <p>Trang chủ / Liên hệ</p>
+            <h1>{{ __('LIÊN HỆ VỚI CHÚNG TÔI') }}</h1>
+            <p>{{ __('Trang chủ') }} / {{ __('Liên hệ') }}</p>
         </div>
     </section>
 
@@ -189,8 +189,8 @@
         <div class="container">
             <div class="contact-grid">
                 <div class="contact-info">
-                    <h2>KẾT NỐI CÙNG VACAMAXI</h2>
-                    <p>Chúng tôi luôn sẵn sàng lắng nghe và giải đáp mọi thắc mắc của bạn. Hãy liên hệ với chúng tôi qua thông tin bên dưới hoặc để lại lời nhắn qua form liên hệ.</p>
+                    <h2>{{ __('KẾT NỐI CÙNG VACAMAXI') }}</h2>
+                    <p>{{ __('Chúng tôi luôn sẵn sàng lắng nghe và giải đáp mọi thắc mắc của bạn. Hãy liên hệ với chúng tôi qua thông tin bên dưới hoặc để lại lời nhắn qua form liên hệ.') }}</p>
                     
                     <div class="contact-details">
                         <div class="contact-item">
@@ -198,7 +198,7 @@
                                 <i class="bi bi-geo-alt-fill"></i>
                             </div>
                             <div class="contact-text">
-                                <h4>Địa chỉ</h4>
+                                <h4>{{ __('Địa chỉ') }}</h4>
                                 <p>{{ $footer['address'] ?? '166 Phạm Văn Đồng, P. Đông Ngạc, TP. Hà Nội' }}</p>
                             </div>
                         </div>
@@ -239,33 +239,33 @@
                 
                 <div class="contact-form-card">
                     <div class="contact-form-header">
-                        <h3>GỬI LỜI NHẮN</h3>
-                        <p>Thông tin của bạn sẽ được bảo mật và phản hồi sớm nhất</p>
+                        <h3>{{ __('GỬI LỜI NHẮN') }}</h3>
+                        <p>{{ __('Thông tin của bạn sẽ được bảo mật và phản hồi sớm nhất') }}</p>
                     </div>
 
                     <div id="contact-success" class="success-overlay">
-                        Liên Hệ Của Bạn Đã Được Gửi Đến Bộ Phận Chăm Sóc Khách Hàng Của VACAMAXI
+                        {{ __('Liên hệ của bạn đã được gửi đến bộ phận chăm sóc khách hàng của VACAMAXI') }}
                     </div>
 
                     <form id="contact-page-form" class="form-grid" action="{{ route('frontend.contact.submit') }}" method="POST">
                         @csrf
                         <div class="form-group">
-                            <input type="text" name="full_name" placeholder="Họ và Tên" required>
+                            <input type="text" name="full_name" placeholder="{{ __('Họ và Tên') }}" required>
                         </div>
                         <div class="form-group">
                             <input type="email" name="email" placeholder="Gmail">
                         </div>
                         <div class="form-group">
-                            <input type="tel" name="phone" placeholder="Số Điện Thoại" required>
+                            <input type="tel" name="phone" placeholder="{{ __('Số Điện Thoại') }}" required>
                         </div>
                         <div class="form-group">
-                            <input type="text" name="title" placeholder="Tiêu đề">
+                            <input type="text" name="title" placeholder="{{ __('Tiêu đề') }}">
                         </div>
                         <div class="form-group full-width">
-                            <textarea name="content" rows="5" placeholder="Nội dung liên hệ" required></textarea>
+                            <textarea name="content" rows="5" placeholder="{{ __('Nội dung liên hệ') }}" required></textarea>
                         </div>
                         <button type="submit" class="btn-send-contact" id="submit-btn">
-                            <span class="btn-text">GỬI THƯ</span>
+                            <span class="btn-text">{{ __('GỬI THƯ') }}</span>
                             <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
                         </button>
                     </form>

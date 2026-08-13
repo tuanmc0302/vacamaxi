@@ -68,9 +68,68 @@
                                         </li>
                                     @endforeach
                                 </ul>
-                            @endif
+                    @endif
                         </li>
                     @endforeach
+
+                    @php
+                        $currentRouteName = Route::currentRouteName();
+                        $currentRouteParams = Route::current() ? Route::current()->parameters() : [];
+
+                        $translations = [
+                            'en' => [
+                                'gioi-thieu' => 'about',
+                                'lien-he' => 'contact',
+                                'gioi-thieu-quy-mo' => 'about-scale',
+                                'dich-vu-nha-hang' => 'restaurant',
+                                'san-pham' => 'products',
+                                'giong-bo-vacamaxi' => 'breeds',
+                                'tin-tuc' => 'news',
+                                'danh-muc' => 'category',
+                            ],
+                            'vi' => [
+                                'about' => 'gioi-thieu',
+                                'contact' => 'lien-he',
+                                'about-scale' => 'gioi-thieu-quy-mo',
+                                'restaurant' => 'dich-vu-nha-hang',
+                                'products' => 'san-pham',
+                                'breeds' => 'giong-bo-vacamaxi',
+                                'news' => 'tin-tuc',
+                                'category' => 'danh-muc',
+                            ]
+                        ];
+
+                        try {
+                            // Determine if current route is EN (.en suffix) or VI
+                            $isEnRoute = str_ends_with($currentRouteName ?? '', '.en');
+                            $baseRouteName = $isEnRoute ? preg_replace('/\.en$/', '', $currentRouteName) : $currentRouteName;
+                            $enRouteName = $baseRouteName . '.en';
+
+                            // Build VI params (translate all params to Vietnamese)
+                            $viParams = [];
+                            foreach ($currentRouteParams as $key => $val) {
+                                $viParams[$key] = $translations['vi'][$val] ?? \App\Helpers\SlugHelper::toVi($val);
+                            }
+                            $viUrl = $baseRouteName ? route($baseRouteName, $viParams) : '/';
+
+                            // Build EN params (translate all params to English)
+                            $enParams = [];
+                            foreach ($currentRouteParams as $key => $val) {
+                                $enParams[$key] = $translations['en'][$val] ?? \App\Helpers\SlugHelper::toEn($val);
+                            }
+                            $enUrl = $enRouteName ? route($enRouteName, $enParams) : '/en';
+                        } catch (\Throwable $e) {
+                            $viUrl = '/';
+                            $enUrl = '/en';
+                        }
+
+                        $currentLocale = app()->getLocale();
+                    @endphp
+                    <li class="nav-item ms-lg-3 d-flex align-items-center gap-2">
+                        <a href="{{ $viUrl }}" class="nav-link px-1 py-0 {{ $currentLocale === 'vi' ? 'active' : 'text-white-50' }}" style="font-size: 0.85rem; font-weight: {{ $currentLocale === 'vi' ? '700' : '400' }};">VI</a>
+                        <span class="text-white-50" style="font-size: 0.85rem;">|</span>
+                        <a href="{{ $enUrl }}" class="nav-link px-1 py-0 {{ $currentLocale === 'en' ? 'active' : 'text-white-50' }}" style="font-size: 0.85rem; font-weight: {{ $currentLocale === 'en' ? '700' : '400' }};">EN</a>
+                    </li>
                 </ul>
             </div>
         </div>

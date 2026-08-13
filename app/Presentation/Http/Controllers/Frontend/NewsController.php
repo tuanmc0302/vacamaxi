@@ -42,10 +42,12 @@ class NewsController extends Controller
         ]);
     }
 
-    public function category(string $categorySlug): View
+    public function category(string $news, string $category_word, string $categorySlug): View
     {
         $frontendData = $this->frontendData();
-        $category = Category::where('slug', $categorySlug)->where('module', 'news')->firstOrFail();
+        $category = Category::where(fn($q) => $q->where('slug', $categorySlug)->orWhere('slug_en', $categorySlug))
+            ->where('module', 'news')
+            ->firstOrFail();
 
         $posts = Post::query()
             ->where('category_id', $category->id)
@@ -61,10 +63,13 @@ class NewsController extends Controller
         ]);
     }
 
-    public function show(string $slug): View
+    public function show(string $news, string $slug): View
     {
         $frontendData = $this->frontendData();
-        $post = Post::where('slug', $slug)->where('is_active', true)->with(['category', 'author', 'approvedComments' => fn($q) => $q->latest()])->firstOrFail();
+        $post = Post::where(fn($q) => $q->where('slug', $slug)->orWhere('slug_en', $slug))
+            ->where('is_active', true)
+            ->with(['category', 'author', 'approvedComments' => fn($q) => $q->latest()])
+            ->firstOrFail();
 
         $relatedPosts = Post::where('category_id', $post->category_id)
             ->where('id', '!=', $post->id)

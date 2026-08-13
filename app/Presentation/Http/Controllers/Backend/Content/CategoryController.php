@@ -87,6 +87,7 @@ class CategoryController extends Controller
 
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
+            'name_en' => ['nullable', 'string', 'max:255'],
             'slug' => [
                 'required',
                 'string',
@@ -94,6 +95,7 @@ class CategoryController extends Controller
                 Rule::unique('categories')->where('module', $module)->ignore($category?->id),
             ],
             'description' => ['nullable', 'string'],
+            'description_en' => ['nullable', 'string'],
             'sort_order' => ['nullable', 'integer', 'min:0'],
             'is_active' => ['nullable', 'boolean'],
         ]);

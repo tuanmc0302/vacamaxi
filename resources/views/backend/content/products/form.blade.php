@@ -16,9 +16,14 @@
         <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
             <div class="grid gap-5 md:grid-cols-2">
                 <div>
-                    <label class="mb-2 block text-sm font-semibold text-slate-700">Tên sản phẩm</label>
+                    <label class="mb-2 block text-sm font-semibold text-slate-700">Tên sản phẩm (VI)</label>
                     <input name="name" value="{{ old('name', $product->name) }}" class="h-12 w-full rounded-xl border border-slate-200 px-4 text-sm outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-50" required>
                     @error('name') <p class="mt-2 text-sm text-red-600">{{ $message }}</p> @enderror
+                </div>
+                <div>
+                    <label class="mb-2 block text-sm font-semibold text-slate-700">Tên sản phẩm (EN)</label>
+                    <input name="name_en" value="{{ old('name_en', $product->name_en) }}" class="h-12 w-full rounded-xl border border-slate-200 px-4 text-sm outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-50">
+                    @error('name_en') <p class="mt-2 text-sm text-red-600">{{ $message }}</p> @enderror
                 </div>
                 <div>
                     <label class="mb-2 block text-sm font-semibold text-slate-700">Slug</label>
@@ -61,14 +66,24 @@
         <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
             <div class="space-y-5">
                 <div>
-                    <label class="mb-2 block text-sm font-semibold text-slate-700">Mô tả ngắn</label>
+                    <label class="mb-2 block text-sm font-semibold text-slate-700">Mô tả ngắn (VI)</label>
                     <textarea name="short_description" rows="3" class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-50">{{ old('short_description', $product->short_description) }}</textarea>
                     @error('short_description') <p class="mt-2 text-sm text-red-600">{{ $message }}</p> @enderror
                 </div>
                 <div>
-                    <label class="mb-2 block text-sm font-semibold text-slate-700">Mô tả sản phẩm</label>
+                    <label class="mb-2 block text-sm font-semibold text-slate-700">Mô tả ngắn (EN)</label>
+                    <textarea name="short_description_en" rows="3" class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-50">{{ old('short_description_en', $product->short_description_en) }}</textarea>
+                    @error('short_description_en') <p class="mt-2 text-sm text-red-600">{{ $message }}</p> @enderror
+                </div>
+                <div>
+                    <label class="mb-2 block text-sm font-semibold text-slate-700">Mô tả sản phẩm (VI)</label>
                     <textarea name="description" rows="8" class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-50">{{ old('description', $product->description) }}</textarea>
                     @error('description') <p class="mt-2 text-sm text-red-600">{{ $message }}</p> @enderror
+                </div>
+                <div>
+                    <label class="mb-2 block text-sm font-semibold text-slate-700">Mô tả sản phẩm (EN)</label>
+                    <textarea name="description_en" rows="8" class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-50">{{ old('description_en', $product->description_en) }}</textarea>
+                    @error('description_en') <p class="mt-2 text-sm text-red-600">{{ $message }}</p> @enderror
                 </div>
             </div>
         </div>
@@ -77,14 +92,24 @@
             <h2 class="text-lg font-bold text-slate-900">SEO</h2>
             <div class="mt-5 grid gap-5 md:grid-cols-2">
                 <div>
-                    <label class="mb-2 block text-sm font-semibold text-slate-700">SEO title</label>
+                    <label class="mb-2 block text-sm font-semibold text-slate-700">SEO title (VI)</label>
                     <input name="seo_title" value="{{ old('seo_title', $product->seo_title) }}" class="h-12 w-full rounded-xl border border-slate-200 px-4 text-sm outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-50">
                     @error('seo_title') <p class="mt-2 text-sm text-red-600">{{ $message }}</p> @enderror
                 </div>
                 <div>
-                    <label class="mb-2 block text-sm font-semibold text-slate-700">SEO description</label>
+                    <label class="mb-2 block text-sm font-semibold text-slate-700">SEO title (EN)</label>
+                    <input name="seo_title_en" value="{{ old('seo_title_en', $product->seo_title_en) }}" class="h-12 w-full rounded-xl border border-slate-200 px-4 text-sm outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-50">
+                    @error('seo_title_en') <p class="mt-2 text-sm text-red-600">{{ $message }}</p> @enderror
+                </div>
+                <div>
+                    <label class="mb-2 block text-sm font-semibold text-slate-700">SEO description (VI)</label>
                     <textarea name="seo_description" rows="3" class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-50">{{ old('seo_description', $product->seo_description) }}</textarea>
                     @error('seo_description') <p class="mt-2 text-sm text-red-600">{{ $message }}</p> @enderror
+                </div>
+                <div>
+                    <label class="mb-2 block text-sm font-semibold text-slate-700">SEO description (EN)</label>
+                    <textarea name="seo_description_en" rows="3" class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-50">{{ old('seo_description_en', $product->seo_description_en) }}</textarea>
+                    @error('seo_description_en') <p class="mt-2 text-sm text-red-600">{{ $message }}</p> @enderror
                 </div>
             </div>
         </div>

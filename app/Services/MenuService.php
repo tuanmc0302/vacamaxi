@@ -27,19 +27,31 @@ class MenuService
                 return $this->fallbackMenu();
             }
 
-            return $items->map(function ($item) {
+            $locale = app()->getLocale();
+
+            return $items->map(function ($item) use ($locale) {
+                $url = $item->url;
+                if ($locale === 'en' && str_starts_with($url, '/') && !str_starts_with($url, '/en')) {
+                    $url = '/en' . ($url === '/' ? '' : $url);
+                }
+
                 $data = [
                     'label' => $item->label,
-                    'url' => $item->url,
+                    'url' => $url,
                     'key' => $item->key,
                     'target' => $item->target ?: '_self',
                 ];
 
                 if ($item->children->isNotEmpty()) {
-                    $data['children'] = $item->children->map(function ($child) {
+                    $data['children'] = $item->children->map(function ($child) use ($locale) {
+                        $childUrl = $child->url;
+                        if ($locale === 'en' && str_starts_with($childUrl, '/') && !str_starts_with($childUrl, '/en')) {
+                            $childUrl = '/en' . ($childUrl === '/' ? '' : $childUrl);
+                        }
+
                         return [
                             'label' => $child->label,
-                            'url' => $child->url,
+                            'url' => $childUrl,
                             'key' => $child->key,
                             'target' => $child->target ?: '_self',
                         ];
@@ -62,7 +74,39 @@ class MenuService
         }
 
         $data = json_decode((string) file_get_contents($path), true);
+        $nav = is_array($data) ? ($data['nav'] ?? []) : [];
+        $locale = app()->getLocale();
 
-        return is_array($data) ? ($data['nav'] ?? []) : [];
+        return collect($nav)->map(function ($item) use ($locale) {
+            $url = $item['url'] ?? '#';
+            if ($locale === 'en' && str_starts_with($url, '/') && !str_starts_with($url, '/en')) {
+                $url = '/en' . ($url === '/' ? '' : $url);
+            }
+
+            $mapped = [
+                'label' => __($item['label'] ?? ''),
+                'url' => $url,
+                'key' => $item['key'] ?? '',
+                'target' => $item['target'] ?? '_self',
+            ];
+
+            if (!empty($item['children'])) {
+                $mapped['children'] = collect($item['children'])->map(function ($child) use ($locale) {
+                    $childUrl = $child['url'] ?? '#';
+                    if ($locale === 'en' && str_starts_with($childUrl, '/') && !str_starts_with($childUrl, '/en')) {
+                        $childUrl = '/en' . ($childUrl === '/' ? '' : $childUrl);
+                    }
+
+                    return [
+                        'label' => __($child['label'] ?? ''),
+                        'url' => $childUrl,
+                        'key' => $child['key'] ?? '',
+                        'target' => $child['target'] ?? '_self',
+                    ];
+                })->all();
+            }
+
+            return $mapped;
+        })->all();
     }
 }

@@ -74,7 +74,9 @@ class ExpertController extends Controller
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'role' => ['nullable', 'string', 'max:255'],
+            'role_en' => ['nullable', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
+            'description_en' => ['nullable', 'string'],
             'image' => ['nullable', 'image', 'max:2048'],
             'sort_order' => ['nullable', 'integer'],
             'is_active' => ['nullable', 'boolean'],

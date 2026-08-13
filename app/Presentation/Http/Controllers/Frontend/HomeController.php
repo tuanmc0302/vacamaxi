@@ -112,7 +112,7 @@ class HomeController extends Controller
                 'title' => $product->name,
                 'description' => $product->short_description ?: Str::limit(strip_tags($product->description ?? ''), 90),
                 'url' => $product->category
-                    ? route('frontend.product.show', [$product->category->slug, $product->slug])
+                    ? route('frontend.product.show', ['categorySlug' => $product->category->slug, 'productSlug' => $product->slug])
                     : route('frontend.products.index'),
             ])->all();
         }

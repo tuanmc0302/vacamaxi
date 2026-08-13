@@ -1,8 +1,8 @@
 @extends('frontend.master')
 
 @php
-    $pageTitle = 'Quy mô - Công nghệ - VACAMAXI';
-    $metaDescription = 'Quy mô vận hành và công nghệ của VACAMAXI';
+    $pageTitle = __('Quy mô - Công nghệ') . ' - VACAMAXI';
+    $metaDescription = __('Quy mô vận hành và công nghệ của VACAMAXI');
     $active = 'about-scale';
 
     $splitLines = function (?string $text) {

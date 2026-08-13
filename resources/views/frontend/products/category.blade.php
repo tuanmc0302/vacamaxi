@@ -2,7 +2,7 @@
 
 @php
     $pageTitle = $category->name . ' - VACAMAXI';
-    $metaDescription = 'Danh sách sản phẩm thuộc danh mục ' . $category->name;
+    $metaDescription = __('Danh sách sản phẩm thuộc danh mục') . ' ' . $category->name;
     $active = 'product';
 @endphp
 
@@ -14,7 +14,7 @@
     <section class="page-hero">
         <div class="container">
             <h1>{{ $category->name }}</h1>
-            <p>Trang chủ / Sản phẩm / {{ $category->name }}</p>
+            <p>{{ __('Trang chủ') }} / {{ __('Sản phẩm') }} / {{ $category->name }}</p>
         </div>
     </section>
 
@@ -25,12 +25,12 @@
                     <ul class="category-filter__list">
                         <li>
                             <a href="{{ route('frontend.products.index') }}" class="category-filter__link">
-                                Tất cả
+                                {{ __('Tất cả') }}
                             </a>
                         </li>
                         @foreach ($categories as $cat)
                             <li>
-                                <a href="{{ route('frontend.products.category', $cat->slug) }}" class="category-filter__link {{ $category->id === $cat->id ? 'active' : '' }}">
+                                <a href="{{ route('frontend.products.category', ['categorySlug' => $cat->slug]) }}" class="category-filter__link {{ $category->id === $cat->id ? 'active' : '' }}">
                                     {{ $cat->name }}
                                 </a>
                             </li>

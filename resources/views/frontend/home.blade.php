@@ -1,7 +1,7 @@
 @extends('frontend.master')
 
 @php
-    $pageTitle = 'VACAMAXI - Từ Trang Trại Đến Bàn Ăn';
+    $pageTitle = 'VACAMAXI - ' . __('Từ Trang Trại Đến Bàn Ăn');
     $active = 'home';
 @endphp
 

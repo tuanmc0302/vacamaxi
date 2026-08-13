@@ -16,7 +16,7 @@
     <section class="page-hero">
         <div class="container">
             <h1>{{ $product->name }}</h1>
-            <p>Trang chủ / Sản phẩm / {{ $product->category?->name ?? 'Chi tiết' }}</p>
+            <p>{{ __('Trang chủ') }} / {{ __('Sản phẩm') }} / {{ $product->category?->name ?? __('Chi tiết') }}</p>
         </div>
     </section>
 
@@ -32,9 +32,9 @@
                 <div class="product-detail__info">
                     <h2 class="product-detail__title">{{ $product->name }}</h2>
                     <div class="product-detail__meta">
-                        <span>MÃ: {{ $product->sku ?? '006' }}</span>
+                        <span>{{ __('MÃ:') }} {{ $product->sku ?? '006' }}</span>
                         <span class="divider">|</span>
-                        <span>Thương hiệu {{ $product->brand ?? 'VACAMAXI' }}</span>
+                        <span>{{ __('Thương hiệu') }} {{ $product->brand ?? 'VACAMAXI' }}</span>
                         <span class="divider">|</span>
                         <span class="stars">
                             <i class="bi bi-star-fill"></i>
@@ -46,13 +46,13 @@
                     </div>
 
                     <div class="product-detail__status">
-                        <span class="status-label">Liên hệ</span>
+                        <span class="status-label">{{ __('Liên hệ') }}</span>
                     </div>
 
                     <div class="product-detail__excerpt">
-                        @if($product->slug === 'thit-bo-vaca-a')
-                            Theo Bộ Nông nghiệp Hoa Kỳ (USDA) thịt bò Vaca - A đạt điểm vân mỡ cao, giúp sản phẩm có giá trị cao trên thị trường. Dễ chế biến, thích hợp cho nhà hàng<br>
-                            Sinh sản ổn định: bản năng làm mẹ tốt.
+                        @if($product->slug === 'thit-bo-vaca-a' || $product->slug_en === 'vaca-a')
+                            {{ __('Theo Bộ Nông nghiệp Hoa Kỳ (USDA) thịt bò Vaca - A đạt điểm vân mỡ cao, giúp sản phẩm có giá trị cao trên thị trường. Dễ chế biến, thích hợp cho nhà hàng') }}<br>
+                            {{ __('Sinh sản ổn định: bản năng làm mẹ tốt.') }}
                         @else
                             {!! nl2br(e($product->short_description)) !!}
                         @endif
@@ -60,7 +60,7 @@
 
                     <div class="product-detail__purchase">
                         <div class="quantity-wrapper">
-                            <label>Số Lượng</label>
+                            <label>{{ __('Số Lượng') }}</label>
                             <div class="quantity-selector">
                                 <button type="button" class="qty-btn minus">-</button>
                                 <input type="text" id="product-qty" value="01" readonly class="qty-input">
@@ -69,8 +69,8 @@
                         </div>
                         
                         <div class="button-group">
-                            <button type="button" class="btn-buy-now">MUA NGAY</button>
-                            <button type="button" class="btn-add-cart">THÊM VÀO GIỎ HÀNG</button>
+                            <button type="button" class="btn-buy-now">{{ __('MUA NGAY') }}</button>
+                            <button type="button" class="btn-add-cart">{{ __('THÊM VÀO GIỎ HÀNG') }}</button>
                         </div>
                     </div>
                 </div>
@@ -79,13 +79,13 @@
             <div class="product-detail__tabs">
                 <ul class="nav nav-tabs" id="productTabs" role="tablist">
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link active" id="info-tab" data-bs-toggle="tab" data-bs-target="#info-pane" type="button" role="tab">Thông tin sản phẩm</button>
+                        <button class="nav-link active" id="info-tab" data-bs-toggle="tab" data-bs-target="#info-pane" type="button" role="tab">{{ __('Thông tin sản phẩm') }}</button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="guide-tab" data-bs-toggle="tab" data-bs-target="#guide-pane" type="button" role="tab">Hướng dẫn mua hàng</button>
+                        <button class="nav-link" id="guide-tab" data-bs-toggle="tab" data-bs-target="#guide-pane" type="button" role="tab">{{ __('Hướng dẫn mua hàng') }}</button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="shipping-tab" data-bs-toggle="tab" data-bs-target="#shipping-pane" type="button" role="tab">Giao hàng</button>
+                        <button class="nav-link" id="shipping-tab" data-bs-toggle="tab" data-bs-target="#shipping-pane" type="button" role="tab">{{ __('Giao hàng') }}</button>
                     </li>
                 </ul>
                 <div class="tab-content" id="productTabsContent">
@@ -102,25 +102,25 @@
                                 </div>
                             </div>
                             <div class="read-more-wrapper">
-                                <button type="button" class="btn-read-more" data-bs-toggle="modal" data-bs-target="#infoModal">Xem thêm</button>
+                                <button type="button" class="btn-read-more" data-bs-toggle="modal" data-bs-target="#infoModal">{{ __('Xem thêm') }}</button>
                             </div>
                         </div>
                     </div>
                     
                     <div class="tab-pane fade" id="guide-pane" role="tabpanel" tabindex="0">
                         <div class="py-4">
-                            <p><strong>Bước 1:</strong> Chọn sản phẩm bạn mong muốn và nhấn "MUA NGAY" hoặc "THÊM VÀO GIỎ HÀNG".</p>
-                            <p><strong>Bước 2:</strong> Kiểm tra lại giỏ hàng và điền thông tin giao hàng chính xác.</p>
-                            <p><strong>Bước 3:</strong> Chọn phương thức thanh toán phù hợp (Chuyển khoản hoặc COD).</p>
-                            <p><strong>Bước 4:</strong> Nhấn "ĐẶT HÀNG" và chờ nhân viên VACAMAXI liên hệ xác nhận trong vòng 15-30 phút.</p>
+                            <p><strong>{{ __('Bước 1:') }}</strong> {{ __('Chọn sản phẩm bạn mong muốn và nhấn "MUA NGAY" hoặc "THÊM VÀO GIỎ HÀNG".') }}</p>
+                            <p><strong>{{ __('Bước 2:') }}</strong> {{ __('Kiểm tra lại giỏ hàng và điền thông tin giao hàng chính xác.') }}</p>
+                            <p><strong>{{ __('Bước 3:') }}</strong> {{ __('Chọn phương thức thanh toán phù hợp (Chuyển khoản hoặc COD).') }}</p>
+                            <p><strong>{{ __('Bước 4:') }}</strong> {{ __('Nhấn "ĐẶT HÀNG" và chờ nhân viên VACAMAXI liên hệ xác nhận trong vòng 15-30 phút.') }}</p>
                         </div>
                     </div>
 
                     <div class="tab-pane fade" id="shipping-pane" role="tabpanel" tabindex="0">
                         <div class="py-4">
-                            <p><i class="bi bi-truck me-2"></i> <strong>Giao hàng nội thành:</strong> Nhận hàng trong ngày (2-4h làm việc).</p>
-                            <p><i class="bi bi-geo-alt me-2"></i> <strong>Giao hàng tỉnh:</strong> Thời gian từ 2-3 ngày tùy khu vực.</p>
-                            <p><i class="bi bi-shield-check me-2"></i> <strong>Bảo quản chuyên nghiệp:</strong> Sản phẩm luôn được đóng gói trong thùng xốp cách nhiệt kèm đá khô để đảm bảo độ tươi ngon tuyệt đối khi đến tay khách hàng.</p>
+                            <p><i class="bi bi-truck me-2"></i> <strong>{{ __('Giao hàng nội thành:') }}</strong> {{ __('Nhận hàng trong ngày (2-4h làm việc).') }}</p>
+                            <p><i class="bi bi-geo-alt me-2"></i> <strong>{{ __('Giao hàng tỉnh:') }}</strong> {{ __('Thời gian từ 2-3 ngày tùy khu vực.') }}</p>
+                            <p><i class="bi bi-shield-check me-2"></i> <strong>{{ __('Bảo quản chuyên nghiệp:') }}</strong> {{ __('Sản phẩm luôn được đóng gói trong thùng xốp cách nhiệt kèm đá khô để đảm bảo độ tươi ngon tuyệt đối khi đến tay khách hàng.') }}</p>
                         </div>
                     </div>
                 </div>
@@ -133,7 +133,7 @@
         <div class="modal-dialog modal-lg modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Thông tin chi tiết sản phẩm</h5>
+                    <h5 class="modal-title">{{ __('Thông tin chi tiết sản phẩm') }}</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -152,7 +152,7 @@
         <section class="related-products">
             <div class="container">
                 <div class="related-title">
-                    <h2>Sản phẩm liên quan</h2>
+                    <h2>{{ __('Sản phẩm liên quan') }}</h2>
                     <span></span>
                 </div>
                 <div class="product-grid">

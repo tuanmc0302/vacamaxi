@@ -7,5 +7,5 @@
     <h3>{{ $item['title'] }}</h3>
     <p class="brand">{{ $brand }}</p>
     <p class="contact">{{ $status }}</p>
-    <a class="view" href="{{ $item['url'] ?? '#' }}">Xem thêm</a>
+    <a class="view" href="{{ $item['url'] ?? '#' }}">{{ __('Xem thêm') }}</a>
 </article>

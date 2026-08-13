@@ -1,8 +1,8 @@
 @extends('frontend.master')
 
 @php
-    $pageTitle = 'Tin tức - VACAMAXI';
-    $metaDescription = 'Tin tức mới nhất từ VACAMAXI';
+    $pageTitle = __('Tin tức') . ' - VACAMAXI';
+    $metaDescription = __('Tin tức mới nhất từ VACAMAXI');
     $active = 'news';
 @endphp
 
@@ -13,8 +13,8 @@
 @section('content')
     <section class="page-hero">
         <div class="container">
-            <h1>Tin tức</h1>
-            <p>Góc nhìn và xu hướng từ VACAMAXI</p>
+            <h1>{{ __('Tin tức') }}</h1>
+            <p>{{ __('Góc nhìn và xu hướng từ VACAMAXI') }}</p>
         </div>
     </section>
 
@@ -38,14 +38,14 @@
                             @php
                                 $image = \App\Presentation\Http\Controllers\Frontend\NewsController::imageUrl($post->image, 'image/Rectangle 5.png');
                             @endphp
-                            <a class="news-card" href="{{ route('frontend.news.show', $post->slug) }}">
+                            <a class="news-card" href="{{ route('frontend.news.show', ['slug' => $post->slug]) }}">
                                 <img src="{{ $image }}" alt="{{ $post->title }}">
                                 <div class="news-card-body">
                                     <h3>{{ $post->title }}</h3>
                                     <p>{{ $post->description ?: \Illuminate\Support\Str::limit(strip_tags($post->content), 100) }}</p>
                                     <div class="news-meta">
                                         <span>{{ optional($post->published_at)->format('d/m/Y') ?: $post->created_at->format('d/m/Y') }}</span>
-                                        <strong>Xem thêm</strong>
+                                        <strong>{{ __('Xem thêm') }}</strong>
                                     </div>
                                 </div>
                             </a>
@@ -53,11 +53,11 @@
                     </div>
 
                     <div class="news-more">
-                        <a href="{{ route('frontend.news.category', $category->slug) }}" class="btn-vaca">Xem thêm</a>
+                        <a href="{{ route('frontend.news.category', ['categorySlug' => $category->slug]) }}" class="btn-vaca">{{ __('Xem thêm') }}</a>
                     </div>
                 </div>
             @empty
-                <p class="text-center text-muted py-5">Chưa có bài viết nào được cập nhật.</p>
+                <p class="text-center text-muted py-5">{{ __('Chưa có bài viết nào được cập nhật.') }}</p>
             @endforelse
         </div>
     </section>

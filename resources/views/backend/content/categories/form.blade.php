@@ -23,11 +23,16 @@
         <form method="POST" action="{{ $isEdit ? route($updateRoute, $category) : route($storeRoute) }}" class="mt-8 space-y-5">
             @csrf
             @if($isEdit) @method('PUT') @endif
-            <x-backend.form.input id="name" name="name" label="Tên danh mục" :value="$category->name" required />
+            <x-backend.form.input id="name" name="name" label="Tên danh mục (VI)" :value="$category->name" required />
+            <x-backend.form.input id="name_en" name="name_en" label="Tên danh mục (EN)" :value="$category->name_en" />
             <x-backend.form.input id="slug" name="slug" label="Slug" :value="$category->slug" placeholder="Tự sinh nếu để trống" />
             <div>
-                <label for="description" class="mb-2 block text-sm font-medium text-slate-700">Mô tả</label>
-                <textarea id="description" name="description" rows="5" class="block w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900 shadow-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100">{{ old('description', $category->description) }}</textarea>
+                <label for="description" class="mb-2 block text-sm font-medium text-slate-700">Mô tả (VI)</label>
+                <textarea id="description" name="description" rows="3" class="block w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900 shadow-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100">{{ old('description', $category->description) }}</textarea>
+            </div>
+            <div>
+                <label for="description_en" class="mb-2 block text-sm font-medium text-slate-700">Mô tả (EN)</label>
+                <textarea id="description_en" name="description_en" rows="3" class="block w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900 shadow-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100">{{ old('description_en', $category->description_en) }}</textarea>
             </div>
             <div class="grid gap-5 md:grid-cols-2">
                 <x-backend.form.input id="sort_order" name="sort_order" type="number" label="Thứ tự" :value="$category->sort_order" />

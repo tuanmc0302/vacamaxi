@@ -167,20 +167,32 @@ class WidgetController extends Controller
         $validated = $request->validate([
             'page' => ['nullable', 'string'],
             'title' => ['nullable', 'string', 'max:255'],
+            'title_en' => ['nullable', 'string', 'max:255'],
             'sub_title' => ['nullable', 'string', 'max:255'],
+            'sub_title_en' => ['nullable', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
+            'description_en' => ['nullable', 'string'],
             'sort_order' => ['nullable', 'integer', 'min:0'],
             'is_active' => ['nullable', 'boolean'],
             'button_text' => ['nullable', 'string', 'max:255'],
+            'button_text_en' => ['nullable', 'string', 'max:255'],
             'button_url' => ['nullable', 'string', 'max:255'],
+            'button_url_en' => ['nullable', 'string', 'max:255'],
             'category_id' => ['nullable', 'integer', 'exists:categories,id'],
             'setting_fields' => ['nullable', 'array'],
             'setting_fields.*' => ['nullable', 'string', 'max:255'],
+            'setting_fields_en' => ['nullable', 'array'],
+            'setting_fields_en.*' => ['nullable', 'string', 'max:255'],
             'feedback_items' => ['nullable', 'array', 'max:10'],
             'feedback_items.*.avatar' => ['nullable', 'string', 'max:255'],
             'feedback_items.*.role' => ['nullable', 'string', 'max:80'],
             'feedback_items.*.name' => ['nullable', 'string', 'max:120'],
             'feedback_items.*.content' => ['nullable', 'string', 'max:500'],
+            'feedback_items_en' => ['nullable', 'array', 'max:10'],
+            'feedback_items_en.*.avatar' => ['nullable', 'string', 'max:255'],
+            'feedback_items_en.*.role' => ['nullable', 'string', 'max:80'],
+            'feedback_items_en.*.name' => ['nullable', 'string', 'max:120'],
+            'feedback_items_en.*.content' => ['nullable', 'string', 'max:500'],
             'widget_images' => ['nullable', 'array', 'max:' . max($this->imageConfigCount($widget->key), 1)],
             'widget_images.*' => ['nullable', 'string', 'max:255'],
             'widget_image_files' => ['nullable', 'array', 'max:' . max($this->imageConfigCount($widget->key), 1)],
@@ -192,19 +204,36 @@ class WidgetController extends Controller
             'banner_slides.*.button_text' => ['nullable', 'string', 'max:255'],
             'banner_slides.*.button_url' => ['nullable', 'string', 'max:255'],
             'banner_slides.*.image' => ['nullable', 'string', 'max:255'],
+            'banner_slides_en' => ['nullable', 'array', 'max:10'],
+            'banner_slides_en.*.title' => ['nullable', 'string', 'max:255'],
+            'banner_slides_en.*.sub_title' => ['nullable', 'string', 'max:255'],
+            'banner_slides_en.*.description' => ['nullable', 'string'],
+            'banner_slides_en.*.button_text' => ['nullable', 'string', 'max:255'],
+            'banner_slides_en.*.button_url' => ['nullable', 'string', 'max:255'],
+            'banner_slides_en.*.image' => ['nullable', 'string', 'max:255'],
             'banner_slide_image_files' => ['nullable', 'array', 'max:10'],
             'banner_slide_image_files.*' => ['nullable', 'image', 'max:40960'],
         ]);
 
         $settings = $widget->settings ?? [];
+        $settingsEn = $widget->settings_en ?? [];
 
         if ($request->hasAny(['button_text', 'button_url'])) {
             $settings['button_text'] = trim((string) ($validated['button_text'] ?? '')) ?: null;
             $settings['button_url'] = trim((string) ($validated['button_url'] ?? '')) ?: null;
         }
 
+        if ($request->hasAny(['button_text_en', 'button_url_en'])) {
+            $settingsEn['button_text'] = trim((string) ($validated['button_text_en'] ?? '')) ?: null;
+            $settingsEn['button_url'] = trim((string) ($validated['button_url_en'] ?? '')) ?: null;
+        }
+
         foreach (($validated['setting_fields'] ?? []) as $settingKey => $settingValue) {
             $settings[$settingKey] = trim((string) $settingValue) ?: null;
+        }
+
+        foreach (($validated['setting_fields_en'] ?? []) as $settingKey => $settingValue) {
+            $settingsEn[$settingKey] = trim((string) $settingValue) ?: null;
         }
 
         if (Str::startsWith($widget->key, 'product_option_') || Str::startsWith($widget->key, 'restaurant_product_')) {
@@ -218,6 +247,7 @@ class WidgetController extends Controller
 
         if ($widget->key === 'feedback_home') {
             $settings['items'] = $this->feedbackItems($validated['feedback_items'] ?? []);
+            $settingsEn['items'] = $this->feedbackItems($validated['feedback_items_en'] ?? []);
         }
 
         if ($widget->key === 'banner_home') {
@@ -225,6 +255,29 @@ class WidgetController extends Controller
                 $validated['banner_slides'] ?? [],
                 $request->file('banner_slide_image_files', [])
             );
+
+            // English slides share the same images uploaded in slide files, but use text fields from banner_slides_en
+            $slidesEn = $validated['banner_slides_en'] ?? [];
+            foreach ($slidesEn as $i => $slide) {
+                // If a new image was uploaded for this slide index, use it. Otherwise, fallback to the VI slide image or input image
+                if (isset($request->file('banner_slide_image_files')[$i])) {
+                    // image is already stored and populated in the VI slide, so we can copy it from VI slide image
+                }
+                // We'll map English slides using bannerSlides helper but passing empty files (they'll use the image from banner_slides_en input)
+                // bannerSlides takes care of putting the image field from the slides array
+            }
+            $settingsEn['slides'] = $this->bannerSlides(
+                $slidesEn,
+                []
+            );
+            // Copy slide images from VI slides if they are empty in EN slides
+            if (isset($settings['slides']) && isset($settingsEn['slides'])) {
+                foreach ($settingsEn['slides'] as $index => &$enSlide) {
+                    if (empty($enSlide['image']) && isset($settings['slides'][$index]['image'])) {
+                        $enSlide['image'] = $settings['slides'][$index]['image'];
+                    }
+                }
+            }
         }
 
         if ($this->hasImageConfig($widget->key)) {
@@ -237,11 +290,15 @@ class WidgetController extends Controller
 
         $widget->update([
             'title' => $validated['title'] ?? null,
+            'title_en' => $validated['title_en'] ?? null,
             'sub_title' => $validated['sub_title'] ?? null,
+            'sub_title_en' => $validated['sub_title_en'] ?? null,
             'description' => $validated['description'] ?? null,
+            'description_en' => $validated['description_en'] ?? null,
             'sort_order' => (int) ($validated['sort_order'] ?? 0),
             'is_active' => $request->boolean('is_active'),
             'settings' => $settings,
+            'settings_en' => $settingsEn,
         ]);
 
         return redirect()->route('admin.widgets.index', ['page' => $page])->with('status', 'Đã cập nhật widget frontend.');

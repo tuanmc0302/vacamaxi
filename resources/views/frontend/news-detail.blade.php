@@ -42,7 +42,7 @@
                 <div class="article-toc" id="toc-container" style="display: none;">
                     <div class="toc-header">
                         <i class="bi bi-list-ul"></i>
-                        <strong>Mục lục bài viết</strong>
+                        <strong>{{ __('Mục lục bài viết') }}</strong>
                     </div>
                     <ul id="toc-list"></ul>
                 </div>
@@ -56,13 +56,13 @@
                 </article>
 
                 <div class="article-share">
-                    <span class="share-label">Chia sẻ bài viết:</span>
+                    <span class="share-label">{{ __('Chia sẻ bài viết:') }}</span>
                     <div class="share-links">
                         <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(request()->fullUrl()) }}" target="_blank" class="share-link fb">
                             <i class="bi bi-facebook"></i>
                         </a>
                         <a href="https://zalo.me/share?url={{ urlencode(request()->fullUrl()) }}" target="_blank" class="share-link zalo">
-                            Zalo
+                            {{ __('Zalo') }}
                         </a>
                         <a href="https://www.youtube.com" target="_blank" class="share-link yt">
                             <i class="bi bi-youtube"></i>
@@ -72,23 +72,23 @@
 
                 <div class="comment-section">
                     <div class="comment-card">
-                        <h3>Viết bình luận của bạn</h3>
+                        <h3>{{ __('Viết bình luận của bạn') }}</h3>
                         <div id="comment-success" class="comment-success">
-                            Bình luận của bạn đã được gửi và đang chờ kiểm duyệt. Cảm ơn bạn!
+                            {{ __('Bình luận của bạn đã được gửi và đang chờ kiểm duyệt. Cảm ơn bạn!') }}
                         </div>
-                        <form id="news-comment-form" class="comment-form" action="{{ route('frontend.news.comment.submit', $post) }}" method="POST">
+                        <form id="news-comment-form" class="comment-form" action="{{ route('frontend.news.comment.submit', ['post' => $post]) }}" method="POST">
                             @csrf
                             <div class="form-group">
-                                <input type="text" name="full_name" placeholder="Họ và Tên" required>
+                                <input type="text" name="full_name" placeholder="{{ __('Họ và Tên') }}" required>
                             </div>
                             <div class="form-group">
-                                <input type="email" name="email" placeholder="Gmail">
+                                <input type="email" name="email" placeholder="{{ __('Gmail') }}">
                             </div>
                             <div class="form-group full-width">
-                                <textarea name="content" rows="4" placeholder="Nội dung bình luận" required></textarea>
+                                <textarea name="content" rows="4" placeholder="{{ __('Nội dung bình luận') }}" required></textarea>
                             </div>
                             <button type="submit" class="btn-submit-comment" id="comment-submit-btn">
-                                <span class="btn-text">GỬI BÌNH LUẬN</span>
+                                <span class="btn-text">{{ __('GỬI BÌNH LUẬN') }}</span>
                                 <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
                             </button>
                         </form>
@@ -97,7 +97,7 @@
                     @if($post->approvedComments->isNotEmpty())
                         <div class="comments-list mt-5">
                             <h4 class="mb-4" style="color: #250900; font-weight: 800; text-transform: uppercase; font-size: 20px;">
-                                Bình luận ({{ $post->approvedComments->count() }})
+                                {{ __('Bình luận') }} ({{ $post->approvedComments->count() }})
                             </h4>
                             <div class="d-flex flex-column gap-4">
                                 @foreach($post->approvedComments as $comment)
@@ -125,14 +125,14 @@
                                 @php
                                     $relatedImage = \App\Presentation\Http\Controllers\Frontend\NewsController::imageUrl($relatedPost->image, 'image/Rectangle 5.png');
                                 @endphp
-                                <a class="news-card" href="{{ route('frontend.news.show', $relatedPost->slug) }}">
+                                <a class="news-card" href="{{ route('frontend.news.show', ['slug' => $relatedPost->slug]) }}">
                                     <img src="{{ $relatedImage }}" alt="{{ $relatedPost->title }}">
                                     <div class="news-card-body">
                                         <h3>{{ $relatedPost->title }}</h3>
                                         <p>{{ $relatedPost->description ?: \Illuminate\Support\Str::limit(strip_tags($relatedPost->content), 100) }}</p>
                                         <div class="news-meta">
                                             <span>{{ optional($relatedPost->published_at)->format('d/m/Y') ?: $relatedPost->created_at->format('d/m/Y') }}</span>
-                                            <strong>Xem thêm</strong>
+                                            <strong>{{ __('Xem thêm') }}</strong>
                                         </div>
                                     </div>
                                 </a>

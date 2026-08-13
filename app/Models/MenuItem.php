@@ -6,16 +6,27 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+use App\Models\Concerns\Translatable;
+
 class MenuItem extends Model
 {
+    use Translatable;
+
     protected $fillable = [
         'label',
+        'label_en',
         'url',
+        'url_en',
         'key',
         'parent_id',
         'sort_order',
         'target',
         'is_active',
+    ];
+
+    protected $translatable = [
+        'label',
+        'url',
     ];
 
     protected $casts = [

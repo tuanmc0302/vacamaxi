@@ -24,12 +24,18 @@
                     <section class="rounded-2xl border border-slate-200 bg-slate-50 p-6">
                         <h3 class="text-lg font-semibold text-slate-900">Thông tin thương hiệu</h3>
                         <div class="mt-5 grid gap-5 md:grid-cols-2">
-                            <x-backend.form.input id="site_name" name="site_name" label="Tên thương hiệu" :value="$setting->site_name" placeholder="VACAMAXI" />
-                            <x-backend.form.input id="site_title" name="site_title" label="Tiêu đề website" :value="$setting->site_title" placeholder="VACAMAXI" />
+                            <x-backend.form.input id="site_name" name="site_name" label="Tên thương hiệu (VI)" :value="$setting->site_name" placeholder="VACAMAXI" />
+                            <x-backend.form.input id="site_name_en" name="site_name_en" label="Tên thương hiệu (EN)" :value="$setting->site_name_en" placeholder="VACAMAXI (EN)" />
+                            <x-backend.form.input id="site_title" name="site_title" label="Tiêu đề website (VI)" :value="$setting->site_title" placeholder="VACAMAXI" />
+                            <x-backend.form.input id="site_title_en" name="site_title_en" label="Tiêu đề website (EN)" :value="$setting->site_title_en" placeholder="VACAMAXI (EN)" />
                         </div>
                         <div class="mt-5">
-                            <label for="site_description" class="mb-2 block text-sm font-medium text-slate-700">Mô tả thương hiệu</label>
+                            <label for="site_description" class="mb-2 block text-sm font-medium text-slate-700">Mô tả thương hiệu (VI)</label>
                             <textarea id="site_description" name="site_description" rows="4" class="block w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900 shadow-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100">{{ old('site_description', $setting->site_description) }}</textarea>
+                        </div>
+                        <div class="mt-5">
+                            <label for="site_description_en" class="mb-2 block text-sm font-medium text-slate-700">Mô tả thương hiệu (EN)</label>
+                            <textarea id="site_description_en" name="site_description_en" rows="4" class="block w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900 shadow-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100">{{ old('site_description_en', $setting->site_description_en) }}</textarea>
                         </div>
                         <div class="mt-5 grid gap-5 md:grid-cols-3">
                             <div>
@@ -59,14 +65,23 @@
                     <section class="rounded-2xl border border-slate-200 bg-slate-50 p-6">
                         <h3 class="text-lg font-semibold text-slate-900">SEO mặc định</h3>
                         <div class="mt-5 grid gap-5">
-                            <x-backend.form.input id="seo_title" name="seo_title" label="SEO title" :value="$setting->seo_title" placeholder="Tiêu đề SEO mặc định" />
+                            <x-backend.form.input id="seo_title" name="seo_title" label="SEO title (VI)" :value="$setting->seo_title" placeholder="Tiêu đề SEO mặc định" />
+                            <x-backend.form.input id="seo_title_en" name="seo_title_en" label="SEO title (EN)" :value="$setting->seo_title_en" placeholder="Tiêu đề SEO mặc định (EN)" />
                             <div>
-                                <label for="seo_description" class="mb-2 block text-sm font-medium text-slate-700">SEO description</label>
+                                <label for="seo_description" class="mb-2 block text-sm font-medium text-slate-700">SEO description (VI)</label>
                                 <textarea id="seo_description" name="seo_description" rows="4" class="block w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900 shadow-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100">{{ old('seo_description', $setting->seo_description) }}</textarea>
                             </div>
                             <div>
-                                <label for="seo_keywords" class="mb-2 block text-sm font-medium text-slate-700">SEO keywords</label>
+                                <label for="seo_description_en" class="mb-2 block text-sm font-medium text-slate-700">SEO description (EN)</label>
+                                <textarea id="seo_description_en" name="seo_description_en" rows="4" class="block w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900 shadow-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100">{{ old('seo_description_en', $setting->seo_description_en) }}</textarea>
+                            </div>
+                            <div>
+                                <label for="seo_keywords" class="mb-2 block text-sm font-medium text-slate-700">SEO keywords (VI)</label>
                                 <textarea id="seo_keywords" name="seo_keywords" rows="4" class="block w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900 shadow-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100">{{ old('seo_keywords', $setting->seo_keywords) }}</textarea>
+                            </div>
+                            <div>
+                                <label for="seo_keywords_en" class="mb-2 block text-sm font-medium text-slate-700">SEO keywords (EN)</label>
+                                <textarea id="seo_keywords_en" name="seo_keywords_en" rows="4" class="block w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900 shadow-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100">{{ old('seo_keywords_en', $setting->seo_keywords_en) }}</textarea>
                             </div>
                         </div>
                     </section>
@@ -75,7 +90,8 @@
                 <section class="rounded-2xl border border-slate-200 bg-slate-50 p-6">
                     <h3 class="text-lg font-semibold text-slate-900">Thông tin liên hệ</h3>
                     <div class="mt-5 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-                        <x-backend.form.input id="address" name="address" label="Địa chỉ" :value="$setting->address" placeholder="Nhập địa chỉ" />
+                        <x-backend.form.input id="address" name="address" label="Địa chỉ (VI)" :value="$setting->address" placeholder="Nhập địa chỉ" />
+                        <x-backend.form.input id="address_en" name="address_en" label="Địa chỉ (EN)" :value="$setting->address_en" placeholder="Nhập địa chỉ (EN)" />
                         <x-backend.form.input id="phone_wine" name="phone_wine" label="SĐT về rượu" :value="$setting->phone_wine" placeholder="0983..." />
                         <x-backend.form.input id="phone_beef" name="phone_beef" label="SĐT về bò" :value="$setting->phone_beef" placeholder="0988..." />
                         <x-backend.form.input id="email" name="email" label="Email" type="email" :value="$setting->email" placeholder="info@example.com" />

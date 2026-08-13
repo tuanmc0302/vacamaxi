@@ -1,8 +1,8 @@
 @php
     $footer = $footer ?? [];
     $nav = $nav ?? [];
-    $phoneWine = $siteSettings['phone_wine'] ?? '';
-    $phoneBeef = $siteSettings['phone_beef'] ?? '';
+    $phoneWine = !empty($siteSettings['phone_wine']) ? __($siteSettings['phone_wine']) : '';
+    $phoneBeef = !empty($siteSettings['phone_beef']) ? __($siteSettings['phone_beef']) : '';
     $socialLinks = [
         ['label' => 'Zalo', 'url' => $siteSettings['zalo_url'] ?? ''],
         ['label' => 'Facebook', 'url' => $siteSettings['facebook_url'] ?? ''],
@@ -21,7 +21,7 @@
                 </div>
                 <div class="col-lg-2 col-md-6">
                     <div class="footer-links">
-                        <h4 class="footer-title">LIÊN KẾT</h4>
+                        <h4 class="footer-title">{{ __('LIÊN KẾT') }}</h4>
                         <ul class="footer-menu">
                             @foreach ($nav as $item)
                                 <li><a href="{{ $item['url'] }}">{{ $item['label'] }}</a></li>
@@ -31,7 +31,7 @@
                 </div>
                 <div class="col-lg-3 col-md-6">
                     <div class="footer-info">
-                        <h4 class="footer-title">THÔNG TIN LIÊN HỆ</h4>
+                        <h4 class="footer-title">{{ __('THÔNG TIN LIÊN HỆ') }}</h4>
                         <div class="footer-contact">
                             @if(!empty($siteSettings['address']) || !empty($footer['address']))
                                 <p><i class="bi bi-geo-alt-fill me-2"></i>{{ $siteSettings['address'] ?? $footer['address'] ?? '' }}</p>
@@ -53,13 +53,13 @@
                 <div class="col-lg-3 col-md-6">
                     <div class="footer-social-wrap">
                         @if(!empty($siteSettings['google_map_embed_url']))
-                            <h4 class="footer-title">BẢN ĐỒ</h4>
+                            <h4 class="footer-title">{{ __('BẢN ĐỒ') }}</h4>
                             <div class="footer-map mt-2">
                                 {!! $siteSettings['google_map_embed_url'] !!}
                             </div>
                         @endif
 
-                        <h4 class="footer-title {{ !empty($siteSettings['google_map_embed_url']) ? 'mt-4' : '' }}">MẠNG XÃ HỘI</h4>
+                        <h4 class="footer-title {{ !empty($siteSettings['google_map_embed_url']) ? 'mt-4' : '' }}">{{ __('MẠNG XÃ HỘI') }}</h4>
                         <div class="footer-social">
                             @php
                                 $socials = $footer['socials'] ?? [
@@ -91,10 +91,10 @@
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-md-6">
-                    <p class="copyright mb-md-0">© {{ date('Y') }} {{ $siteSettings['site_name'] ?? 'VACAMAXI' }}. Tất cả quyền được bảo lưu.</p>
+                    <p class="copyright mb-md-0">© {{ date('Y') }} {{ $siteSettings['site_name'] ?? 'VACAMAXI' }}. {{ __('Tất cả quyền được bảo lưu.') }}</p>
                 </div>
                 <div class="col-md-6 text-md-end">
-                    <p class="design-by mb-0">Phát triển bởi Vacamaxi</p>
+                    <p class="design-by mb-0">{{ __('Phát triển bởi') }} Vacamaxi</p>
                 </div>
             </div>
         </div>

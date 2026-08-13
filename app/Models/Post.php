@@ -6,20 +6,39 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+use App\Models\Concerns\Translatable;
+
 class Post extends Model
 {
+    use Translatable;
+
     protected $fillable = [
         'category_id',
         'author_id',
         'title',
+        'title_en',
         'slug',
+        'slug_en',
         'image',
+        'description',
+        'description_en',
+        'content',
+        'content_en',
+        'seo_title',
+        'seo_title_en',
+        'seo_description',
+        'seo_description_en',
+        'published_at',
+        'is_active',
+    ];
+
+    protected $translatable = [
+        'title',
         'description',
         'content',
         'seo_title',
         'seo_description',
-        'published_at',
-        'is_active',
+        'slug',
     ];
 
     protected $casts = [

@@ -1,8 +1,8 @@
 @extends('frontend.master')
 
 @php
-    $pageTitle = 'Giống bò VACAMAXI - GIỐNG BÒ CỦA CHÚNG TÔI';
-    $metaDescription = 'Mỗi giống bò tại VACAMAXI là kết quả của quá trình chọn lọc và phát triển di truyền nghiêm ngặt, đảm bảo năng xuất và chất lượng vượt trội';
+    $pageTitle = __('Giống bò VACAMAXI - GIỐNG BÒ CỦA CHÚNG TÔI');
+    $metaDescription = __('Mỗi giống bò tại VACAMAXI là kết quả của quá trình chọn lọc và phát triển di truyền nghiêm ngặt, đảm bảo năng xuất và chất lượng vượt trội');
     $active = 'breeds';
     $comparison = $frontendData['comparison'] ?? [];
 @endphp

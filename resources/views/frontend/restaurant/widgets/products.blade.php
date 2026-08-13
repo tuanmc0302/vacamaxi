@@ -4,7 +4,7 @@
     $buttonUrl = data_get($widget, 'settings.button_url', '/san-pham');
 
     if ($products->isNotEmpty() && $products->first()->category) {
-        $buttonUrl = route('frontend.products.category', $products->first()->category->slug);
+        $buttonUrl = route('frontend.products.category', ['categorySlug' => $products->first()->category->slug]);
     }
 @endphp
 
@@ -25,7 +25,7 @@
                 @endforeach
             </div>
         @else
-            <div class="restaurant-empty">Chưa có sản phẩm phù hợp.</div>
+            <div class="restaurant-empty">{{ __('Chưa có sản phẩm phù hợp.') }}</div>
         @endif
 
         @if ($buttonText)

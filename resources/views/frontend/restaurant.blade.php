@@ -1,8 +1,8 @@
 @extends('frontend.master')
 
 @php
-    $pageTitle = 'Dịch vụ - Nhà hàng - VACAMAXI';
-    $metaDescription = 'Không gian steak & grill cao cấp của VACAMAXI';
+    $pageTitle = __('Dịch vụ - Nhà hàng') . ' - VACAMAXI';
+    $metaDescription = __('Không gian steak & grill cao cấp của VACAMAXI');
     $active = 'restaurant';
 
     $splitLines = function (?string $text) {

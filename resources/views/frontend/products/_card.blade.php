@@ -19,8 +19,8 @@
                 {{ $product->short_description }}
             </p>
         @else
-            <p class="product-card__price">Liên hệ</p>
+            <p class="product-card__price">{{ __('Liên hệ') }}</p>
         @endif
-        <a href="{{ $url }}" class="btn-vaca" style="min-width: 100%; min-height: 40px; font-size: 12px; padding: 10px;">Xem chi tiết</a>
+        <a href="{{ $url }}" class="btn-vaca" style="min-width: 100%; min-height: 40px; font-size: 12px; padding: 10px;">{{ __('Xem chi tiết') }}</a>
     </div>
         </article>

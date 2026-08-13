@@ -77,12 +77,17 @@ class ProductController extends Controller
         $validated = $request->validate([
             'category_id' => ['nullable', 'exists:categories,id'],
             'name' => ['required', 'string', 'max:255'],
+            'name_en' => ['nullable', 'string', 'max:255'],
             'slug' => ['required', 'string', 'max:255', Rule::unique('products')->ignore($product?->id)],
             'image_file' => ['nullable', 'image', 'max:4096'],
             'short_description' => ['nullable', 'string'],
+            'short_description_en' => ['nullable', 'string'],
             'description' => ['nullable', 'string'],
+            'description_en' => ['nullable', 'string'],
             'seo_title' => ['nullable', 'string', 'max:255'],
+            'seo_title_en' => ['nullable', 'string', 'max:255'],
             'seo_description' => ['nullable', 'string'],
+            'seo_description_en' => ['nullable', 'string'],
             'sort_order' => ['nullable', 'integer', 'min:0'],
             'is_active' => ['nullable', 'boolean'],
         ]);
