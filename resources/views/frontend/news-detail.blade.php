@@ -155,13 +155,17 @@
         const btnText = submitBtn ? submitBtn.querySelector('.btn-text') : null;
         const spinner = submitBtn ? submitBtn.querySelector('.spinner-border') : null;
 
+        const sendingText = "{{ __('ĐANG GỬI...') }}";
+        const commentText = "{{ __('GỬI BÌNH LUẬN') }}";
+        const errorText = "{{ __('Có lỗi xảy ra, vui lòng thử lại sau.') }}";
+
         if (form && successMsg && submitBtn) {
             form.addEventListener('submit', function(e) {
                 e.preventDefault();
                 
                 // Show loading
                 submitBtn.disabled = true;
-                if(btnText) btnText.textContent = 'ĐANG GỬI...';
+                if(btnText) btnText.textContent = sendingText;
                 if(spinner) spinner.classList.remove('d-none');
 
                 const formData = new FormData(form);
@@ -181,9 +185,9 @@
                 })
                 .catch(error => {
                     console.error('Error:', error);
-                    alert('Có lỗi xảy ra, vui lòng thử lại sau.');
+                    alert(errorText);
                     submitBtn.disabled = false;
-                    if(btnText) btnText.textContent = 'GỬI BÌNH LUẬN';
+                    if(btnText) btnText.textContent = commentText;
                     if(spinner) spinner.classList.add('d-none');
                 });
             });

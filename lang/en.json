@@ -145,5 +145,7 @@
   "Gmail": "Email",
   "Nội dung bình luận": "Comment content",
   "GỬI BÌNH LUẬN": "SUBMIT COMMENT",
-  "Bình luận": "Comments"
+  "Bình luận": "Comments",
+  "ĐANG GỬI...": "SENDING...",
+  "Có lỗi xảy ra, vui lòng thử lại sau.": "An error occurred, please try again later."
 }

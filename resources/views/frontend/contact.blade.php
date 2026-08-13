@@ -199,7 +199,7 @@
                             </div>
                             <div class="contact-text">
                                 <h4>{{ __('Địa chỉ') }}</h4>
-                                <p>{{ $footer['address'] ?? '166 Phạm Văn Đồng, P. Đông Ngạc, TP. Hà Nội' }}</p>
+                                <p>{{ app()->getLocale() === 'en' && !empty($siteSettings['address_en']) ? $siteSettings['address_en'] : ($siteSettings['address'] ?? ($footer['address'] ?? '166 Phạm Văn Đồng, P. Đông Ngạc, TP. Hà Nội')) }}</p>
                             </div>
                         </div>
                         
@@ -209,9 +209,17 @@
                             </div>
                             <div class="contact-text">
                                 <h4>Hotline</h4>
-                                @foreach($footer['hotlines'] ?? [] as $phone)
-                                    <p>{{ $phone }}</p>
-                                @endforeach
+                                @if(!empty($siteSettings['phone_wine']))
+                                    <p>{{ __($siteSettings['phone_wine']) }}</p>
+                                @endif
+                                @if(!empty($siteSettings['phone_beef']))
+                                    <p>{{ __($siteSettings['phone_beef']) }}</p>
+                                @endif
+                                @if(empty($siteSettings['phone_wine']) && empty($siteSettings['phone_beef']))
+                                    @foreach($footer['hotlines'] ?? [] as $phone)
+                                        <p>{{ __($phone) }}</p>
+                                    @endforeach
+                                @endif
                             </div>
                         </div>
                         
@@ -221,7 +229,7 @@
                             </div>
                             <div class="contact-text">
                                 <h4>Email</h4>
-                                <p>{{ $footer['email'] ?? 'info@vacamaxi.vn' }}</p>
+                                <p>{{ $siteSettings['email'] ?? ($footer['email'] ?? 'info@vacamaxi.vn') }}</p>
                             </div>
                         </div>
                         
@@ -231,7 +239,7 @@
                             </div>
                             <div class="contact-text">
                                 <h4>Website</h4>
-                                <p>{{ $footer['website'] ?? 'vacamaxi.vn' }}</p>
+                                <p>{{ $siteSettings['website_url'] ?? ($footer['website'] ?? 'vacamaxi.vn') }}</p>
                             </div>
                         </div>
                     </div>
@@ -293,13 +301,17 @@
         const btnText = submitBtn.querySelector('.btn-text');
         const spinner = submitBtn.querySelector('.spinner-border');
 
+        const sendingText = "{{ __('ĐANG GỬI...') }}";
+        const sendText = "{{ __('GỬI THƯ') }}";
+        const errorText = "{{ __('Có lỗi xảy ra, vui lòng thử lại sau.') }}";
+
         if (form && successMsg) {
             form.addEventListener('submit', function(e) {
                 e.preventDefault();
                 
                 // Show loading
                 submitBtn.disabled = true;
-                btnText.textContent = 'ĐANG GỬI...';
+                btnText.textContent = sendingText;
                 spinner.classList.remove('d-none');
 
                 const formData = new FormData(form);
@@ -319,9 +331,9 @@
                 })
                 .catch(error => {
                     console.error('Error:', error);
-                    alert('Có lỗi xảy ra, vui lòng thử lại sau.');
+                    alert(errorText);
                     submitBtn.disabled = false;
-                    btnText.textContent = 'GỬI THƯ';
+                    btnText.textContent = sendText;
                     spinner.classList.add('d-none');
                 });
             });
