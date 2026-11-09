@@ -109,18 +109,13 @@
                     
                     <div class="tab-pane fade" id="guide-pane" role="tabpanel" tabindex="0">
                         <div class="py-4">
-                            <p><strong>{{ __('Bước 1:') }}</strong> {{ __('Chọn sản phẩm bạn mong muốn và nhấn "MUA NGAY" hoặc "THÊM VÀO GIỎ HÀNG".') }}</p>
-                            <p><strong>{{ __('Bước 2:') }}</strong> {{ __('Kiểm tra lại giỏ hàng và điền thông tin giao hàng chính xác.') }}</p>
-                            <p><strong>{{ __('Bước 3:') }}</strong> {{ __('Chọn phương thức thanh toán phù hợp (Chuyển khoản hoặc COD).') }}</p>
-                            <p><strong>{{ __('Bước 4:') }}</strong> {{ __('Nhấn "ĐẶT HÀNG" và chờ nhân viên VACAMAXI liên hệ xác nhận trong vòng 15-30 phút.') }}</p>
+                            <p>{{ __('Vui lòng liên hệ để biết thêm thông tin chi tiết.') }}</p>
                         </div>
                     </div>
 
                     <div class="tab-pane fade" id="shipping-pane" role="tabpanel" tabindex="0">
                         <div class="py-4">
-                            <p><i class="bi bi-truck me-2"></i> <strong>{{ __('Giao hàng nội thành:') }}</strong> {{ __('Nhận hàng trong ngày (2-4h làm việc).') }}</p>
-                            <p><i class="bi bi-geo-alt me-2"></i> <strong>{{ __('Giao hàng tỉnh:') }}</strong> {{ __('Thời gian từ 2-3 ngày tùy khu vực.') }}</p>
-                            <p><i class="bi bi-shield-check me-2"></i> <strong>{{ __('Bảo quản chuyên nghiệp:') }}</strong> {{ __('Sản phẩm luôn được đóng gói trong thùng xốp cách nhiệt kèm đá khô để đảm bảo độ tươi ngon tuyệt đối khi đến tay khách hàng.') }}</p>
+                            <p>{{ __('Vui lòng liên hệ để biết thêm thông tin chi tiết.') }}</p>
                         </div>
                     </div>
                 </div>
