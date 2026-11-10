@@ -51,15 +51,33 @@
                         </div>
                     @endif
                 </div>
-                <div>
-                    <label class="mb-2 block text-sm font-semibold text-slate-700">Upload ảnh phụ (Gallery)</label>
-                    <input type="file" name="gallery_files[]" accept="image/*" multiple class="block h-12 w-full rounded-xl border border-slate-200 px-4 py-2 text-sm outline-none transition file:mr-4 file:rounded-lg file:border-0 file:bg-slate-900 file:px-3 file:py-2 file:text-sm file:font-semibold file:text-white focus:border-blue-500 focus:ring-4 focus:ring-blue-50">
+                <div class="md:col-span-2 rounded-xl border border-slate-200 bg-slate-50/60 p-4">
+                    <label class="mb-2 block text-sm font-semibold text-slate-700">Upload ảnh phụ (Gallery - chọn nhiều ảnh cùng lúc)</label>
+                    <input type="file" id="gallery_files_input" name="gallery_files[]" accept="image/*" multiple class="block w-full rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm outline-none transition file:mr-4 file:rounded-lg file:border-0 file:bg-blue-600 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-blue-700 focus:border-blue-500 focus:ring-4 focus:ring-blue-50">
+                    <p class="mt-1 text-xs text-slate-500">Giữ phím Ctrl (hoặc Shift) để chọn nhiều ảnh cùng một lúc.</p>
                     @error('gallery_files.*') <p class="mt-2 text-sm text-red-600">{{ $message }}</p> @enderror
-                    @if ($product->gallery)
-                        <div class="mt-3 flex flex-wrap gap-2">
-                            @foreach ($product->gallery as $galleryImage)
-                                <img src="{{ asset($galleryImage) }}" alt="Gallery" class="h-14 w-20 rounded-lg object-cover">
-                            @endforeach
+
+                    {{-- Vùng xem trước ảnh mới chọn --}}
+                    <div id="new_gallery_preview_wrapper" class="mt-4 hidden border-t border-slate-200 pt-3">
+                        <p class="text-xs font-semibold text-blue-700 mb-2">Ảnh mới chọn xem trước:</p>
+                        <div id="new_gallery_preview" class="flex flex-wrap gap-3"></div>
+                    </div>
+
+                    {{-- Vùng ảnh phụ hiện tại --}}
+                    @if (!empty($product->gallery) && is_array($product->gallery))
+                        <div class="mt-4 border-t border-slate-200 pt-3">
+                            <p class="text-xs font-semibold text-slate-700 mb-2">Ảnh phụ hiện tại (bấm nút đỏ trên góc ảnh để xóa):</p>
+                            <div class="flex flex-wrap gap-3" id="existing_gallery_container">
+                                @foreach ($product->gallery as $idx => $galleryImage)
+                                    <div class="relative group rounded-lg overflow-hidden border border-slate-200 bg-white shadow-sm" id="gallery_item_{{ $idx }}">
+                                        <img src="{{ asset($galleryImage) }}" alt="Gallery" class="h-20 w-24 object-cover">
+                                        <input type="hidden" name="existing_gallery[]" value="{{ $galleryImage }}">
+                                        <button type="button" onclick="removeExistingGalleryImage('gallery_item_{{ $idx }}')" class="absolute top-1 right-1 h-6 w-6 rounded-full bg-red-600 text-white flex items-center justify-center opacity-85 hover:opacity-100 transition shadow" title="Xóa ảnh này">
+                                            <i class="bi bi-x text-base font-bold"></i>
+                                        </button>
+                                    </div>
+                                @endforeach
+                            </div>
                         </div>
                     @endif
                 </div>
@@ -132,3 +150,48 @@
         </div>
     </form>
 @endsection
+
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const input = document.getElementById('gallery_files_input');
+        const previewWrapper = document.getElementById('new_gallery_preview_wrapper');
+        const previewContainer = document.getElementById('new_gallery_preview');
+
+        if (input && previewContainer) {
+            input.addEventListener('change', function(e) {
+                previewContainer.innerHTML = '';
+                const files = Array.from(e.target.files);
+
+                if (files.length > 0) {
+                    previewWrapper.classList.remove('hidden');
+                    files.forEach(function(file) {
+                        if (!file.type.startsWith('image/')) return;
+
+                        const reader = new FileReader();
+                        reader.onload = function(event) {
+                            const item = document.createElement('div');
+                            item.className = 'relative rounded-lg overflow-hidden border border-blue-300 bg-white shadow-sm';
+                            item.innerHTML = `
+                                <img src="${event.target.result}" alt="${file.name}" class="h-20 w-24 object-cover">
+                                <span class="absolute bottom-0 left-0 right-0 bg-slate-900/70 text-white text-[10px] px-1 py-0.5 truncate text-center block" title="${file.name}">${file.name}</span>
+                            `;
+                            previewContainer.appendChild(item);
+                        };
+                        reader.readAsDataURL(file);
+                    });
+                } else {
+                    previewWrapper.classList.add('hidden');
+                }
+            });
+        }
+    });
+
+    function removeExistingGalleryImage(itemId) {
+        const item = document.getElementById(itemId);
+        if (item) {
+            item.remove();
+        }
+    }
+</script>
+@endpush

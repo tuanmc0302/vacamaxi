@@ -103,14 +103,26 @@ class ProductController extends Controller
             $validated['image'] = null;
         }
 
+        $existingGallery = $request->input('existing_gallery', []);
+        if (! is_array($existingGallery)) {
+            $existingGallery = [];
+        }
+
+        $newGallery = [];
         if ($request->hasFile('gallery_files')) {
-            $galleryPaths = [];
             foreach ($request->file('gallery_files') as $file) {
-                $path = $file->store('products/gallery', 'public');
-                $galleryPaths[] = 'storage/' . $path;
+                // Store in 'products' directory to avoid permission issues when creating nested subdirectories
+                $path = $file->store('products', 'public');
+                $newGallery[] = 'storage/' . $path;
             }
-            $existing = $product ? ($product->gallery ?? []) : [];
-            $validated['gallery'] = array_merge($existing, $galleryPaths);
+        }
+
+        if ($product) {
+            if ($request->has('existing_gallery') || $request->hasFile('gallery_files')) {
+                $validated['gallery'] = array_values(array_merge($existingGallery, $newGallery));
+            }
+        } else {
+            $validated['gallery'] = $newGallery;
         }
 
         $validated['is_active'] = $request->boolean('is_active');
