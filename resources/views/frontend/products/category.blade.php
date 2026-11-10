@@ -46,33 +46,7 @@
                 </div>
             @endif
 
-            {{-- Thanh lọc danh mục con (Subcategories) nếu có --}}
-            @if(isset($subcategories) && $subcategories->isNotEmpty())
-                <div class="subcategory-filter mb-5">
-                    <div class="subcategory-filter__inner">
-                        <span class="subcategory-filter__label d-none d-md-inline-block">{{ __('Phân loại:') }}</span>
-                        <ul class="subcategory-filter__list">
-                            <li>
-                                <a href="{{ route('frontend.products.category', ['categorySlug' => $rootCategory->slug]) }}" 
-                                   class="subcategory-filter__link {{ empty($activeSub) ? 'active' : '' }}">
-                                    {{ __('Tất cả') }}
-                                </a>
-                            </li>
-                            @foreach ($subcategories as $sub)
-                                <li>
-                                    <a href="{{ route('frontend.products.category', ['categorySlug' => $rootCategory->slug, 'sub' => $sub->slug]) }}" 
-                                       class="subcategory-filter__link {{ ($activeSub && $activeSub->id === $sub->id) ? 'active' : '' }}">
-                                        {{ $sub->name }}
-                                        @if($sub->products_count > 0)
-                                            <span class="subcategory-count">({{ $sub->products_count }})</span>
-                                        @endif
-                                    </a>
-                                </li>
-                            @endforeach
-                        </ul>
-                    </div>
-                </div>
-            @endif
+
 
             @if(isset($subcategories) && $subcategories->isNotEmpty() && empty($activeSub))
                 {{-- Chế độ xem theo từng component danh mục con --}}
