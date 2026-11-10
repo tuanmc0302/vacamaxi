@@ -18,6 +18,7 @@ class Product extends Model
         'slug',
         'slug_en',
         'image',
+        'gallery',
         'short_description',
         'short_description_en',
         'description',
@@ -41,6 +42,7 @@ class Product extends Model
 
     protected $casts = [
         'is_active' => 'boolean',
+        'gallery' => 'array',
     ];
 
     public function category(): BelongsTo

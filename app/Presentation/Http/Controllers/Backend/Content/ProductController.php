@@ -80,6 +80,7 @@ class ProductController extends Controller
             'name_en' => ['nullable', 'string', 'max:255'],
             'slug' => ['required', 'string', 'max:255', Rule::unique('products')->ignore($product?->id)],
             'image_file' => ['nullable', 'image', 'max:4096'],
+            'gallery_files.*' => ['nullable', 'image', 'max:4096'],
             'short_description' => ['nullable', 'string'],
             'short_description_en' => ['nullable', 'string'],
             'description' => ['nullable', 'string'],
@@ -93,12 +94,23 @@ class ProductController extends Controller
         ]);
 
         unset($validated['image_file']);
+        unset($validated['gallery_files']);
 
         if ($request->hasFile('image_file')) {
             $path = $request->file('image_file')->store('products', 'public');
             $validated['image'] = 'storage/' . $path;
         } elseif (! $product) {
             $validated['image'] = null;
+        }
+
+        if ($request->hasFile('gallery_files')) {
+            $galleryPaths = [];
+            foreach ($request->file('gallery_files') as $file) {
+                $path = $file->store('products/gallery', 'public');
+                $galleryPaths[] = 'storage/' . $path;
+            }
+            $existing = $product ? ($product->gallery ?? []) : [];
+            $validated['gallery'] = array_merge($existing, $galleryPaths);
         }
 
         $validated['is_active'] = $request->boolean('is_active');

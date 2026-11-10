@@ -25,7 +25,38 @@
             <div class="product-detail__grid">
                 <div class="product-detail__gallery">
                     <div class="product-detail__main-image">
-                        <img src="{{ $productImage }}" alt="{{ $product->name }}">
+                        <img id="mainProductImage" src="{{ $productImage }}" alt="{{ $product->name }}">
+                    </div>
+                    <div class="product-detail__thumbnails">
+                        <div class="thumbnail-item active" onclick="changeMainImage(this)" data-src="{{ $productImage }}">
+                            <img src="{{ $productImage }}" alt="{{ $product->name }}">
+                        </div>
+                        @if($product->gallery)
+                            @foreach($product->gallery as $galleryImg)
+                                <div class="thumbnail-item" onclick="changeMainImage(this)" data-src="{{ asset($galleryImg) }}">
+                                    <img src="{{ asset($galleryImg) }}" alt="{{ $product->name }}">
+                                </div>
+                            @endforeach
+                        @endif
+                        @for($i = ($product->gallery ? count($product->gallery) : 0); $i < 3; $i++)
+                            <div class="thumbnail-item placeholder">
+                                <div class="thumbnail-placeholder"></div>
+                            </div>
+                        @endfor
+                    </div>
+                    <div class="product-detail__share">
+                        <span class="share-label">{{ __('Chia sẻ:') }}</span>
+                        <div class="share-icons">
+                            <a href="https://zalo.me" target="_blank" rel="noopener" class="share-icon share-icon--zalo" title="Zalo">
+                                <img src="{{ asset('image/icon-zalo.png') }}" alt="Zalo" onerror="this.outerHTML='<span style=&quot;color:#0068ff;font-weight:700;font-size:14px&quot;>Zalo</span>'">
+                            </a>
+                            <a href="https://facebook.com" target="_blank" rel="noopener" class="share-icon share-icon--facebook" title="Facebook">
+                                <i class="bi bi-facebook"></i>
+                            </a>
+                            <a href="https://youtube.com" target="_blank" rel="noopener" class="share-icon share-icon--youtube" title="YouTube">
+                                <i class="bi bi-youtube"></i>
+                            </a>
+                        </div>
                     </div>
                 </div>
                 
@@ -59,6 +90,7 @@
                     </div>
 
                     <div class="product-detail__purchase">
+                        {{-- Quantity and buy/cart buttons temporarily hidden
                         <div class="quantity-wrapper">
                             <label>{{ __('Số Lượng') }}</label>
                             <div class="quantity-selector">
@@ -67,10 +99,15 @@
                                 <button type="button" class="qty-btn plus">+</button>
                             </div>
                         </div>
-                        
                         <div class="button-group">
                             <button type="button" class="btn-buy-now">{{ __('MUA NGAY') }}</button>
                             <button type="button" class="btn-add-cart">{{ __('THÊM VÀO GIỎ HÀNG') }}</button>
+                        </div>
+                        --}}
+                        <div class="button-group">
+                            <a href="{{ route('frontend.contact') }}" class="btn-contact-now">
+                                <i class="bi bi-telephone-fill me-2"></i>{{ __('LIÊN HỆ') }}
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -162,6 +199,15 @@
 
 @push('scripts')
 <script>
+    function changeMainImage(el) {
+        const src = el.getAttribute('data-src');
+        if (src) {
+            document.getElementById('mainProductImage').src = src;
+            document.querySelectorAll('.thumbnail-item').forEach(t => t.classList.remove('active'));
+            el.classList.add('active');
+        }
+    }
+
     document.addEventListener('DOMContentLoaded', function() {
         const qtyInput = document.getElementById('product-qty');
         const minusBtn = document.querySelector('.qty-btn.minus');

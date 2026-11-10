@@ -52,6 +52,18 @@
                     @endif
                 </div>
                 <div>
+                    <label class="mb-2 block text-sm font-semibold text-slate-700">Upload ảnh phụ (Gallery)</label>
+                    <input type="file" name="gallery_files[]" accept="image/*" multiple class="block h-12 w-full rounded-xl border border-slate-200 px-4 py-2 text-sm outline-none transition file:mr-4 file:rounded-lg file:border-0 file:bg-slate-900 file:px-3 file:py-2 file:text-sm file:font-semibold file:text-white focus:border-blue-500 focus:ring-4 focus:ring-blue-50">
+                    @error('gallery_files.*') <p class="mt-2 text-sm text-red-600">{{ $message }}</p> @enderror
+                    @if ($product->gallery)
+                        <div class="mt-3 flex flex-wrap gap-2">
+                            @foreach ($product->gallery as $galleryImage)
+                                <img src="{{ asset($galleryImage) }}" alt="Gallery" class="h-14 w-20 rounded-lg object-cover">
+                            @endforeach
+                        </div>
+                    @endif
+                </div>
+                <div>
                     <label class="mb-2 block text-sm font-semibold text-slate-700">Thứ tự</label>
                     <input type="number" min="0" name="sort_order" value="{{ old('sort_order', $product->sort_order ?? 0) }}" class="h-12 w-full rounded-xl border border-slate-200 px-4 text-sm outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-50">
                     @error('sort_order') <p class="mt-2 text-sm text-red-600">{{ $message }}</p> @enderror
