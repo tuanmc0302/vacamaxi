@@ -48,17 +48,37 @@
                             </div>
                         @endfor
                     </div>
+@php
+    $shareCurrentUrl = request()->fullUrl();
+@endphp
                     <div class="product-detail__share">
                         <span class="share-label">{{ __('Chia sẻ:') }}</span>
-                        <div class="share-icons">
-                            <a href="https://zalo.me" target="_blank" rel="noopener" class="share-icon share-icon--zalo" title="Zalo">
-                                <img src="{{ asset('image/icon-zalo.png') }}" alt="Zalo" onerror="this.outerHTML='<span style=&quot;color:#0068ff;font-weight:700;font-size:14px&quot;>Zalo</span>'">
+                        <div class="footer-social product-share-social">
+                            {{-- Chia sẻ Zalo thật --}}
+                            <a href="https://sp.zalo.me/share_inline?link={{ urlencode($shareCurrentUrl) }}" 
+                               onclick="shareViaPopup('zalo', '{{ $shareCurrentUrl }}'); return false;"
+                               class="social-link" 
+                               aria-label="Chia sẻ qua Zalo" 
+                               title="Chia sẻ lên Zalo">
+                                <span class="zalo-text">ZALO</span>
                             </a>
-                            <a href="https://facebook.com" target="_blank" rel="noopener" class="share-icon share-icon--facebook" title="Facebook">
+
+                            {{-- Chia sẻ Facebook thật --}}
+                            <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode($shareCurrentUrl) }}" 
+                               onclick="shareViaPopup('facebook', '{{ $shareCurrentUrl }}'); return false;"
+                               class="social-link" 
+                               aria-label="Chia sẻ qua Facebook" 
+                               title="Chia sẻ lên Facebook">
                                 <i class="bi bi-facebook"></i>
                             </a>
-                            <a href="https://youtube.com" target="_blank" rel="noopener" class="share-icon share-icon--youtube" title="YouTube">
-                                <i class="bi bi-youtube"></i>
+
+                            {{-- Sao chép liên kết / Chia sẻ hệ thống --}}
+                            <a href="javascript:void(0);" 
+                               onclick="shareNativeOrCopy('{{ $shareCurrentUrl }}', '{{ addslashes($product->name) }}'); return false;"
+                               class="social-link" 
+                               aria-label="Sao chép liên kết" 
+                               title="Sao chép liên kết chia sẻ">
+                                <i class="bi bi-play-fill"></i>
                             </a>
                         </div>
                     </div>
@@ -199,6 +219,12 @@
             </div>
         </section>
     @endif
+
+    {{-- Toast thông báo sao chép liên kết --}}
+    <div id="share-toast" class="share-toast">
+        <i class="bi bi-check-circle-fill me-2" style="color: #f3b21a;"></i>
+        <span>{{ __('Đã sao chép liên kết sản phẩm!') }}</span>
+    </div>
 @endsection
 
 @push('scripts')
@@ -209,6 +235,72 @@
             document.getElementById('mainProductImage').src = src;
             document.querySelectorAll('.thumbnail-item').forEach(t => t.classList.remove('active'));
             el.classList.add('active');
+        }
+    }
+
+    function shareViaPopup(platform, fallbackUrl) {
+        const currentUrl = encodeURIComponent(window.location.href);
+        let shareUrl = '';
+        let w = 600, h = 550;
+
+        if (platform === 'facebook') {
+            shareUrl = 'https://www.facebook.com/sharer/sharer.php?u=' + currentUrl;
+            w = 600; h = 500;
+        } else if (platform === 'zalo') {
+            shareUrl = 'https://sp.zalo.me/share_inline?link=' + currentUrl;
+            w = 600; h = 600;
+        }
+
+        if (shareUrl) {
+            const left = Math.max(0, (window.screen.width - w) / 2);
+            const top = Math.max(0, (window.screen.height - h) / 2);
+            window.open(shareUrl, platform + '-share', `width=${w},height=${h},top=${top},left=${left},scrollbars=yes,status=no,toolbar=no`);
+        }
+    }
+
+    function shareNativeOrCopy(url, title) {
+        const shareData = {
+            title: title || document.title,
+            text: title || document.title,
+            url: url || window.location.href
+        };
+
+        if (navigator.share && /mobile|android|iphone|ipad/i.test(navigator.userAgent)) {
+            navigator.share(shareData).catch(() => {});
+        } else {
+            copyProductLink(shareData.url);
+        }
+    }
+
+    function copyProductLink(text) {
+        if (navigator.clipboard && window.isSecureContext) {
+            navigator.clipboard.writeText(text).then(showShareToast).catch(() => fallbackCopy(text));
+        } else {
+            fallbackCopy(text);
+        }
+    }
+
+    function fallbackCopy(text) {
+        const temp = document.createElement('textarea');
+        temp.value = text;
+        temp.style.position = 'fixed';
+        temp.style.opacity = '0';
+        document.body.appendChild(temp);
+        temp.select();
+        try {
+            document.execCommand('copy');
+            showShareToast();
+        } catch (e) {
+            prompt('Sao chép liên kết dưới đây:', text);
+        }
+        document.body.removeChild(temp);
+    }
+
+    function showShareToast() {
+        const toast = document.getElementById('share-toast');
+        if (toast) {
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2500);
         }
     }
 

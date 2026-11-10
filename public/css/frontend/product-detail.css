@@ -97,8 +97,8 @@
 .product-detail__share {
     display: flex;
     align-items: center;
-    gap: 14px;
-    margin-top: 22px;
+    gap: 16px;
+    margin-top: 24px;
 }
 
 .share-label {
@@ -107,47 +107,102 @@
     color: #111111;
 }
 
-.share-icons {
+.product-share-social {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
 }
 
-.share-icon {
+.product-share-social .social-link {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 36px;
-    height: 36px;
-    border-radius: 8px;
-    border: 1px solid #e0e0e0;
-    background: #ffffff;
+    width: 44px;
+    height: 38px;
+    background: linear-gradient(145deg, #632a0d, #4a1d00);
+    color: #f3b21a;
+    border-radius: 42% 58% 70% 30% / 45% 45% 55% 55%;
     text-decoration: none;
-    transition: all 0.2s ease;
-    padding: 4px;
-}
-
-.share-icon:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
-    border-color: #d0d0d0;
-}
-
-.share-icon--zalo img {
-    width: 22px;
-    height: 22px;
-    object-fit: contain;
-    border-radius: 4px;
-}
-
-.share-icon--facebook i {
-    color: #1877f2;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     font-size: 18px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(243, 178, 26, 0.15);
 }
 
-.share-icon--youtube i {
-    color: #ff0000;
-    font-size: 18px;
+.product-share-social .social-link::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 8px,
+        rgba(0, 0, 0, 0.2) 8px,
+        rgba(0, 0, 0, 0.2) 10px
+    );
+    pointer-events: none;
+}
+
+.product-share-social .social-link:hover {
+    background: linear-gradient(145deg, #7a3512, #5c2401);
+    color: #ffffff;
+    transform: scale(1.12) rotate(4deg);
+    box-shadow: 3px 6px 12px rgba(0, 0, 0, 0.35);
+    border-radius: 58% 42% 30% 70% / 55% 55% 45% 45%;
+}
+
+.product-share-social .social-link:nth-child(2) {
+    border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+    transform: rotate(-4deg);
+}
+
+.product-share-social .social-link:nth-child(2):hover {
+    transform: scale(1.12) rotate(0deg);
+}
+
+.product-share-social .social-link:nth-child(3) {
+    border-radius: 30% 70% 70% 30% / 50% 60% 40% 50%;
+    transform: rotate(6deg);
+}
+
+.product-share-social .social-link:nth-child(3):hover {
+    transform: scale(1.12) rotate(10deg);
+}
+
+.product-share-social .zalo-text {
+    font-size: 9px;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: #f3b21a;
+    letter-spacing: 0.5px;
+}
+
+.product-share-social .social-link:hover .zalo-text {
+    color: #ffffff;
+}
+
+.product-share-social .bi-facebook {
+    font-size: 16px;
+    color: #f3b21a;
+}
+
+.product-share-social .social-link:hover .bi-facebook {
+    color: #ffffff;
+}
+
+.product-share-social .bi-play-fill {
+    font-size: 20px;
+    color: #f3b21a;
+    margin-left: 2px;
+}
+
+.product-share-social .social-link:hover .bi-play-fill {
+    color: #ffffff;
 }
 
 .product-detail__info {
@@ -536,4 +591,31 @@
     .product-detail__main-image { height: 320px; padding: 12px; }
     .product-detail__thumbnails { gap: 8px; }
     .btn-contact-now { max-width: 100%; width: 100%; }
+}
+
+/* Toast thông báo sao chép liên kết */
+.share-toast {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: #250900;
+    color: #ffffff;
+    padding: 12px 24px;
+    border-radius: 50px;
+    font-size: 14px;
+    font-weight: 600;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+    border: 1px solid #f3b21a;
+    display: inline-flex;
+    align-items: center;
+    z-index: 99999;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    pointer-events: none;
+}
+
+.share-toast.show {
+    opacity: 1;
+    transform: translateY(0);
 }

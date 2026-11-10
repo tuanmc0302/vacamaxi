@@ -8,9 +8,14 @@
     <meta name="keywords" content="@yield('metaKeywords', $metaKeywords ?? ($siteSettings['seo_keywords'] ?? ''))">
     <meta property="og:title" content="@yield('title', $pageTitle ?? ($siteSettings['seo_title'] ?? 'VACAMAXI'))">
     <meta property="og:description" content="@yield('metaDescription', $metaDescription ?? ($siteSettings['seo_description'] ?? 'VACAMAXI'))">
-    @if (!empty($siteSettings['seo_image_url']))
-        <meta property="og:image" content="{{ $siteSettings['seo_image_url'] }}">
+    @php
+        $finalOgImage = $ogImage ?? ($siteSettings['seo_image_url'] ?? null);
+    @endphp
+    @if (!empty($finalOgImage))
+        <meta property="og:image" content="{{ Str::startsWith($finalOgImage, ['http://', 'https://']) ? $finalOgImage : asset($finalOgImage) }}">
     @endif
+    <meta property="og:url" content="{{ request()->fullUrl() }}">
+    <meta property="og:type" content="website">
     <link rel="icon" href="{{ $siteSettings['favicon_url'] ?? asset('favicon.ico') }}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
