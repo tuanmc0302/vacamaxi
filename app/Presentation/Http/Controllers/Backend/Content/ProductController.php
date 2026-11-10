@@ -96,9 +96,11 @@ class ProductController extends Controller
         unset($validated['image_file']);
         unset($validated['gallery_files']);
 
-        if ($request->hasFile('image_file')) {
+        if ($request->hasFile('image_file') && $request->file('image_file')->isValid()) {
             $path = $request->file('image_file')->store('products', 'public');
-            $validated['image'] = 'storage/' . $path;
+            if (! empty($path)) {
+                $validated['image'] = 'storage/' . $path;
+            }
         } elseif (! $product) {
             $validated['image'] = null;
         }
@@ -107,13 +109,21 @@ class ProductController extends Controller
         if (! is_array($existingGallery)) {
             $existingGallery = [];
         }
+        $existingGallery = array_values(array_filter($existingGallery, function ($img) {
+            $img = trim((string) $img);
+            return $img !== '' && $img !== 'storage' && $img !== 'storage/' && $img !== '/';
+        }));
 
         $newGallery = [];
         if ($request->hasFile('gallery_files')) {
             foreach ($request->file('gallery_files') as $file) {
-                // Store in 'products' directory to avoid permission issues when creating nested subdirectories
-                $path = $file->store('products', 'public');
-                $newGallery[] = 'storage/' . $path;
+                if ($file && $file->isValid()) {
+                    // Store in 'products' directory to avoid permission issues when creating nested subdirectories
+                    $path = $file->store('products', 'public');
+                    if (! empty($path)) {
+                        $newGallery[] = 'storage/' . $path;
+                    }
+                }
             }
         }
 

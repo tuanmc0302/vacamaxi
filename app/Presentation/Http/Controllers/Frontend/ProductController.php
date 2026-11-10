@@ -212,7 +212,11 @@ class ProductController extends Controller
 
     public static function imageUrl(?string $path, string $fallback = 'image/Rectangle 11.png'): string
     {
-        $path = $path ?: $fallback;
+        $path = trim((string) $path);
+
+        if ($path === '' || $path === 'storage' || $path === 'storage/' || $path === '/') {
+            $path = $fallback;
+        }
 
         if (Str::startsWith($path, ['http://', 'https://', '/'])) {
             return $path;

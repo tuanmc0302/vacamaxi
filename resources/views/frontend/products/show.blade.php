@@ -31,14 +31,18 @@
                         <div class="thumbnail-item active" onclick="changeMainImage(this)" data-src="{{ $productImage }}">
                             <img src="{{ $productImage }}" alt="{{ $product->name }}">
                         </div>
-                        @if($product->gallery)
-                            @foreach($product->gallery as $galleryImg)
-                                <div class="thumbnail-item" onclick="changeMainImage(this)" data-src="{{ asset($galleryImg) }}">
-                                    <img src="{{ asset($galleryImg) }}" alt="{{ $product->name }}">
-                                </div>
-                            @endforeach
-                        @endif
-                        @for($i = ($product->gallery ? count($product->gallery) : 0); $i < 3; $i++)
+                        @php
+                            $validGallery = collect($product->gallery ?? [])
+                                ->map(fn($img) => \App\Presentation\Http\Controllers\Frontend\ProductController::imageUrl($img, ''))
+                                ->filter()
+                                ->values();
+                        @endphp
+                        @foreach($validGallery as $gUrl)
+                            <div class="thumbnail-item" onclick="changeMainImage(this)" data-src="{{ $gUrl }}">
+                                <img src="{{ $gUrl }}" alt="{{ $product->name }}">
+                            </div>
+                        @endforeach
+                        @for($i = $validGallery->count(); $i < 3; $i++)
                             <div class="thumbnail-item placeholder">
                                 <div class="thumbnail-placeholder"></div>
                             </div>
