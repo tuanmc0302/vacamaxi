@@ -152,18 +152,39 @@ class ProductController extends Controller
             $activeSub = $subSlug ? $subcategories->first(fn($s) => $s->slug === $subSlug || $s->slug_en === $subSlug) : null;
         }
 
-        if ($activeSub) {
-            $targetCategoryIds = [$activeSub->id];
+        $productsBySubcategory = collect();
+        $parentDirectProducts = collect();
+        $products = null;
+
+        if ($subcategories->isNotEmpty() && ! $activeSub) {
+            $productsBySubcategory = $subcategories->mapWithKeys(function (Category $sub) use ($search, $sort) {
+                $subQuery = $this->products()
+                    ->with('category')
+                    ->where('category_id', $sub->id)
+                    ->when($search !== '', fn (Builder $query) => $query->where('name', 'like', "%{$search}%"));
+
+                $this->applySort($subQuery, $sort);
+
+                return [$sub->id => $subQuery->limit(4)->get()];
+            });
+
+            $parentDirectQuery = $this->products()
+                ->with('category')
+                ->where('category_id', $rootCategory->id)
+                ->when($search !== '', fn (Builder $query) => $query->where('name', 'like', "%{$search}%"));
+            $this->applySort($parentDirectQuery, $sort);
+            $parentDirectProducts = $parentDirectQuery->limit(4)->get();
         } else {
-            $targetCategoryIds = $subcategories->pluck('id')->prepend($rootCategory->id)->unique()->all();
+            $targetCategoryIds = $activeSub ? [$activeSub->id] : [$rootCategory->id];
+
+            $productsQuery = $this->products()
+                ->with('category')
+                ->whereIn('category_id', $targetCategoryIds)
+                ->when($search !== '', fn (Builder $query) => $query->where('name', 'like', "%{$search}%"));
+
+            $this->applySort($productsQuery, $sort);
+            $products = $productsQuery->paginate(12)->withQueryString();
         }
-
-        $productsQuery = $this->products()
-            ->with('category')
-            ->whereIn('category_id', $targetCategoryIds)
-            ->when($search !== '', fn (Builder $query) => $query->where('name', 'like', "%{$search}%"));
-
-        $this->applySort($productsQuery, $sort);
 
         return view('frontend.products.category', [
             'frontendData' => $frontendData,
@@ -172,7 +193,9 @@ class ProductController extends Controller
             'rootCategory' => $rootCategory,
             'subcategories' => $subcategories,
             'activeSub' => $activeSub,
-            'products' => $productsQuery->paginate(12)->withQueryString(),
+            'productsBySubcategory' => $productsBySubcategory,
+            'parentDirectProducts' => $parentDirectProducts,
+            'products' => $products,
             'filters' => [
                 'search' => $search,
                 'sort' => $sort,

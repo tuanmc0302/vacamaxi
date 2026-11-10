@@ -74,22 +74,83 @@
                 </div>
             @endif
 
-            <div class="product-grid">
-                @foreach ($products as $product)
-                    @include('frontend.products._card', ['product' => $product])
+            @if(isset($subcategories) && $subcategories->isNotEmpty() && empty($activeSub))
+                {{-- Chế độ xem theo từng component danh mục con --}}
+                @php $hasAnySubProduct = false; @endphp
+
+                @foreach ($subcategories as $sub)
+                    @php
+                        $subProducts = $productsBySubcategory->get($sub->id, collect());
+                    @endphp
+
+                    @continue($subProducts->isEmpty())
+                    @php $hasAnySubProduct = true; @endphp
+
+                    <div class="subcategory-block mb-5">
+                        <div class="subcategory-header d-flex align-items-center justify-content-between mb-4">
+                            <div class="related-title flex-grow-1 me-4 mb-0">
+                                <h2>{{ $sub->name }}</h2>
+                                <span></span>
+                            </div>
+                            <a href="{{ route('frontend.products.category', ['categorySlug' => $rootCategory->slug, 'sub' => $sub->slug]) }}" 
+                               class="btn-view-all-sub">
+                                {{ __('Xem tất cả') }} <i class="bi bi-arrow-right ms-1"></i>
+                            </a>
+                        </div>
+
+                        <div class="product-grid">
+                            @foreach ($subProducts as $product)
+                                @include('frontend.products._card', ['product' => $product])
+                            @endforeach
+                        </div>
+                    </div>
                 @endforeach
-            </div>
 
-            @if ($products->hasPages())
-                <div class="mt-5 d-flex justify-content-center">
-                    {{ $products->links() }}
-                </div>
-            @endif
+                {{-- Sản phẩm thuộc danh mục cha trực tiếp (nếu có) --}}
+                @if(isset($parentDirectProducts) && $parentDirectProducts->isNotEmpty())
+                    @php $hasAnySubProduct = true; @endphp
+                    <div class="subcategory-block mb-5">
+                        <div class="subcategory-header d-flex align-items-center justify-content-between mb-4">
+                            <div class="related-title flex-grow-1 me-4 mb-0">
+                                <h2>{{ $rootCategory->name }}</h2>
+                                <span></span>
+                            </div>
+                        </div>
 
-            @if ($products->isEmpty())
-                <div class="empty-state text-center py-5">
-                    <p class="text-muted">{{ __('Chưa có sản phẩm nào phù hợp.') }}</p>
+                        <div class="product-grid">
+                            @foreach ($parentDirectProducts as $product)
+                                @include('frontend.products._card', ['product' => $product])
+                            @endforeach
+                        </div>
+                    </div>
+                @endif
+
+                @if (! $hasAnySubProduct)
+                    <div class="empty-state text-center py-5">
+                        <p class="text-muted">{{ __('Chưa có sản phẩm nào phù hợp.') }}</p>
+                    </div>
+                @endif
+            @else
+                {{-- Chế độ xem 1 danh mục / danh mục con cụ thể có phân trang --}}
+                <div class="product-grid">
+                    @if(isset($products))
+                        @foreach ($products as $product)
+                            @include('frontend.products._card', ['product' => $product])
+                        @endforeach
+                    @endif
                 </div>
+
+                @if (isset($products) && $products->hasPages())
+                    <div class="mt-5 d-flex justify-content-center">
+                        {{ $products->links() }}
+                    </div>
+                @endif
+
+                @if (!isset($products) || $products->isEmpty())
+                    <div class="empty-state text-center py-5">
+                        <p class="text-muted">{{ __('Chưa có sản phẩm nào phù hợp.') }}</p>
+                    </div>
+                @endif
             @endif
         </div>
     </section>
