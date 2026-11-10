@@ -9,7 +9,7 @@
 
 @push('styles')
     @include('frontend.products._styles')
-    <link rel="stylesheet" href="{{ asset('css/frontend/product-detail.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/frontend/product-detail.css') }}?v={{ file_exists(public_path('css/frontend/product-detail.css')) ? filemtime(public_path('css/frontend/product-detail.css')) : time() }}">
 @endpush
 
 @section('content')
