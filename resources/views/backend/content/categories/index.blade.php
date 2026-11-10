@@ -34,6 +34,7 @@
                 <thead class="bg-slate-50 text-slate-500">
                     <tr>
                         <th class="px-5 py-4 font-semibold">Tên</th>
+                        <th class="px-5 py-4 font-semibold">Danh mục cha</th>
                         <th class="px-5 py-4 font-semibold">Slug</th>
                         <th class="px-5 py-4 font-semibold">Thứ tự</th>
                         <th class="px-5 py-4 font-semibold">Trạng thái</th>
@@ -43,7 +44,19 @@
                 <tbody class="divide-y divide-slate-200 bg-white text-slate-700">
                     @forelse ($categories as $category)
                         <tr class="hover:bg-slate-50">
-                            <td class="px-5 py-4 font-medium text-slate-900">{{ $category->name }}</td>
+                            <td class="px-5 py-4 font-medium text-slate-900">
+                                @if($category->parent_id)
+                                    <span class="text-slate-400 mr-1.5 font-bold">↳</span>
+                                @endif
+                                {{ $category->name }}
+                            </td>
+                            <td class="px-5 py-4 text-xs">
+                                @if($category->parent)
+                                    <span class="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">{{ $category->parent->name }}</span>
+                                @else
+                                    <span class="text-slate-400">—</span>
+                                @endif
+                            </td>
                             <td class="px-5 py-4 font-mono text-xs">{{ $category->slug }}</td>
                             <td class="px-5 py-4">{{ $category->sort_order }}</td>
                             <td class="px-5 py-4">{{ $category->is_active ? 'Hiển thị' : 'Ẩn' }}</td>
@@ -55,7 +68,7 @@
                             </td>
                         </tr>
                     @empty
-                        <tr><td colspan="5" class="px-5 py-10 text-center text-slate-500">Chưa có danh mục.</td></tr>
+                        <tr><td colspan="6" class="px-5 py-10 text-center text-slate-500">Chưa có danh mục.</td></tr>
                     @endforelse
                 </tbody>
             </table>

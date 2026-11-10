@@ -34,8 +34,10 @@
                     <label class="mb-2 block text-sm font-semibold text-slate-700">Danh mục</label>
                     <select name="category_id" class="h-12 w-full rounded-xl border border-slate-200 px-4 text-sm outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-50">
                         <option value="">Chưa chọn</option>
-                        @foreach ($categories as $category)
-                            <option value="{{ $category->id }}" @selected((string) old('category_id', $product->category_id) === (string) $category->id)>{{ $category->name }}</option>
+                        @foreach ($categories as $cat)
+                            <option value="{{ $cat->id }}" @selected((string) old('category_id', $product->category_id) === (string) $cat->id)>
+                                {{ $cat->parent ? '↳ ' . $cat->name . ' (' . $cat->parent->name . ')' : $cat->name }}
+                            </option>
                         @endforeach
                     </select>
                     @error('category_id') <p class="mt-2 text-sm text-red-600">{{ $message }}</p> @enderror

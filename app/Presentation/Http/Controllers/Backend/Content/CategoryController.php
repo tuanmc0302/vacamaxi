@@ -21,6 +21,7 @@ class CategoryController extends Controller
             'module' => $module,
             'categories' => Category::query()
                 ->where('module', $module)
+                ->with('parent')
                 ->when($keyword !== '', fn ($query) => $query->where('name', 'like', "%{$keyword}%"))
                 ->orderBy('sort_order')
                 ->orderByDesc('id')
@@ -32,9 +33,17 @@ class CategoryController extends Controller
 
     public function create(Request $request): View
     {
+        $module = $this->module($request);
+
         return view('backend.content.categories.form', [
-            'module' => $this->module($request),
+            'module' => $module,
             'category' => new Category(['is_active' => true, 'sort_order' => 0]),
+            'parentCategories' => Category::query()
+                ->where('module', $module)
+                ->whereNull('parent_id')
+                ->orderBy('sort_order')
+                ->orderBy('name')
+                ->get(),
         ]);
     }
 
@@ -57,6 +66,13 @@ class CategoryController extends Controller
         return view('backend.content.categories.form', [
             'module' => $module,
             'category' => $category,
+            'parentCategories' => Category::query()
+                ->where('module', $module)
+                ->where('id', '!=', $category->id)
+                ->whereNull('parent_id')
+                ->orderBy('sort_order')
+                ->orderBy('name')
+                ->get(),
         ]);
     }
 
@@ -86,6 +102,15 @@ class CategoryController extends Controller
         $request->merge(['slug' => $slug]);
 
         $validated = $request->validate([
+            'parent_id' => [
+                'nullable',
+                Rule::exists('categories', 'id')->where('module', $module),
+                function ($attribute, $value, $fail) use ($category) {
+                    if ($category && (int) $value === (int) $category->id) {
+                        $fail('Danh mục cha không thể là chính nó.');
+                    }
+                },
+            ],
             'name' => ['required', 'string', 'max:255'],
             'name_en' => ['nullable', 'string', 'max:255'],
             'slug' => [
@@ -100,6 +125,7 @@ class CategoryController extends Controller
             'is_active' => ['nullable', 'boolean'],
         ]);
 
+        $validated['parent_id'] = $request->filled('parent_id') ? (int) $request->input('parent_id') : null;
         $validated['is_active'] = $request->boolean('is_active');
         $validated['sort_order'] = (int) ($validated['sort_order'] ?? 0);
 

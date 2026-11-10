@@ -145,6 +145,7 @@ class ProductController extends Controller
     {
         return Category::query()
             ->where('module', Category::MODULE_PRODUCT)
+            ->with('parent')
             ->orderBy('sort_order')
             ->orderBy('name')
             ->get();

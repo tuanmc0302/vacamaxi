@@ -130,25 +130,53 @@ class ProductController extends Controller
 
         $frontendData = $this->frontendData();
         $categories = $this->productCategories();
-        $category = $categories->first(fn($c) => $c->slug === $categorySlug || $c->slug_en === $categorySlug) ?? abort(404);
+
+        $category = Category::query()
+            ->where('module', Category::MODULE_PRODUCT)
+            ->where('is_active', true)
+            ->where(fn($q) => $q->where('slug', $categorySlug)->orWhere('slug_en', $categorySlug))
+            ->with(['parent', 'children' => fn($q) => $q->where('is_active', true)->withCount(['products' => fn ($pq) => $pq->where('is_active', true)])->orderBy('sort_order')->orderBy('name')])
+            ->first() ?? abort(404);
+
         $sort = (string) $request->string('sort', 'newest');
         $search = trim((string) $request->string('search'));
+        $subSlug = trim((string) $request->string('sub'));
 
-        $products = $this->products()
+        if ($category->parent_id && $category->parent) {
+            $rootCategory = $category->parent;
+            $subcategories = $rootCategory->children;
+            $activeSub = $category;
+        } else {
+            $rootCategory = $category;
+            $subcategories = $category->children;
+            $activeSub = $subSlug ? $subcategories->first(fn($s) => $s->slug === $subSlug || $s->slug_en === $subSlug) : null;
+        }
+
+        if ($activeSub) {
+            $targetCategoryIds = [$activeSub->id];
+        } else {
+            $targetCategoryIds = $subcategories->pluck('id')->prepend($rootCategory->id)->unique()->all();
+        }
+
+        $productsQuery = $this->products()
             ->with('category')
-            ->where('category_id', $category->id)
+            ->whereIn('category_id', $targetCategoryIds)
             ->when($search !== '', fn (Builder $query) => $query->where('name', 'like', "%{$search}%"));
 
-        $this->applySort($products, $sort);
+        $this->applySort($productsQuery, $sort);
 
         return view('frontend.products.category', [
             'frontendData' => $frontendData,
             'categories' => $categories,
             'category' => $category,
-            'products' => $products->paginate(12)->withQueryString(),
+            'rootCategory' => $rootCategory,
+            'subcategories' => $subcategories,
+            'activeSub' => $activeSub,
+            'products' => $productsQuery->paginate(12)->withQueryString(),
             'filters' => [
                 'search' => $search,
                 'sort' => $sort,
+                'sub' => $subSlug,
             ],
         ]);
     }
@@ -253,8 +281,10 @@ class ProductController extends Controller
         return Category::query()
             ->where('module', Category::MODULE_PRODUCT)
             ->where('is_active', true)
+            ->whereNull('parent_id')
             ->whereNotIn('slug', ['bo', 'giong-bo-vacamaxi'])
             ->withCount(['products' => fn (Builder $query) => $query->where('is_active', true)])
+            ->with(['children' => fn ($query) => $query->where('is_active', true)->withCount(['products' => fn ($q) => $q->where('is_active', true)])->orderBy('sort_order')->orderBy('name')])
             ->orderBy('sort_order')
             ->orderBy('name')
             ->get();

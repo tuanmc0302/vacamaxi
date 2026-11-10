@@ -15,6 +15,7 @@ class Category extends Model
     public const MODULE_NEWS = 'news';
 
     protected $fillable = [
+        'parent_id',
         'module',
         'name',
         'name_en',
@@ -35,6 +36,16 @@ class Category extends Model
     protected $casts = [
         'is_active' => 'boolean',
     ];
+
+    public function parent(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(Category::class, 'parent_id');
+    }
+
+    public function children(): HasMany
+    {
+        return $this->hasMany(Category::class, 'parent_id')->orderBy('sort_order')->orderBy('name');
+    }
 
     public function products(): HasMany
     {

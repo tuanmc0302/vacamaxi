@@ -23,6 +23,20 @@
         <form method="POST" action="{{ $isEdit ? route($updateRoute, $category) : route($storeRoute) }}" class="mt-8 space-y-5">
             @csrf
             @if($isEdit) @method('PUT') @endif
+            <div>
+                <label for="parent_id" class="mb-2 block text-sm font-medium text-slate-700">Danh mục cha</label>
+                <select id="parent_id" name="parent_id" class="block w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900 shadow-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100">
+                    <option value="">-- Là danh mục gốc (không có cha) --</option>
+                    @if(isset($parentCategories))
+                        @foreach ($parentCategories as $parent)
+                            <option value="{{ $parent->id }}" @selected((string) old('parent_id', $category->parent_id) === (string) $parent->id)>
+                                {{ $parent->name }}
+                            </option>
+                        @endforeach
+                    @endif
+                </select>
+                @error('parent_id') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
+            </div>
             <x-backend.form.input id="name" name="name" label="Tên danh mục (VI)" :value="$category->name" required />
             <x-backend.form.input id="name_en" name="name_en" label="Tên danh mục (EN)" :value="$category->name_en" />
             <x-backend.form.input id="slug" name="slug" label="Slug" :value="$category->slug" placeholder="Tự sinh nếu để trống" />
