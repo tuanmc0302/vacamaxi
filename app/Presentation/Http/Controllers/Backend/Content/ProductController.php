@@ -5,6 +5,7 @@ namespace App\Presentation\Http\Controllers\Backend\Content;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Product;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -67,6 +68,36 @@ class ProductController extends Controller
         $product->delete();
 
         return redirect()->route('admin.products.index')->with('status', 'Đã xóa sản phẩm.');
+    }
+
+    public function uploadEditorImage(Request $request): JsonResponse
+    {
+        if (! $request->hasFile('upload') || ! $request->file('upload')->isValid()) {
+            return response()->json([
+                'error' => [
+                    'message' => 'Tải lên hình ảnh không thành công.',
+                ],
+            ], 400);
+        }
+
+        $file = $request->file('upload');
+        $validator = validator(['upload' => $file], [
+            'upload' => ['image', 'max:10240'],
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'error' => [
+                    'message' => $validator->errors()->first('upload'),
+                ],
+            ], 422);
+        }
+
+        $path = $file->store('products', 'public');
+
+        return response()->json([
+            'url' => asset('storage/' . $path),
+        ]);
     }
 
     private function validated(Request $request, ?Product $product = null): array

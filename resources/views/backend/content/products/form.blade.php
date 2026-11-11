@@ -6,6 +6,14 @@
 @section('eyebrow', 'Quản trị nội dung')
 @section('page_heading', $isEdit ? 'Sửa sản phẩm' : 'Thêm sản phẩm')
 
+@push('styles')
+<style>
+    .ck-editor__editable_inline {
+        min-height: 260px;
+    }
+</style>
+@endpush
+
 @section('content')
     <form method="POST" action="{{ $isEdit ? route('admin.products.update', $product) : route('admin.products.store') }}" enctype="multipart/form-data" class="space-y-6">
         @csrf
@@ -109,12 +117,12 @@
                 </div>
                 <div>
                     <label class="mb-2 block text-sm font-semibold text-slate-700">Mô tả sản phẩm (VI)</label>
-                    <textarea name="description" rows="8" class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-50">{{ old('description', $product->description) }}</textarea>
+                    <textarea id="description" name="description" rows="8" class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-50">{{ old('description', $product->description) }}</textarea>
                     @error('description') <p class="mt-2 text-sm text-red-600">{{ $message }}</p> @enderror
                 </div>
                 <div>
                     <label class="mb-2 block text-sm font-semibold text-slate-700">Mô tả sản phẩm (EN)</label>
-                    <textarea name="description_en" rows="8" class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-50">{{ old('description_en', $product->description_en) }}</textarea>
+                    <textarea id="description_en" name="description_en" rows="8" class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-50">{{ old('description_en', $product->description_en) }}</textarea>
                     @error('description_en') <p class="mt-2 text-sm text-red-600">{{ $message }}</p> @enderror
                 </div>
             </div>
@@ -154,8 +162,33 @@
 @endsection
 
 @push('scripts')
+<script src="https://cdn.ckeditor.com/ckeditor5/41.4.2/classic/ckeditor.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        // Khởi tạo CKEditor 5 cho Mô tả sản phẩm với tính năng upload ảnh
+        const editors = ['#description', '#description_en'];
+        editors.forEach(selector => {
+            const editorEl = document.querySelector(selector);
+            if (editorEl && window.ClassicEditor) {
+                ClassicEditor.create(editorEl, {
+                    ckfinder: {
+                        uploadUrl: '{{ route('admin.products.editor-upload') }}?_token={{ csrf_token() }}'
+                    },
+                    image: {
+                        toolbar: [
+                            'imageTextAlternative',
+                            'toggleImageCaption',
+                            'imageStyle:inline',
+                            'imageStyle:block',
+                            'imageStyle:side'
+                        ]
+                    }
+                }).catch(function (error) {
+                    console.error(error);
+                });
+            }
+        });
+
         const input = document.getElementById('gallery_files_input');
         const previewWrapper = document.getElementById('new_gallery_preview_wrapper');
         const previewContainer = document.getElementById('new_gallery_preview');

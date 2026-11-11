@@ -329,8 +329,11 @@
         const infoWrapper = document.getElementById('info-content-wrapper');
         if (infoWrapper) {
             const realContent = infoWrapper.querySelector('.tab-real-content');
-            if (realContent && realContent.offsetHeight > 400) {
-                infoWrapper.classList.add('is-long');
+            if (realContent) {
+                // scrollHeight works even when parent is overflow:hidden
+                if (realContent.scrollHeight > 420) {
+                    infoWrapper.classList.add('is-long');
+                }
             }
         }
     });
