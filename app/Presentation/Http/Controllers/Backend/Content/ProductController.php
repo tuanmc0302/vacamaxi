@@ -74,10 +74,11 @@ class ProductController extends Controller
     {
         if (! $request->hasFile('upload') || ! $request->file('upload')->isValid()) {
             return response()->json([
+                'uploaded' => 0,
                 'error' => [
-                    'message' => 'Tải lên hình ảnh không thành công.',
+                    'message' => 'Tải lên hình ảnh không thành công hoặc file không hợp lệ.',
                 ],
-            ], 400);
+            ]);
         }
 
         $file = $request->file('upload');
@@ -87,16 +88,21 @@ class ProductController extends Controller
 
         if ($validator->fails()) {
             return response()->json([
+                'uploaded' => 0,
                 'error' => [
                     'message' => $validator->errors()->first('upload'),
                 ],
-            ], 422);
+            ]);
         }
 
         $path = $file->store('products', 'public');
+        $url = asset('storage/' . $path);
 
         return response()->json([
-            'url' => asset('storage/' . $path),
+            'uploaded' => 1,
+            'fileName' => $file->getClientOriginalName(),
+            'url' => $url,
+            'default' => $url,
         ]);
     }
 
