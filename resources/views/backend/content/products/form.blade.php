@@ -164,8 +164,8 @@
 @push('scripts')
 <script src="https://cdn.ckeditor.com/ckeditor5/41.4.2/classic/ckeditor.js"></script>
 <script>
-        // Custom Upload Adapter cho CKEditor 5 để upload ảnh sản phẩm
-        class ProductImageUploadAdapter {
+    // Custom Upload Adapter cho CKEditor 5 để upload ảnh sản phẩm
+    class ProductImageUploadAdapter {
             constructor(loader) {
                 this.loader = loader;
             }
@@ -224,6 +224,7 @@
             };
         }
 
+    document.addEventListener('DOMContentLoaded', function() {
         // Khởi tạo CKEditor 5 cho Mô tả sản phẩm
         const editors = ['#description', '#description_en'];
         editors.forEach(selector => {
