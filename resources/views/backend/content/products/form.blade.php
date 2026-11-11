@@ -164,16 +164,73 @@
 @push('scripts')
 <script src="https://cdn.ckeditor.com/ckeditor5/41.4.2/classic/ckeditor.js"></script>
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Khởi tạo CKEditor 5 cho Mô tả sản phẩm với tính năng upload ảnh
+        // Custom Upload Adapter cho CKEditor 5 để upload ảnh sản phẩm
+        class ProductImageUploadAdapter {
+            constructor(loader) {
+                this.loader = loader;
+            }
+
+            upload() {
+                return this.loader.file
+                    .then(file => new Promise((resolve, reject) => {
+                        const data = new FormData();
+                        data.append('upload', file);
+                        data.append('_token', '{{ csrf_token() }}');
+
+                        fetch('{{ route('admin.products.editor-upload') }}', {
+                            method: 'POST',
+                            headers: {
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                'Accept': 'application/json'
+                            },
+                            body: data
+                        })
+                        .then(async response => {
+                            let result = {};
+                            try {
+                                result = await response.json();
+                            } catch (e) {
+                                throw new Error('Máy chủ trả về dữ liệu không hợp lệ (' + response.status + ')');
+                            }
+
+                            if (!response.ok || result.uploaded === 0) {
+                                throw new Error(result.error?.message || 'Lỗi tải ảnh lên máy chủ (' + response.status + ')');
+                            }
+
+                            return result;
+                        })
+                        .then(result => {
+                            const url = result.url || result.default;
+                            if (url) {
+                                resolve({
+                                    default: url
+                                });
+                            } else {
+                                reject(result.error?.message || 'Không tìm thấy đường dẫn ảnh');
+                            }
+                        })
+                        .catch(error => {
+                            reject(error.message || 'Không thể tải ảnh lên');
+                        });
+                    }));
+            }
+
+            abort() {}
+        }
+
+        function ProductUploadAdapterPlugin(editor) {
+            editor.plugins.get('FileRepository').createUploadAdapter = (loader) => {
+                return new ProductImageUploadAdapter(loader);
+            };
+        }
+
+        // Khởi tạo CKEditor 5 cho Mô tả sản phẩm
         const editors = ['#description', '#description_en'];
         editors.forEach(selector => {
             const editorEl = document.querySelector(selector);
             if (editorEl && window.ClassicEditor) {
                 ClassicEditor.create(editorEl, {
-                    ckfinder: {
-                        uploadUrl: '{{ route('admin.products.editor-upload') }}?_token={{ csrf_token() }}'
-                    },
+                    extraPlugins: [ProductUploadAdapterPlugin],
                     image: {
                         toolbar: [
                             'imageTextAlternative',
