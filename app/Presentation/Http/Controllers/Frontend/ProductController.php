@@ -37,9 +37,11 @@ class ProductController extends Controller
             ->get();
 
         $productsByCategory = $categories->mapWithKeys(function (Category $category) use ($search, $sort): array {
+            $categoryIds = $category->children->pluck('id')->push($category->id)->all();
+
             $products = $this->products()
-                ->with('category')
-                ->where('category_id', $category->id)
+                ->with('category.parent')
+                ->whereIn('category_id', $categoryIds)
                 ->when($search !== '', fn (Builder $query) => $query->where('name', 'like', "%{$search}%"));
 
             $this->applySort($products, $sort);
@@ -65,10 +67,13 @@ class ProductController extends Controller
                 ->value('id');
 
             if ($categoryId) {
+                $breedCat = Category::query()->with('children')->find($categoryId);
+                $categoryIds = $breedCat ? $breedCat->children->pluck('id')->push($breedCat->id)->all() : [$categoryId];
+
                 $products = Product::query()
-                    ->with('category')
+                    ->with('category.parent')
                     ->where('is_active', true)
-                    ->where('category_id', $categoryId)
+                    ->whereIn('category_id', $categoryIds)
                     ->orderBy('sort_order')
                     ->orderBy('id')
                     ->limit(4)
@@ -78,9 +83,7 @@ class ProductController extends Controller
                     'image' => $product->image ? asset($product->image) : asset('image/Rectangle 11.png'),
                     'title' => $product->name,
                     'description' => $product->short_description ?: Str::limit(strip_tags($product->description ?? ''), 90),
-                    'url' => $product->category
-                        ? route('frontend.product.show', ['categorySlug' => $product->category->slug, 'productSlug' => $product->slug])
-                        : route('frontend.products.index'),
+                    'url' => self::productUrl($product),
                 ])->all();
             }
         }
@@ -156,11 +159,15 @@ class ProductController extends Controller
         $parentDirectProducts = collect();
         $products = null;
 
+        $allCategoryIds = $rootCategory->children->pluck('id')->push($rootCategory->id)->all();
+
         if ($subcategories->isNotEmpty() && ! $activeSub) {
             $productsBySubcategory = $subcategories->mapWithKeys(function (Category $sub) use ($search, $sort) {
+                $subCategoryIds = $sub->children->pluck('id')->push($sub->id)->all();
+
                 $subQuery = $this->products()
-                    ->with('category')
-                    ->where('category_id', $sub->id)
+                    ->with('category.parent')
+                    ->whereIn('category_id', $subCategoryIds)
                     ->when($search !== '', fn (Builder $query) => $query->where('name', 'like', "%{$search}%"));
 
                 $this->applySort($subQuery, $sort);
@@ -169,16 +176,18 @@ class ProductController extends Controller
             });
 
             $parentDirectQuery = $this->products()
-                ->with('category')
+                ->with('category.parent')
                 ->where('category_id', $rootCategory->id)
                 ->when($search !== '', fn (Builder $query) => $query->where('name', 'like', "%{$search}%"));
             $this->applySort($parentDirectQuery, $sort);
             $parentDirectProducts = $parentDirectQuery->limit(4)->get();
         } else {
-            $targetCategoryIds = $activeSub ? [$activeSub->id] : [$rootCategory->id];
+            $targetCategoryIds = $activeSub 
+                ? $activeSub->children->pluck('id')->push($activeSub->id)->all() 
+                : $allCategoryIds;
 
             $productsQuery = $this->products()
-                ->with('category')
+                ->with('category.parent')
                 ->whereIn('category_id', $targetCategoryIds)
                 ->when($search !== '', fn (Builder $query) => $query->where('name', 'like', "%{$search}%"));
 
@@ -228,25 +237,41 @@ class ProductController extends Controller
         $frontendData = $this->frontendData();
 
         $product = $this->products()
-            ->with('category')
+            ->with('category.parent')
             ->where(fn($q) => $q->where('slug', $productSlug)->orWhere('slug_en', $productSlug))
             ->whereHas('category', function (Builder $query) use ($categorySlug): void {
                 $query->where('module', Category::MODULE_PRODUCT)
-                    ->where(fn($q) => $q->where('slug', $categorySlug)->orWhere('slug_en', $categorySlug));
+                    ->where(function (Builder $cq) use ($categorySlug) {
+                        $cq->where('slug', $categorySlug)
+                            ->orWhere('slug_en', $categorySlug)
+                            ->orWhereHas('parent', function (Builder $pq) use ($categorySlug) {
+                                $pq->where('slug', $categorySlug)
+                                    ->orWhere('slug_en', $categorySlug);
+                            });
+                    });
             })
             ->firstOrFail();
 
+        $relatedCategoryIds = array_filter([$product->category_id]);
+        if ($product->category) {
+            if ($product->category->parent_id && $product->category->parent) {
+                $relatedCategoryIds = $product->category->parent->children->pluck('id')->push($product->category->parent->id)->all();
+            } else {
+                $relatedCategoryIds = $product->category->children->pluck('id')->push($product->category->id)->all();
+            }
+        }
+
         $relatedProducts = $this->products()
-            ->with('category')
+            ->with('category.parent')
             ->whereKeyNot($product->id)
-            ->when($product->category_id, fn (Builder $query) => $query->where('category_id', $product->category_id))
+            ->when(!empty($relatedCategoryIds), fn ($query) => $query->whereIn('category_id', $relatedCategoryIds))
             ->latest('id')
             ->limit(4)
             ->get();
 
         if ($relatedProducts->isEmpty()) {
             $relatedProducts = $this->products()
-                ->with('category')
+                ->with('category.parent')
                 ->whereKeyNot($product->id)
                 ->latest('id')
                 ->limit(4)
@@ -282,8 +307,13 @@ class ProductController extends Controller
             return route('frontend.products.index');
         }
 
+        // Hỗ trợ cả slug cha lẫn slug con: ưu tiên dùng slug cha nếu có để URL chuẩn SEO
+        $category = ($product->category->parent_id && $product->category->parent)
+            ? $product->category->parent
+            : $product->category;
+
         $locale = \Illuminate\Support\Facades\App::getLocale();
-        $categorySlug = \App\Helpers\SlugHelper::translate($product->category->slug, $locale);
+        $categorySlug = \App\Helpers\SlugHelper::translate($category->slug, $locale);
         $productSlug = \App\Helpers\SlugHelper::translate($product->slug, $locale);
 
         return route('frontend.product.show', ['categorySlug' => $categorySlug, 'productSlug' => $productSlug]);

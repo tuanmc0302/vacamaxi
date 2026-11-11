@@ -19,11 +19,17 @@ class ProductController extends Controller
         $keyword = trim((string) $request->string('keyword'));
         $categoryId = $request->integer('category_id') ?: null;
 
+        $selectedCategoryIds = null;
+        if ($categoryId) {
+            $cat = Category::query()->with('children')->find($categoryId);
+            $selectedCategoryIds = $cat ? $cat->children->pluck('id')->push($cat->id)->all() : [$categoryId];
+        }
+
         return view('backend.content.products.index', [
             'products' => Product::query()
                 ->with('category')
                 ->when($keyword !== '', fn ($query) => $query->where('name', 'like', "%{$keyword}%"))
-                ->when($categoryId, fn ($query) => $query->where('category_id', $categoryId))
+                ->when($selectedCategoryIds, fn ($query) => $query->whereIn('category_id', $selectedCategoryIds))
                 ->orderBy('sort_order')
                 ->orderByDesc('id')
                 ->paginate(20)

@@ -94,10 +94,13 @@ class HomeController extends Controller
                 continue;
             }
 
+            $category = Category::query()->with('children')->find($categoryId);
+            $categoryIds = $category ? $category->children->pluck('id')->push($category->id)->all() : [$categoryId];
+
             $products = Product::query()
-                ->with('category')
+                ->with('category.parent')
                 ->where('is_active', true)
-                ->where('category_id', $categoryId)
+                ->whereIn('category_id', $categoryIds)
                 ->orderBy('sort_order')
                 ->orderBy('id')
                 ->limit(4)
@@ -111,9 +114,7 @@ class HomeController extends Controller
                 'image' => $product->image ? asset($product->image) : asset('image/Rectangle 11.png'),
                 'title' => $product->name,
                 'description' => $product->short_description ?: Str::limit(strip_tags($product->description ?? ''), 90),
-                'url' => $product->category
-                    ? route('frontend.product.show', ['categorySlug' => $product->category->slug, 'productSlug' => $product->slug])
-                    : route('frontend.products.index'),
+                'url' => \App\Presentation\Http\Controllers\Frontend\ProductController::productUrl($product),
             ])->all();
         }
 

@@ -16,7 +16,14 @@
     <section class="page-hero">
         <div class="container">
             <h1>{{ $product->name }}</h1>
-            <p>{{ __('Trang chủ') }} / {{ __('Sản phẩm') }} / {{ $product->category?->name ?? __('Chi tiết') }}</p>
+            <p>
+                {{ __('Trang chủ') }} / {{ __('Sản phẩm') }}
+                @if($product->category?->parent)
+                    / {{ $product->category->parent->name }} / {{ $product->category->name }}
+                @else
+                    / {{ $product->category?->name ?? __('Chi tiết') }}
+                @endif
+            </p>
         </div>
     </section>
 
