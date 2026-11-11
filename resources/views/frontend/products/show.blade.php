@@ -23,20 +23,29 @@
     <section class="product-detail">
         <div class="container">
             <div class="product-detail__grid">
+@php
+    $validGallery = collect($product->gallery ?? [])
+        ->map(fn($img) => \App\Presentation\Http\Controllers\Frontend\ProductController::imageUrl($img, ''))
+        ->filter()
+        ->values();
+
+    $allGalleryImages = collect([$productImage])
+        ->filter()
+        ->merge($validGallery)
+        ->unique()
+        ->values();
+@endphp
                 <div class="product-detail__gallery">
-                    <div class="product-detail__main-image">
+                    <div class="product-detail__main-image" onclick="openProductGallery()" title="{{ __('Bấm để xem ảnh toàn màn hình') }}">
                         <img id="mainProductImage" src="{{ $productImage }}" alt="{{ $product->name }}">
+                        <button type="button" class="btn-zoom-image" aria-label="Xem toàn màn hình" title="{{ __('Xem toàn màn hình') }}">
+                            <i class="bi bi-arrows-fullscreen"></i>
+                        </button>
                     </div>
                     <div class="product-detail__thumbnails">
                         <div class="thumbnail-item active" onclick="changeMainImage(this)" data-src="{{ $productImage }}">
                             <img src="{{ $productImage }}" alt="{{ $product->name }}">
                         </div>
-                        @php
-                            $validGallery = collect($product->gallery ?? [])
-                                ->map(fn($img) => \App\Presentation\Http\Controllers\Frontend\ProductController::imageUrl($img, ''))
-                                ->filter()
-                                ->values();
-                        @endphp
                         @foreach($validGallery as $gUrl)
                             <div class="thumbnail-item" onclick="changeMainImage(this)" data-src="{{ $gUrl }}">
                                 <img src="{{ $gUrl }}" alt="{{ $product->name }}">
@@ -163,7 +172,9 @@
                                 </div>
                             </div>
                             <div class="read-more-wrapper">
-                                <button type="button" class="btn-read-more" data-bs-toggle="modal" data-bs-target="#infoModal">{{ __('Xem thêm') }}</button>
+                                <button type="button" class="btn-read-more" id="btn-read-more-info" onclick="toggleTabContent()">
+                                    {{ __('Xem thêm') }} <i class="bi bi-chevron-down ms-1"></i>
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -183,26 +194,6 @@
             </div>
         </div>
     </section>
-
-    <!-- Modal for Info -->
-    <div class="modal fade" id="infoModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-scrollable">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">{{ __('Thông tin chi tiết sản phẩm') }}</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    {!! $product->description !!}
-                    @if($product->specifications)
-                        <div class="mt-4">
-                            {!! $product->specifications !!}
-                        </div>
-                    @endif
-                </div>
-            </div>
-        </div>
-    </div>
 
     @if ($relatedProducts->isNotEmpty())
         <section class="related-products">
@@ -225,10 +216,134 @@
         <i class="bi bi-check-circle-fill me-2" style="color: #f3b21a;"></i>
         <span>{{ __('Đã sao chép liên kết sản phẩm!') }}</span>
     </div>
+
+    {{-- Fullscreen Product Gallery Modal --}}
+    <div id="productGalleryModal" class="product-gallery-modal" aria-hidden="true" role="dialog" aria-label="{{ __('Xem ảnh sản phẩm') }}">
+        <div class="pg-backdrop" onclick="closeProductGallery()"></div>
+        <div class="pg-header">
+            <div class="pg-counter" id="pgCounter">1 / {{ max(1, $allGalleryImages->count()) }}</div>
+            <div class="pg-title">{{ $product->name }}</div>
+            <button type="button" class="pg-close" onclick="closeProductGallery()" aria-label="{{ __('Đóng') }}" title="{{ __('Đóng (Esc)') }}">
+                <i class="bi bi-x-lg"></i>
+            </button>
+        </div>
+        
+        <div class="pg-body">
+            @if($allGalleryImages->count() > 1)
+                <button type="button" class="pg-nav-btn pg-prev" onclick="prevProductImage(event)" aria-label="{{ __('Ảnh trước') }}" title="{{ __('Ảnh trước (←)') }}">
+                    <i class="bi bi-chevron-left"></i>
+                </button>
+            @endif
+            
+            <div class="pg-main-image-wrap" onclick="closeProductGallery()">
+                <img id="pgMainImage" src="{{ $productImage }}" alt="{{ $product->name }}" onclick="event.stopPropagation()">
+            </div>
+
+            @if($allGalleryImages->count() > 1)
+                <button type="button" class="pg-nav-btn pg-next" onclick="nextProductImage(event)" aria-label="{{ __('Ảnh kế tiếp') }}" title="{{ __('Ảnh kế tiếp (→)') }}">
+                    <i class="bi bi-chevron-right"></i>
+                </button>
+            @endif
+        </div>
+
+        @if($allGalleryImages->count() > 1)
+            <div class="pg-footer">
+                <div class="pg-thumbnails" id="pgThumbnails">
+                    @foreach($allGalleryImages as $idx => $imgUrl)
+                        <div class="pg-thumb-item {{ $idx === 0 ? 'active' : '' }}" onclick="goToProductImage({{ $idx }})" data-index="{{ $idx }}">
+                            <img src="{{ $imgUrl }}" alt="{{ $product->name }}">
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        @endif
+    </div>
 @endsection
 
 @push('scripts')
 <script>
+    const productGalleryImages = @json($allGalleryImages);
+    let currentGalleryIndex = 0;
+
+    function openProductGallery(index) {
+        if (!productGalleryImages || productGalleryImages.length === 0) return;
+        
+        if (typeof index === 'number') {
+            currentGalleryIndex = index;
+        } else {
+            const currentSrc = document.getElementById('mainProductImage')?.getAttribute('src');
+            const foundIdx = productGalleryImages.findIndex(url => url === currentSrc);
+            currentGalleryIndex = foundIdx !== -1 ? foundIdx : 0;
+        }
+
+        renderGalleryImage(currentGalleryIndex);
+
+        const modal = document.getElementById('productGalleryModal');
+        if (modal) {
+            modal.classList.add('is-open');
+            modal.setAttribute('aria-hidden', 'false');
+            document.body.style.overflow = 'hidden';
+        }
+    }
+
+    function closeProductGallery() {
+        const modal = document.getElementById('productGalleryModal');
+        if (modal) {
+            modal.classList.remove('is-open');
+            modal.setAttribute('aria-hidden', 'true');
+            document.body.style.overflow = '';
+        }
+    }
+
+    function renderGalleryImage(index) {
+        if (!productGalleryImages || productGalleryImages.length === 0) return;
+        
+        currentGalleryIndex = (index + productGalleryImages.length) % productGalleryImages.length;
+        const currentUrl = productGalleryImages[currentGalleryIndex];
+
+        const imgEl = document.getElementById('pgMainImage');
+        if (imgEl) {
+            imgEl.style.opacity = '0.3';
+            imgEl.src = currentUrl;
+            imgEl.onload = function() {
+                imgEl.style.opacity = '1';
+            };
+        }
+
+        const counterEl = document.getElementById('pgCounter');
+        if (counterEl) {
+            counterEl.textContent = `${currentGalleryIndex + 1} / ${productGalleryImages.length}`;
+        }
+
+        document.querySelectorAll('.pg-thumb-item').forEach(item => {
+            const itemIdx = parseInt(item.getAttribute('data-index'));
+            item.classList.toggle('active', itemIdx === currentGalleryIndex);
+        });
+    }
+
+    function prevProductImage(e) {
+        if (e) e.stopPropagation();
+        renderGalleryImage(currentGalleryIndex - 1);
+    }
+
+    function nextProductImage(e) {
+        if (e) e.stopPropagation();
+        renderGalleryImage(currentGalleryIndex + 1);
+    }
+
+    function goToProductImage(index) {
+        renderGalleryImage(index);
+    }
+
+    document.addEventListener('keydown', function(e) {
+        const modal = document.getElementById('productGalleryModal');
+        if (!modal || !modal.classList.contains('is-open')) return;
+
+        if (e.key === 'Escape') closeProductGallery();
+        if (e.key === 'ArrowLeft') prevProductImage();
+        if (e.key === 'ArrowRight') nextProductImage();
+    });
+
     function changeMainImage(el) {
         const src = el.getAttribute('data-src');
         if (src) {
@@ -304,6 +419,23 @@
         }
     }
 
+    function toggleTabContent() {
+        const wrapper = document.getElementById('info-content-wrapper');
+        const btn = document.getElementById('btn-read-more-info');
+        if (!wrapper) return;
+
+        if (wrapper.classList.contains('is-expanded')) {
+            wrapper.classList.remove('is-expanded');
+            wrapper.classList.add('is-long');
+            if (btn) btn.innerHTML = '{{ __('Xem thêm') }} <i class="bi bi-chevron-down ms-1"></i>';
+            wrapper.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        } else {
+            wrapper.classList.add('is-expanded');
+            wrapper.classList.remove('is-long');
+            if (btn) btn.innerHTML = '{{ __('Thu gọn') }} <i class="bi bi-chevron-up ms-1"></i>';
+        }
+    }
+
     document.addEventListener('DOMContentLoaded', function() {
         const qtyInput = document.getElementById('product-qty');
         const minusBtn = document.querySelector('.qty-btn.minus');
@@ -335,6 +467,21 @@
                     infoWrapper.classList.add('is-long');
                 }
             }
+        }
+
+        // Vuốt cảm ứng xem ảnh trên điện thoại
+        let touchStartX = 0;
+        let touchEndX = 0;
+        const galleryWrap = document.querySelector('.pg-main-image-wrap');
+        if (galleryWrap) {
+            galleryWrap.addEventListener('touchstart', function(e) {
+                touchStartX = e.changedTouches[0].screenX;
+            }, { passive: true });
+            galleryWrap.addEventListener('touchend', function(e) {
+                touchEndX = e.changedTouches[0].screenX;
+                if (touchStartX - touchEndX > 50) nextProductImage();
+                if (touchEndX - touchStartX > 50) prevProductImage();
+            }, { passive: true });
         }
     });
 </script>
