@@ -265,6 +265,8 @@
             </div>
         @endif
     </div>
+
+    @include('frontend.products._age_verification_modal')
 @endsection
 
 @push('scripts')

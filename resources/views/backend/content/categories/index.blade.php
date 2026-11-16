@@ -47,8 +47,10 @@
                             <td class="px-5 py-4 font-medium text-slate-900">
                                 @if($category->parent_id)
                                     <span class="text-slate-400 mr-1.5 font-bold">↳</span>
-                                @endif
                                 {{ $category->name }}
+                                @if($category->is_18_plus)
+                                    <span class="inline-flex items-center rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-bold text-amber-800 ring-1 ring-inset ring-amber-600/20 ml-1.5" title="Sản phẩm giới hạn độ tuổi 18+">18+</span>
+                                @endif
                             </td>
                             <td class="px-5 py-4 text-xs">
                                 @if($category->parent)

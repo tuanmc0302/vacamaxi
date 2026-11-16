@@ -195,6 +195,10 @@ class ProductController extends Controller
             $products = $productsQuery->paginate(12)->withQueryString();
         }
 
+        $requiresAgeVerification = $category->requiresAgeVerification()
+            || ($rootCategory && $rootCategory->requiresAgeVerification())
+            || ($activeSub && $activeSub->requiresAgeVerification());
+
         return view('frontend.products.category', [
             'frontendData' => $frontendData,
             'categories' => $categories,
@@ -205,6 +209,7 @@ class ProductController extends Controller
             'productsBySubcategory' => $productsBySubcategory,
             'parentDirectProducts' => $parentDirectProducts,
             'products' => $products,
+            'requiresAgeVerification' => $requiresAgeVerification,
             'filters' => [
                 'search' => $search,
                 'sort' => $sort,
@@ -278,11 +283,14 @@ class ProductController extends Controller
                 ->get();
         }
 
+        $requiresAgeVerification = $product->category ? $product->category->requiresAgeVerification() : false;
+
         return view('frontend.products.show', [
             'frontendData' => $frontendData,
             'categories' => $this->productCategories(),
             'product' => $product,
             'relatedProducts' => $relatedProducts,
+            'requiresAgeVerification' => $requiresAgeVerification,
         ]);
     }
 

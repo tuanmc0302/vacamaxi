@@ -25,6 +25,7 @@ class Category extends Model
         'description_en',
         'sort_order',
         'is_active',
+        'is_18_plus',
     ];
 
     protected $translatable = [
@@ -35,7 +36,26 @@ class Category extends Model
 
     protected $casts = [
         'is_active' => 'boolean',
+        'is_18_plus' => 'boolean',
     ];
+
+    public function requiresAgeVerification(): bool
+    {
+        if (! empty($this->attributes['is_18_plus'])) {
+            return true;
+        }
+
+        // Fallback nhận diện danh mục rượu theo slug nếu chưa chạy migrate trên server
+        if (in_array($this->slug, ['ruou', 'ruou-369', 'wine'], true)) {
+            return true;
+        }
+
+        if ($this->parent_id && $this->parent) {
+            return $this->parent->requiresAgeVerification();
+        }
+
+        return false;
+    }
 
     public function parent(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {

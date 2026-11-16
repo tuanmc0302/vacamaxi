@@ -123,10 +123,12 @@ class CategoryController extends Controller
             'description_en' => ['nullable', 'string'],
             'sort_order' => ['nullable', 'integer', 'min:0'],
             'is_active' => ['nullable', 'boolean'],
+            'is_18_plus' => ['nullable', 'boolean'],
         ]);
 
         $validated['parent_id'] = $request->filled('parent_id') ? (int) $request->input('parent_id') : null;
         $validated['is_active'] = $request->boolean('is_active');
+        $validated['is_18_plus'] = $request->boolean('is_18_plus');
         $validated['sort_order'] = (int) ($validated['sort_order'] ?? 0);
 
         return $validated;

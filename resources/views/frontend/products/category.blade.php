@@ -128,4 +128,6 @@
             @endif
         </div>
     </section>
+
+    @include('frontend.products._age_verification_modal')
 @endsection

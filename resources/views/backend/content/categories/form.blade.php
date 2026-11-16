@@ -56,6 +56,18 @@
                     Hiển thị
                 </label>
             </div>
+            @if(! $isNews)
+                <div class="rounded-xl border border-amber-200 bg-amber-50/60 p-4">
+                    <label class="flex items-start gap-3 cursor-pointer">
+                        <input type="hidden" name="is_18_plus" value="0">
+                        <input type="checkbox" name="is_18_plus" value="1" @checked(old('is_18_plus', $category->is_18_plus)) class="mt-0.5 h-4 w-4 rounded border-amber-300 text-amber-600 focus:ring-amber-500">
+                        <div>
+                            <span class="block text-sm font-semibold text-slate-800">Dành cho người từ đủ 18 tuổi trở lên (18+)</span>
+                            <span class="block text-xs text-slate-500 mt-0.5">Bật tính năng này sẽ hiển thị popup yêu cầu xác minh độ tuổi 18+ khi người dùng truy cập danh mục này và các sản phẩm thuộc danh mục.</span>
+                        </div>
+                    </label>
+                </div>
+            @endif
             <button type="submit" class="inline-flex w-full items-center justify-center rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-700">{{ $isEdit ? 'Cập nhật' : 'Tạo mới' }}</button>
         </form>
     </x-backend.panel>
