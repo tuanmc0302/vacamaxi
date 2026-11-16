@@ -45,16 +45,18 @@
     $specifications = [];
     $rawAttrs = (app()->getLocale() === 'en' && !empty($product->attributes_en)) ? $product->attributes_en : ($product->attributes ?? []);
     if (!empty($rawAttrs) && is_array($rawAttrs)) {
-        foreach ($product->attributes as $k => $v) {
+        foreach ($rawAttrs as $k => $v) {
             if (is_array($v) && (isset($v['key']) || isset($v['name']) || isset($v['label']))) {
                 $label = $v['label'] ?? $v['name'] ?? $v['key'];
                 $val = $v['value'] ?? $v['val'] ?? '';
+                $type = in_array($v['type'] ?? '', ['color', 'text'], true) ? $v['type'] : ((preg_match('/^#([a-f0-9]{3}|[a-f0-9]{6})$/i', (string)$val) || in_array(mb_strtolower($label), ['màu sắc', 'màu', 'color', 'colour'])) ? 'color' : 'text');
             } else {
                 $label = is_string($k) ? $k : '';
                 $val = is_scalar($v) ? (string)$v : json_encode($v, JSON_UNESCAPED_UNICODE);
+                $type = (preg_match('/^#([a-f0-9]{3}|[a-f0-9]{6})$/i', (string)$val) || in_array(mb_strtolower($label), ['màu sắc', 'màu', 'color', 'colour'])) ? 'color' : 'text');
             }
             if ($label !== '') {
-                $specifications[] = ['label' => $label, 'value' => $val];
+                $specifications[] = ['label' => $label, 'type' => $type, 'value' => $val];
             }
         }
     }
@@ -145,16 +147,18 @@
                         <div class="product-detail__specs">
                             @foreach($specifications as $spec)
                                 @php
+                                    $specType = $spec['type'] ?? 'text';
                                     $lowerLabel = mb_strtolower(trim($spec['label']));
-                                    $isColor = in_array($lowerLabel, ['màu sắc', 'màu', 'color', 'colour']);
-                                    $valTrim = trim($spec['value']);
-                                    $isHex = preg_match('/^#([a-f0-9]{3}|[a-f0-9]{6})$/i', $valTrim);
+                                    $valTrim = trim((string)($spec['value'] ?? ''));
+                                    $isHex = (bool) preg_match('/^#([a-f0-9]{3}|[a-f0-9]{6})$/i', $valTrim);
+                                    $isColor = ($specType === 'color') || in_array($lowerLabel, ['màu sắc', 'màu', 'color', 'colour'], true) || $isHex;
+                                    $circleColor = $isHex ? $valTrim : '#ffffff';
                                 @endphp
                                 <div class="product-detail__spec-item">
                                     <span class="spec-label">{{ $spec['label'] }}:</span>
                                     <span class="spec-value">
                                         @if($isColor)
-                                            <span class="spec-color-circle" @if($isHex) style="background-color: {{ $valTrim }};" @endif title="{{ $valTrim ?: 'Trong suốt' }}"></span>
+                                            <span class="spec-color-circle" style="background-color: {{ $circleColor }};" title="{{ $valTrim ?: 'Màu sắc' }}"></span>
                                         @endif
                                         @if(!$isHex && $valTrim !== '')
                                             <span>{{ $spec['value'] }}</span>

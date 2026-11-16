@@ -114,6 +114,8 @@
         </div>
 
         <?php
+            $attributeTypes = \App\Models\Product::attributeTypes();
+
             $rawAttrs = old('attributes_json') ? json_decode(old('attributes_json'), true) : ($product->attributes ?? []);
             if (!is_array($rawAttrs)) {
                 $rawAttrs = [];
@@ -121,15 +123,15 @@
             $attrRows = [];
             foreach ($rawAttrs as $k => $v) {
                 if (is_array($v) && (isset($v['key']) || isset($v['name']) || isset($v['label']))) {
-                    $attrRows[] = [
-                        'key' => $v['label'] ?? $v['name'] ?? $v['key'],
-                        'value' => $v['value'] ?? $v['val'] ?? '',
-                    ];
+                    $key = $v['label'] ?? $v['name'] ?? $v['key'];
+                    $val = $v['value'] ?? $v['val'] ?? '';
+                    $type = in_array($v['type'] ?? '', ['color', 'text'], true) ? $v['type'] : ((preg_match('/^#([a-f0-9]{3}|[a-f0-9]{6})$/i', (string)$val) || in_array(mb_strtolower($key), ['màu sắc', 'màu', 'color'])) ? 'color' : 'text');
+                    $attrRows[] = ['key' => $key, 'type' => $type, 'value' => $val];
                 } else {
-                    $attrRows[] = [
-                        'key' => is_string($k) ? $k : '',
-                        'value' => is_scalar($v) ? (string)$v : json_encode($v, JSON_UNESCAPED_UNICODE),
-                    ];
+                    $key = is_string($k) ? $k : '';
+                    $val = is_scalar($v) ? (string)$v : json_encode($v, JSON_UNESCAPED_UNICODE);
+                    $type = (preg_match('/^#([a-f0-9]{3}|[a-f0-9]{6})$/i', (string)$val) || in_array(mb_strtolower($key), ['màu sắc', 'màu', 'color'])) ? 'color' : 'text';
+                    $attrRows[] = ['key' => $key, 'type' => $type, 'value' => $val];
                 }
             }
 
@@ -140,15 +142,15 @@
             $attrRowsEn = [];
             foreach ($rawAttrsEn as $k => $v) {
                 if (is_array($v) && (isset($v['key']) || isset($v['name']) || isset($v['label']))) {
-                    $attrRowsEn[] = [
-                        'key' => $v['label'] ?? $v['name'] ?? $v['key'],
-                        'value' => $v['value'] ?? $v['val'] ?? '',
-                    ];
+                    $key = $v['label'] ?? $v['name'] ?? $v['key'];
+                    $val = $v['value'] ?? $v['val'] ?? '';
+                    $type = in_array($v['type'] ?? '', ['color', 'text'], true) ? $v['type'] : ((preg_match('/^#([a-f0-9]{3}|[a-f0-9]{6})$/i', (string)$val) || in_array(mb_strtolower($key), ['colour', 'color'])) ? 'color' : 'text');
+                    $attrRowsEn[] = ['key' => $key, 'type' => $type, 'value' => $val];
                 } else {
-                    $attrRowsEn[] = [
-                        'key' => is_string($k) ? $k : '',
-                        'value' => is_scalar($v) ? (string)$v : json_encode($v, JSON_UNESCAPED_UNICODE),
-                    ];
+                    $key = is_string($k) ? $k : '';
+                    $val = is_scalar($v) ? (string)$v : json_encode($v, JSON_UNESCAPED_UNICODE);
+                    $type = (preg_match('/^#([a-f0-9]{3}|[a-f0-9]{6})$/i', (string)$val) || in_array(mb_strtolower($key), ['colour', 'color'])) ? 'color' : 'text';
+                    $attrRowsEn[] = ['key' => $key, 'type' => $type, 'value' => $val];
                 }
             }
         ?>
@@ -157,7 +159,7 @@
             <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
                 <div>
                     <h3 class="text-base font-bold text-slate-800">Thông số & Đặc tính sản phẩm (JSON / Thuộc tính tùy biến)</h3>
-                    <p class="text-xs text-slate-500 mt-1">Cấu hình riêng biệt theo ngôn ngữ VI và EN: Trạng thái, Màu sắc, Mùi vị...</p>
+                    <p class="text-xs text-slate-500 mt-1">Hỗ trợ các kiểu dữ liệu: <strong>Văn bản (Text)</strong> và <strong>Màu sắc (Color picker)</strong>.</p>
                 </div>
                 <div class="flex rounded-xl bg-slate-100 p-1">
                     <button type="button" onclick="switchAttrLang('vi')" id="tab_attr_btn_vi" class="rounded-lg px-4 py-1.5 text-xs font-bold transition bg-white text-slate-900 shadow-sm">
@@ -187,10 +189,22 @@
                 <div id="attributes_visual_mode_vi">
                     <div id="attributes_repeater_container_vi" class="space-y-3">
                         @forelse(($attrRows ?? []) as $idx => $row)
-                            <div class="attr-row-vi flex items-center gap-3">
-                                <input type="text" name="attribute_keys[]" value="{{ $row['key'] }}" placeholder="Tên thuộc tính (vd: Trạng thái, Màu sắc, Mùi vị)" class="h-11 w-1/3 rounded-xl border border-slate-200 px-3 text-sm font-semibold text-slate-700 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-50" oninput="syncAttrsToJson('vi')">
-                                <input type="text" name="attribute_values[]" value="{{ $row['value'] }}" placeholder="Giá trị (vd: Chất lỏng trong suốt, Trong suốt...)" class="h-11 flex-1 rounded-xl border border-slate-200 px-3 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-50" oninput="syncAttrsToJson('vi')">
-                                <button type="button" onclick="this.closest('.attr-row-vi').remove(); syncAttrsToJson('vi');" class="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-red-200 text-red-600 hover:bg-red-50 transition" title="Xóa dòng này">
+                            @php
+                                $isColor = ($row['type'] ?? 'text') === 'color';
+                                $colorVal = preg_match('/^#([a-f0-9]{3}|[a-f0-9]{6})$/i', $row['value'] ?? '') ? $row['value'] : '#ffffff';
+                            @endphp
+                            <div class="attr-row-vi flex flex-wrap sm:flex-nowrap items-center gap-2.5">
+                                <input type="text" name="attribute_keys[]" value="{{ $row['key'] }}" placeholder="Tên thuộc tính (vd: Trạng thái, Màu sắc)" class="h-11 w-full sm:w-1/3 rounded-xl border border-slate-200 px-3 text-sm font-semibold text-slate-700 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-50 bg-white" oninput="syncAttrsToJson('vi')">
+                                <select name="attribute_types[]" class="h-11 w-36 rounded-xl border border-slate-200 px-3 text-xs font-semibold text-slate-700 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-50 bg-white" onchange="onAttrTypeChange(this, 'vi')">
+                                    @foreach($attributeTypes as $tKey => $tConfig)
+                                        <option value="{{ $tKey }}" @selected(($row['type'] ?? 'text') === $tKey)>{{ $tConfig['label'] }}</option>
+                                    @endforeach
+                                </select>
+                                <div class="attr-val-box flex-1 flex items-center gap-2 w-full">
+                                    <input type="color" value="{{ $colorVal }}" class="attr-color-picker h-11 w-12 p-1 rounded-xl border border-slate-200 cursor-pointer bg-white {{ $isColor ? '' : 'hidden' }}" oninput="onColorPickerChange(this, 'vi')" title="Chọn mã màu">
+                                    <input type="text" name="attribute_values[]" value="{{ $row['value'] }}" placeholder="{{ $isColor ? 'Mã màu (#ffffff) hoặc tên màu' : 'Giá trị (vd: Chất lỏng trong suốt...)' }}" class="attr-text-input h-11 flex-1 rounded-xl border border-slate-200 px-3 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-50 bg-white" oninput="onColorHexInput(this, 'vi')">
+                                </div>
+                                <button type="button" onclick="this.closest('.attr-row-vi').remove(); syncAttrsToJson('vi');" class="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-red-200 text-red-600 hover:bg-red-50 transition" title="Xóa dòng này">
                                     <i class="bi bi-trash"></i>
                                 </button>
                             </div>
@@ -207,8 +221,8 @@
 
                 {{-- JSON mode VI --}}
                 <div id="attributes_json_mode_vi" class="hidden">
-                    <textarea id="attributes_json_input_vi" name="attributes_json" rows="6" class="w-full font-mono text-xs rounded-xl border border-slate-200 bg-slate-50 p-4 text-slate-800 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-50" placeholder='{"Trạng thái": "Chất lỏng trong suốt", "Màu sắc": "Trong suốt", "Mùi vị": "..."}'>{{ json_encode($product->attributes ?? [], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) }}</textarea>
-                    <p class="mt-1 text-xs text-slate-500">JSON Tiếng Việt dạng <code>{"Tên": "Giá trị"}</code>.</p>
+                    <textarea id="attributes_json_input_vi" name="attributes_json" rows="6" class="w-full font-mono text-xs rounded-xl border border-slate-200 bg-slate-50 p-4 text-slate-800 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-50" placeholder='[{"key": "Trạng thái", "type": "text", "value": "Chất lỏng trong suốt"}, {"key": "Màu sắc", "type": "color", "value": "#ffffff"}]'>{{ json_encode($product->attributes ?? [], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) }}</textarea>
+                    <p class="mt-1 text-xs text-slate-500">JSON Tiếng Việt dạng danh sách <code>[{"key": "Tên", "type": "text|color", "value": "Giá trị"}]</code>.</p>
                 </div>
             </div>
 
@@ -230,10 +244,22 @@
                 <div id="attributes_visual_mode_en">
                     <div id="attributes_repeater_container_en" class="space-y-3">
                         @forelse(($attrRowsEn ?? []) as $idx => $row)
-                            <div class="attr-row-en flex items-center gap-3">
-                                <input type="text" name="attribute_keys_en[]" value="{{ $row['key'] }}" placeholder="Attribute name (e.g. Appearance, Color, Taste)" class="h-11 w-1/3 rounded-xl border border-slate-200 px-3 text-sm font-semibold text-slate-700 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-50" oninput="syncAttrsToJson('en')">
-                                <input type="text" name="attribute_values_en[]" value="{{ $row['value'] }}" placeholder="Value (e.g. Clear liquid, Transparent...)" class="h-11 flex-1 rounded-xl border border-slate-200 px-3 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-50" oninput="syncAttrsToJson('en')">
-                                <button type="button" onclick="this.closest('.attr-row-en').remove(); syncAttrsToJson('en');" class="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-red-200 text-red-600 hover:bg-red-50 transition" title="Delete this row">
+                            @php
+                                $isColorEn = ($row['type'] ?? 'text') === 'color';
+                                $colorValEn = preg_match('/^#([a-f0-9]{3}|[a-f0-9]{6})$/i', $row['value'] ?? '') ? $row['value'] : '#ffffff';
+                            @endphp
+                            <div class="attr-row-en flex flex-wrap sm:flex-nowrap items-center gap-2.5">
+                                <input type="text" name="attribute_keys_en[]" value="{{ $row['key'] }}" placeholder="Attribute name (e.g. Appearance, Color)" class="h-11 w-full sm:w-1/3 rounded-xl border border-slate-200 px-3 text-sm font-semibold text-slate-700 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-50 bg-white" oninput="syncAttrsToJson('en')">
+                                <select name="attribute_types_en[]" class="h-11 w-36 rounded-xl border border-slate-200 px-3 text-xs font-semibold text-slate-700 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-50 bg-white" onchange="onAttrTypeChange(this, 'en')">
+                                    @foreach($attributeTypes as $tKey => $tConfig)
+                                        <option value="{{ $tKey }}" @selected(($row['type'] ?? 'text') === $tKey)>{{ $tConfig['label'] }}</option>
+                                    @endforeach
+                                </select>
+                                <div class="attr-val-box flex-1 flex items-center gap-2 w-full">
+                                    <input type="color" value="{{ $colorValEn }}" class="attr-color-picker h-11 w-12 p-1 rounded-xl border border-slate-200 cursor-pointer bg-white {{ $isColorEn ? '' : 'hidden' }}" oninput="onColorPickerChange(this, 'en')" title="Choose color">
+                                    <input type="text" name="attribute_values_en[]" value="{{ $row['value'] }}" placeholder="{{ $isColorEn ? 'Color hex (#ffffff) or name' : 'Value (e.g. Clear liquid...)' }}" class="attr-text-input h-11 flex-1 rounded-xl border border-slate-200 px-3 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-50 bg-white" oninput="onColorHexInput(this, 'en')">
+                                </div>
+                                <button type="button" onclick="this.closest('.attr-row-en').remove(); syncAttrsToJson('en');" class="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-red-200 text-red-600 hover:bg-red-50 transition" title="Delete this row">
                                     <i class="bi bi-trash"></i>
                                 </button>
                             </div>
@@ -250,8 +276,8 @@
 
                 {{-- JSON mode EN --}}
                 <div id="attributes_json_mode_en" class="hidden">
-                    <textarea id="attributes_json_input_en" name="attributes_en_json" rows="6" class="w-full font-mono text-xs rounded-xl border border-slate-200 bg-slate-50 p-4 text-slate-800 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-50" placeholder='{"Appearance": "Clear liquid", "Color": "Transparent", "Taste": "..."}'>{{ json_encode($product->attributes_en ?? [], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) }}</textarea>
-                    <p class="mt-1 text-xs text-slate-500">JSON Tiếng Anh dạng <code>{"Key": "Value"}</code>.</p>
+                    <textarea id="attributes_json_input_en" name="attributes_en_json" rows="6" class="w-full font-mono text-xs rounded-xl border border-slate-200 bg-slate-50 p-4 text-slate-800 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-50" placeholder='[{"key": "Appearance", "type": "text", "value": "Clear liquid"}, {"key": "Color", "type": "color", "value": "#ffffff"}]'>{{ json_encode($product->attributes_en ?? [], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) }}</textarea>
+                    <p class="mt-1 text-xs text-slate-500">JSON Tiếng Anh dạng danh sách <code>[{"key": "Key", "type": "text|color", "value": "Value"}]</code>.</p>
                 </div>
             </div>
         </div>
@@ -459,26 +485,84 @@
         }
     }
 
-    function addAttributeRow(lang = 'vi', key = '', value = '') {
+    function addAttributeRow(lang = 'vi', key = '', type = 'text', value = '') {
         const isEn = lang === 'en';
         const container = document.getElementById(isEn ? 'attributes_repeater_container_en' : 'attributes_repeater_container_vi');
         if (!container) return;
 
         const row = document.createElement('div');
-        row.className = (isEn ? 'attr-row-en' : 'attr-row-vi') + ' flex items-center gap-3';
+        row.className = (isEn ? 'attr-row-en' : 'attr-row-vi') + ' flex flex-wrap sm:flex-nowrap items-center gap-2.5';
         const keyName = isEn ? 'attribute_keys_en[]' : 'attribute_keys[]';
+        const typeName = isEn ? 'attribute_types_en[]' : 'attribute_types[]';
         const valName = isEn ? 'attribute_values_en[]' : 'attribute_values[]';
-        const keyPlaceholder = isEn ? 'Attribute name (e.g. Appearance, Color, Taste)' : 'Tên thuộc tính (vd: Trạng thái, Màu sắc, Mùi vị)';
-        const valPlaceholder = isEn ? 'Value (e.g. Clear liquid, Transparent...)' : 'Giá trị (vd: Chất lỏng trong suốt, Trong suốt...)';
+        const keyPlaceholder = isEn ? 'Attribute name (e.g. Appearance, Color)' : 'Tên thuộc tính (vd: Trạng thái, Màu sắc)';
+        const isColor = type === 'color';
+        const colorVal = /^#([a-f0-9]{3}|[a-f0-9]{6})$/i.test(value) ? value : '#ffffff';
+        const valPlaceholder = isColor ? (isEn ? 'Color hex (#ffffff) or name' : 'Mã màu (#ffffff) hoặc tên màu') : (isEn ? 'Value' : 'Giá trị');
 
         row.innerHTML = `
-            <input type="text" name="${keyName}" value="${escapeHtml(key)}" placeholder="${keyPlaceholder}" class="h-11 w-1/3 rounded-xl border border-slate-200 px-3 text-sm font-semibold text-slate-700 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-50" oninput="syncAttrsToJson('${lang}')">
-            <input type="text" name="${valName}" value="${escapeHtml(value)}" placeholder="${valPlaceholder}" class="h-11 flex-1 rounded-xl border border-slate-200 px-3 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-50" oninput="syncAttrsToJson('${lang}')">
-            <button type="button" onclick="this.closest('.${isEn ? 'attr-row-en' : 'attr-row-vi'}').remove(); syncAttrsToJson('${lang}');" class="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-red-200 text-red-600 hover:bg-red-50 transition" title="Xóa dòng này">
+            <input type="text" name="${keyName}" value="${escapeHtml(key)}" placeholder="${keyPlaceholder}" class="h-11 w-full sm:w-1/3 rounded-xl border border-slate-200 px-3 text-sm font-semibold text-slate-700 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-50 bg-white" oninput="syncAttrsToJson('${lang}')">
+            <select name="${typeName}" class="h-11 w-36 rounded-xl border border-slate-200 px-3 text-xs font-semibold text-slate-700 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-50 bg-white" onchange="onAttrTypeChange(this, '${lang}')">
+                <option value="text" ${type === 'text' ? 'selected' : ''}>${isEn ? 'Văn bản (Text)' : 'Văn bản (Text)'}</option>
+                <option value="color" ${type === 'color' ? 'selected' : ''}>${isEn ? 'Màu sắc (Color)' : 'Màu sắc (Color)'}</option>
+            </select>
+            <div class="attr-val-box flex-1 flex items-center gap-2 w-full">
+                <input type="color" value="${colorVal}" class="attr-color-picker h-11 w-12 p-1 rounded-xl border border-slate-200 cursor-pointer bg-white ${isColor ? '' : 'hidden'}" oninput="onColorPickerChange(this, '${lang}')" title="Chọn màu">
+                <input type="text" name="${valName}" value="${escapeHtml(value)}" placeholder="${valPlaceholder}" class="attr-text-input h-11 flex-1 rounded-xl border border-slate-200 px-3 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-50 bg-white" oninput="onColorHexInput(this, '${lang}')">
+            </div>
+            <button type="button" onclick="this.closest('.${isEn ? 'attr-row-en' : 'attr-row-vi'}').remove(); syncAttrsToJson('${lang}');" class="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-red-200 text-red-600 hover:bg-red-50 transition" title="Xóa dòng này">
                 <i class="bi bi-trash"></i>
             </button>
         `;
         container.appendChild(row);
+        syncAttrsToJson(lang);
+    }
+
+    function onAttrTypeChange(selectEl, lang) {
+        const isEn = lang === 'en';
+        const row = selectEl.closest(isEn ? '.attr-row-en' : '.attr-row-vi');
+        if (!row) return;
+
+        const colorPicker = row.querySelector('.attr-color-picker');
+        const textInput = row.querySelector('.attr-text-input');
+        const isColor = selectEl.value === 'color';
+
+        if (isColor) {
+            colorPicker.classList.remove('hidden');
+            textInput.placeholder = isEn ? 'Color hex (#ffffff) or name' : 'Mã màu (#ffffff) hoặc tên màu';
+            if (!textInput.value.trim() || !textInput.value.startsWith('#')) {
+                textInput.value = colorPicker.value || '#ffffff';
+            }
+        } else {
+            colorPicker.classList.add('hidden');
+            textInput.placeholder = isEn ? 'Value' : 'Giá trị';
+        }
+        syncAttrsToJson(lang);
+    }
+
+    function onColorPickerChange(colorInput, lang) {
+        const isEn = lang === 'en';
+        const row = colorInput.closest(isEn ? '.attr-row-en' : '.attr-row-vi');
+        if (!row) return;
+        const textInput = row.querySelector('.attr-text-input');
+        if (textInput) {
+            textInput.value = colorInput.value;
+        }
+        syncAttrsToJson(lang);
+    }
+
+    function onColorHexInput(textInput, lang) {
+        const isEn = lang === 'en';
+        const row = textInput.closest(isEn ? '.attr-row-en' : '.attr-row-vi');
+        if (!row) return;
+        const colorPicker = row.querySelector('.attr-color-picker');
+        const select = row.querySelector(isEn ? 'select[name="attribute_types_en[]"]' : 'select[name="attribute_types[]"]');
+        if (select && select.value === 'color' && colorPicker) {
+            const val = textInput.value.trim();
+            if (/^#([a-f0-9]{3}|[a-f0-9]{6})$/i.test(val)) {
+                colorPicker.value = val;
+            }
+        }
         syncAttrsToJson(lang);
     }
 
@@ -497,37 +581,34 @@
             const container = document.getElementById('attributes_repeater_container_en');
             if (!container) return;
             container.innerHTML = '';
-            addAttributeRow('en', 'Appearance', 'Clear liquid');
-            addAttributeRow('en', 'Color', 'Transparent');
-            addAttributeRow('en', 'Taste', 'Characteristic aroma of fermented sticky rice wine, smooth taste.');
+            addAttributeRow('en', 'Appearance', 'text', 'Clear liquid');
+            addAttributeRow('en', 'Color', 'color', '#ffffff');
+            addAttributeRow('en', 'Taste', 'text', 'Characteristic aroma of fermented sticky rice wine, smooth taste.');
         } else {
             const container = document.getElementById('attributes_repeater_container_vi');
             if (!container) return;
             container.innerHTML = '';
-            addAttributeRow('vi', 'Trạng thái', 'Chất lỏng trong suốt');
-            addAttributeRow('vi', 'Màu sắc', 'Trong suốt');
-            addAttributeRow('vi', 'Mùi vị', 'Có mùi vị đặc trưng của rượu lên men từ Gạo nếp cái hoa vàng, vị êm dịu.');
+            addAttributeRow('vi', 'Trạng thái', 'text', 'Chất lỏng trong suốt');
+            addAttributeRow('vi', 'Màu sắc', 'color', '#ffffff');
+            addAttributeRow('vi', 'Mùi vị', 'text', 'Có mùi vị đặc trưng của rượu lên men từ Gạo nếp cái hoa vàng, vị êm dịu.');
         }
     }
 
     function syncAttrsToJson(lang = 'vi') {
         const isEn = lang === 'en';
-        const keyName = isEn ? 'attribute_keys_en[]' : 'attribute_keys[]';
-        const valName = isEn ? 'attribute_values_en[]' : 'attribute_values[]';
-        const jsonInput = document.getElementById(isEn ? 'attributes_json_input_en' : 'attributes_json_input_vi');
-
-        const keys = document.getElementsByName(keyName);
-        const values = document.getElementsByName(valName);
-        const result = {};
-        for (let i = 0; i < keys.length; i++) {
-            const k = keys[i].value.trim();
-            const v = values[i] ? values[i].value.trim() : '';
-            if (k) {
-                result[k] = v;
+        const rows = document.querySelectorAll(isEn ? '.attr-row-en' : '.attr-row-vi');
+        const result = [];
+        rows.forEach(row => {
+            const key = row.querySelector(isEn ? 'input[name="attribute_keys_en[]"]' : 'input[name="attribute_keys[]"]')?.value.trim();
+            const type = row.querySelector(isEn ? 'select[name="attribute_types_en[]"]' : 'select[name="attribute_types[]"]')?.value || 'text';
+            const val = row.querySelector(isEn ? 'input[name="attribute_values_en[]"]' : 'input[name="attribute_values[]"]')?.value.trim();
+            if (key) {
+                result.push({ key: key, type: type, value: val });
             }
-        }
+        });
+        const jsonInput = document.getElementById(isEn ? 'attributes_json_input_en' : 'attributes_json_input_vi');
         if (jsonInput) {
-            jsonInput.value = Object.keys(result).length > 0 ? JSON.stringify(result, null, 2) : '';
+            jsonInput.value = result.length > 0 ? JSON.stringify(result, null, 2) : '';
         }
     }
 
@@ -539,10 +620,18 @@
 
         try {
             const parsed = JSON.parse(jsonInput.value);
-            if (typeof parsed === 'object' && parsed !== null) {
+            if (Array.isArray(parsed)) {
+                container.innerHTML = '';
+                parsed.forEach(item => {
+                    if (item && item.key) {
+                        addAttributeRow(lang, item.key, item.type || 'text', item.value || '');
+                    }
+                });
+            } else if (typeof parsed === 'object' && parsed !== null) {
                 container.innerHTML = '';
                 for (const [k, v] of Object.entries(parsed)) {
-                    addAttributeRow(lang, k, typeof v === 'object' ? JSON.stringify(v) : v);
+                    const isCol = /^#([a-f0-9]{3}|[a-f0-9]{6})$/i.test(String(v)) || /màu|color/i.test(k);
+                    addAttributeRow(lang, k, isCol ? 'color' : 'text', typeof v === 'object' ? JSON.stringify(v) : v);
                 }
             }
         } catch (e) {

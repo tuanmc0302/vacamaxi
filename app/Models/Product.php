@@ -53,6 +53,17 @@ class Product extends Model
         'attributes_en' => 'array',
     ];
 
+    public const ATTRIBUTE_TYPE_TEXT = 'text';
+    public const ATTRIBUTE_TYPE_COLOR = 'color';
+
+    public static function attributeTypes(): array
+    {
+        return config('products.attribute_types', [
+            'text' => ['label' => 'Văn bản (Text)', 'default' => ''],
+            'color' => ['label' => 'Màu sắc (Color)', 'default' => '#ffffff'],
+        ]);
+    }
+
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);

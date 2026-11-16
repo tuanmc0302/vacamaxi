@@ -195,58 +195,74 @@ class ProductController extends Controller
         $validated['subtitle_en'] = $request->filled('subtitle_en') ? trim((string) $request->input('subtitle_en')) : null;
 
         // Xử lý attributes (VI)
-        if ($request->filled('attributes_json')) {
-            $decoded = json_decode((string) $request->input('attributes_json'), true);
-            $validated['attributes'] = is_array($decoded) ? $decoded : null;
-        } elseif ($request->has('attribute_keys') && is_array($request->input('attribute_keys'))) {
-            $keys = $request->input('attribute_keys', []);
-            $values = $request->input('attribute_values', []);
-            $attrs = [];
-            foreach ($keys as $i => $k) {
-                $trimmedKey = trim((string) $k);
-                $trimmedVal = trim((string) ($values[$i] ?? ''));
-                if ($trimmedKey !== '') {
-                    $attrs[$trimmedKey] = $trimmedVal;
-                }
-            }
-            $validated['attributes'] = !empty($attrs) ? $attrs : null;
-        } elseif ($request->has('attributes')) {
-            $rawAttrs = $request->input('attributes');
-            if (is_string($rawAttrs)) {
-                $decoded = json_decode($rawAttrs, true);
-                $validated['attributes'] = is_array($decoded) ? $decoded : null;
-            } elseif (is_array($rawAttrs)) {
-                $validated['attributes'] = $rawAttrs;
-            }
-        }
+        $validated['attributes'] = $this->normalizeAttributes(
+            $request->input('attributes_json') ?: $request->input('attributes'),
+            $request->input('attribute_keys', []),
+            $request->input('attribute_types', []),
+            $request->input('attribute_values', [])
+        );
 
         // Xử lý attributes_en (EN)
-        if ($request->filled('attributes_en_json')) {
-            $decodedEn = json_decode((string) $request->input('attributes_en_json'), true);
-            $validated['attributes_en'] = is_array($decodedEn) ? $decodedEn : null;
-        } elseif ($request->has('attribute_keys_en') && is_array($request->input('attribute_keys_en'))) {
-            $keysEn = $request->input('attribute_keys_en', []);
-            $valuesEn = $request->input('attribute_values_en', []);
-            $attrsEn = [];
-            foreach ($keysEn as $i => $k) {
-                $trimmedKey = trim((string) $k);
-                $trimmedVal = trim((string) ($valuesEn[$i] ?? ''));
-                if ($trimmedKey !== '') {
-                    $attrsEn[$trimmedKey] = $trimmedVal;
-                }
-            }
-            $validated['attributes_en'] = !empty($attrsEn) ? $attrsEn : null;
-        } elseif ($request->has('attributes_en')) {
-            $rawAttrsEn = $request->input('attributes_en');
-            if (is_string($rawAttrsEn)) {
-                $decodedEn = json_decode($rawAttrsEn, true);
-                $validated['attributes_en'] = is_array($decodedEn) ? $decodedEn : null;
-            } elseif (is_array($rawAttrsEn)) {
-                $validated['attributes_en'] = $rawAttrsEn;
+        $validated['attributes_en'] = $this->normalizeAttributes(
+            $request->input('attributes_en_json') ?: $request->input('attributes_en'),
+            $request->input('attribute_keys_en', []),
+            $request->input('attribute_types_en', []),
+            $request->input('attribute_values_en', [])
+        );
+
+        return $validated;
+    }
+
+    private function normalizeAttributes(mixed $input, array $keys = [], array $types = [], array $values = []): ?array
+    {
+        if (!empty($input) && is_string($input)) {
+            $decoded = json_decode($input, true);
+            if (is_array($decoded)) {
+                $input = $decoded;
             }
         }
 
-        return $validated;
+        if (is_array($input) && !empty($input)) {
+            $normalized = [];
+            foreach ($input as $k => $item) {
+                if (is_array($item)) {
+                    $key = trim((string) ($item['key'] ?? $item['name'] ?? $item['label'] ?? ''));
+                    $type = in_array($item['type'] ?? '', ['color', 'text'], true) ? $item['type'] : 'text';
+                    $val = is_scalar($item['value'] ?? '') ? (string)($item['value'] ?? '') : '';
+                } else {
+                    $key = is_string($k) ? trim($k) : '';
+                    $val = is_scalar($item) ? (string)$item : '';
+                    $type = (preg_match('/^#([a-f0-9]{3}|[a-f0-9]{6})$/i', $val) || in_array(mb_strtolower($key), ['màu sắc', 'màu', 'color', 'colour'])) ? 'color' : 'text';
+                }
+                if ($key !== '') {
+                    $normalized[] = [
+                        'key' => $key,
+                        'type' => $type,
+                        'value' => $val,
+                    ];
+                }
+            }
+            return !empty($normalized) ? $normalized : null;
+        }
+
+        if (!empty($keys) && is_array($keys)) {
+            $normalized = [];
+            foreach ($keys as $i => $k) {
+                $trimmedKey = trim((string) $k);
+                $type = in_array($types[$i] ?? '', ['color', 'text'], true) ? $types[$i] : 'text';
+                $trimmedVal = trim((string) ($values[$i] ?? ''));
+                if ($trimmedKey !== '') {
+                    $normalized[] = [
+                        'key' => $trimmedKey,
+                        'type' => $type,
+                        'value' => $trimmedVal,
+                    ];
+                }
+            }
+            return !empty($normalized) ? $normalized : null;
+        }
+
+        return null;
     }
 
     private function categories()
