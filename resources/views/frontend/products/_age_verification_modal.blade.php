@@ -8,10 +8,11 @@
         <h2 id="ageModalTitle" class="age-modal-title">{{ __('Xác nhận độ tuổi') }}</h2>
 
         <p class="age-modal-desc">
-            @if(!empty($productItem?->name))
-                {{ __('Website chỉ giới thiệu sản phẩm') }} <span class="age-product-name">"{{ $productItem->name }}"</span> {{ __('đến đối tượng trên 18 tuổi.') }}
-            @elseif(!empty($categoryItem?->name))
-                {{ __('Website chỉ giới thiệu sản phẩm thuộc danh mục') }} <span class="age-product-name">"{{ $categoryItem->name }}"</span> {{ __('đến đối tượng trên 18 tuổi.') }}
+            @php
+                $itemName = $productItem?->name ?? $categoryItem?->name ?? null;
+            @endphp
+            @if(!empty($itemName))
+                {{ __('Website chỉ giới thiệu sản phẩm') }} <span class="age-product-name">"{{ $itemName }}"</span> {{ __('đến đối tượng trên 18 tuổi.') }}
             @else
                 {{ __('Website chỉ giới thiệu sản phẩm đến đối tượng trên 18 tuổi.') }}
             @endif
