@@ -1,6 +1,8 @@
 @extends('backend.layouts.app')
 
-@php($isEdit = $product->exists)
+@php
+    $isEdit = $product->exists;
+@endphp
 
 @section('title', ($isEdit ? 'Sửa sản phẩm' : 'Thêm sản phẩm') . ' | Admin')
 @section('eyebrow', 'Quản trị nội dung')
