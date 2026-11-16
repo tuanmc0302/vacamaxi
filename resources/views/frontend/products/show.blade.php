@@ -169,14 +169,16 @@
                         </div>
                     @endif
 
-                    <div class="product-detail__excerpt">
-                        @if($product->slug === 'thit-bo-vaca-a' || $product->slug_en === 'vaca-a')
-                            {{ __('Theo Bộ Nông nghiệp Hoa Kỳ (USDA) thịt bò Vaca - A đạt điểm vân mỡ cao, giúp sản phẩm có giá trị cao trên thị trường. Dễ chế biến, thích hợp cho nhà hàng') }}<br>
-                            {{ __('Sinh sản ổn định: bản năng làm mẹ tốt.') }}
-                        @else
-                            {!! nl2br(e($product->short_description)) !!}
-                        @endif
-                    </div>
+                    @if(empty($specifications))
+                        <div class="product-detail__excerpt">
+                            @if($product->slug === 'thit-bo-vaca-a' || $product->slug_en === 'vaca-a')
+                                {{ __('Theo Bộ Nông nghiệp Hoa Kỳ (USDA) thịt bò Vaca - A đạt điểm vân mỡ cao, giúp sản phẩm có giá trị cao trên thị trường. Dễ chế biến, thích hợp cho nhà hàng') }}<br>
+                                {{ __('Sinh sản ổn định: bản năng làm mẹ tốt.') }}
+                            @elseif(!empty($product->short_description))
+                                {!! nl2br(e($product->short_description)) !!}
+                            @endif
+                        </div>
+                    @endif
 
                     <div class="product-detail__purchase">
                         {{-- Quantity and buy/cart buttons temporarily hidden

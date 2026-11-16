@@ -296,10 +296,10 @@
 }
 
 .product-detail__specs {
-    margin: 20px 0 25px;
+    margin: 22px 0 28px;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 18px;
 }
 
 .product-detail__spec-item {
@@ -311,7 +311,7 @@
 .product-detail__spec-item .spec-label {
     font-weight: 700;
     color: #111111;
-    margin-right: 6px;
+    margin-right: 8px;
 }
 
 .product-detail__spec-item .spec-value {
@@ -319,6 +319,7 @@
     font-weight: 400;
     display: inline-flex;
     align-items: center;
+    vertical-align: middle;
     gap: 6px;
 }
 
