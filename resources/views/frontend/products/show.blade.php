@@ -139,7 +139,7 @@
                     </div>
 
                     <div class="product-detail__status">
-                        <span class="status-label">{{ __('Liên hệ') }}</span>
+                        <span class="status-label">{{ $product->price_text ?: __('Liên hệ') }}</span>
                     </div>
 
                     {{-- Thông số & Đặc tính: Trạng thái, Màu sắc, Mùi vị... --}}

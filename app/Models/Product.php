@@ -17,6 +17,8 @@ class Product extends Model
         'name_en',
         'subtitle',
         'subtitle_en',
+        'price_text',
+        'price_text_en',
         'slug',
         'slug_en',
         'image',
@@ -38,6 +40,7 @@ class Product extends Model
     protected $translatable = [
         'name',
         'subtitle',
+        'price_text',
         'attributes',
         'short_description',
         'description',

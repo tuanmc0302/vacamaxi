@@ -123,6 +123,8 @@ class ProductController extends Controller
             'name_en' => ['nullable', 'string', 'max:255'],
             'subtitle' => ['nullable', 'string', 'max:255'],
             'subtitle_en' => ['nullable', 'string', 'max:255'],
+            'price_text' => ['nullable', 'string', 'max:255'],
+            'price_text_en' => ['nullable', 'string', 'max:255'],
             'attributes' => ['nullable'],
             'attributes_json' => ['nullable', 'string'],
             'attributes_en' => ['nullable'],

@@ -46,6 +46,16 @@
                     @error('subtitle_en') <p class="mt-2 text-sm text-red-600">{{ $message }}</p> @enderror
                 </div>
                 <div>
+                    <label class="mb-2 block text-sm font-semibold text-slate-700">Giá / Trạng thái hiển thị (VI)</label>
+                    <input name="price_text" value="{{ old('price_text', $product->price_text) }}" placeholder="Mặc định: Liên hệ (ví dụ: 150.000 đ, Liên hệ...)" class="h-12 w-full rounded-xl border border-slate-200 px-4 text-sm outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-50">
+                    @error('price_text') <p class="mt-2 text-sm text-red-600">{{ $message }}</p> @enderror
+                </div>
+                <div>
+                    <label class="mb-2 block text-sm font-semibold text-slate-700">Giá / Trạng thái hiển thị (EN)</label>
+                    <input name="price_text_en" value="{{ old('price_text_en', $product->price_text_en) }}" placeholder="Mặc định: Contact (ví dụ: $25, Contact...)" class="h-12 w-full rounded-xl border border-slate-200 px-4 text-sm outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-50">
+                    @error('price_text_en') <p class="mt-2 text-sm text-red-600">{{ $message }}</p> @enderror
+                </div>
+                <div>
                     <label class="mb-2 block text-sm font-semibold text-slate-700">Slug</label>
                     <input name="slug" value="{{ old('slug', $product->slug) }}" placeholder="Tự tạo nếu để trống" class="h-12 w-full rounded-xl border border-slate-200 px-4 text-sm outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-50">
                     @error('slug') <p class="mt-2 text-sm text-red-600">{{ $message }}</p> @enderror
