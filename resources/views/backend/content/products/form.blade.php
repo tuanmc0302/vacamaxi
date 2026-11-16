@@ -34,6 +34,16 @@
                     @error('name_en') <p class="mt-2 text-sm text-red-600">{{ $message }}</p> @enderror
                 </div>
                 <div>
+                    <label class="mb-2 block text-sm font-semibold text-slate-700">Phụ đề / Quy cách (VI)</label>
+                    <input name="subtitle" value="{{ old('subtitle', $product->subtitle) }}" placeholder="Ví dụ: 500ml - 33%vol" class="h-12 w-full rounded-xl border border-slate-200 px-4 text-sm outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-50">
+                    @error('subtitle') <p class="mt-2 text-sm text-red-600">{{ $message }}</p> @enderror
+                </div>
+                <div>
+                    <label class="mb-2 block text-sm font-semibold text-slate-700">Phụ đề / Quy cách (EN)</label>
+                    <input name="subtitle_en" value="{{ old('subtitle_en', $product->subtitle_en) }}" placeholder="Ví dụ: 500ml - 33%vol" class="h-12 w-full rounded-xl border border-slate-200 px-4 text-sm outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-50">
+                    @error('subtitle_en') <p class="mt-2 text-sm text-red-600">{{ $message }}</p> @enderror
+                </div>
+                <div>
                     <label class="mb-2 block text-sm font-semibold text-slate-700">Slug</label>
                     <input name="slug" value="{{ old('slug', $product->slug) }}" placeholder="Tự tạo nếu để trống" class="h-12 w-full rounded-xl border border-slate-200 px-4 text-sm outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-50">
                     @error('slug') <p class="mt-2 text-sm text-red-600">{{ $message }}</p> @enderror
@@ -100,6 +110,149 @@
                     <input type="checkbox" name="is_active" value="1" @checked(old('is_active', $product->is_active)) class="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500">
                     Hiển thị
                 </label>
+            </div>
+        </div>
+
+        @php
+            $rawAttrs = old('attributes_json') ? json_decode(old('attributes_json'), true) : ($product->attributes ?? []);
+            if (!is_array($rawAttrs)) {
+                $rawAttrs = [];
+            }
+            $attrRows = [];
+            foreach ($rawAttrs as $k => $v) {
+                if (is_array($v) && (isset($v['key']) || isset($v['name']) || isset($v['label']))) {
+                    $attrRows[] = [
+                        'key' => $v['label'] ?? $v['name'] ?? $v['key'],
+                        'value' => $v['value'] ?? $v['val'] ?? '',
+                    ];
+                } else {
+                    $attrRows[] = [
+                        'key' => is_string($k) ? $k : '',
+                        'value' => is_scalar($v) ? (string)$v : json_encode($v, JSON_UNESCAPED_UNICODE),
+                    ];
+                }
+            }
+
+            $rawAttrsEn = old('attributes_en_json') ? json_decode(old('attributes_en_json'), true) : ($product->attributes_en ?? []);
+            if (!is_array($rawAttrsEn)) {
+                $rawAttrsEn = [];
+            }
+            $attrRowsEn = [];
+            foreach ($rawAttrsEn as $k => $v) {
+                if (is_array($v) && (isset($v['key']) || isset($v['name']) || isset($v['label']))) {
+                    $attrRowsEn[] = [
+                        'key' => $v['label'] ?? $v['name'] ?? $v['key'],
+                        'value' => $v['value'] ?? $v['val'] ?? '',
+                    ];
+                } else {
+                    $attrRowsEn[] = [
+                        'key' => is_string($k) ? $k : '',
+                        'value' => is_scalar($v) ? (string)$v : json_encode($v, JSON_UNESCAPED_UNICODE),
+                    ];
+                }
+            }
+        @endphp
+
+        <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+            <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+                <div>
+                    <h3 class="text-base font-bold text-slate-800">Thông số & Đặc tính sản phẩm (JSON / Thuộc tính tùy biến)</h3>
+                    <p class="text-xs text-slate-500 mt-1">Cấu hình riêng biệt theo ngôn ngữ VI và EN: Trạng thái, Màu sắc, Mùi vị...</p>
+                </div>
+                <div class="flex rounded-xl bg-slate-100 p-1">
+                    <button type="button" onclick="switchAttrLang('vi')" id="tab_attr_btn_vi" class="rounded-lg px-4 py-1.5 text-xs font-bold transition bg-white text-slate-900 shadow-sm">
+                        Tiếng Việt (VI)
+                    </button>
+                    <button type="button" onclick="switchAttrLang('en')" id="tab_attr_btn_en" class="rounded-lg px-4 py-1.5 text-xs font-bold transition text-slate-600 hover:text-slate-900">
+                        Tiếng Anh (EN)
+                    </button>
+                </div>
+            </div>
+
+            {{-- KHỐI TIẾNG VIỆT --}}
+            <div id="attr_lang_panel_vi" class="space-y-4">
+                <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3">
+                    <span class="text-xs font-bold text-slate-700">Đặc tính Tiếng Việt (VI)</span>
+                    <div class="flex items-center gap-2">
+                        <button type="button" onclick="loadWineAttributesPreset('vi')" class="inline-flex items-center gap-1.5 rounded-lg border border-amber-300 bg-amber-50 px-3 py-1.5 text-xs font-semibold text-amber-800 hover:bg-amber-100 transition shadow-sm">
+                            <i class="bi bi-magic"></i> Nạp mẫu Rượu (Trạng thái, Màu sắc, Mùi vị)
+                        </button>
+                        <button type="button" onclick="toggleAttributesMode('vi')" id="btn_toggle_attr_mode_vi" class="inline-flex items-center gap-1.5 rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition shadow-sm">
+                            <i class="bi bi-code-slash"></i> Sửa JSON trực tiếp
+                        </button>
+                    </div>
+                </div>
+
+                {{-- Visual repeater VI --}}
+                <div id="attributes_visual_mode_vi">
+                    <div id="attributes_repeater_container_vi" class="space-y-3">
+                        @forelse($attrRows as $idx => $row)
+                            <div class="attr-row-vi flex items-center gap-3">
+                                <input type="text" name="attribute_keys[]" value="{{ $row['key'] }}" placeholder="Tên thuộc tính (vd: Trạng thái, Màu sắc, Mùi vị)" class="h-11 w-1/3 rounded-xl border border-slate-200 px-3 text-sm font-semibold text-slate-700 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-50" oninput="syncAttrsToJson('vi')">
+                                <input type="text" name="attribute_values[]" value="{{ $row['value'] }}" placeholder="Giá trị (vd: Chất lỏng trong suốt, Trong suốt...)" class="h-11 flex-1 rounded-xl border border-slate-200 px-3 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-50" oninput="syncAttrsToJson('vi')">
+                                <button type="button" onclick="this.closest('.attr-row-vi').remove(); syncAttrsToJson('vi');" class="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-red-200 text-red-600 hover:bg-red-50 transition" title="Xóa dòng này">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </div>
+                        @empty
+                        @endforelse
+                    </div>
+
+                    <div class="mt-4 flex items-center gap-3">
+                        <button type="button" onclick="addAttributeRow('vi')" class="inline-flex items-center gap-1.5 rounded-xl border border-blue-200 bg-blue-50 px-4 py-2 text-xs font-bold text-blue-700 hover:bg-blue-100 transition">
+                            <i class="bi bi-plus-lg"></i> Thêm thuộc tính (VI)
+                        </button>
+                    </div>
+                </div>
+
+                {{-- JSON mode VI --}}
+                <div id="attributes_json_mode_vi" class="hidden">
+                    <textarea id="attributes_json_input_vi" name="attributes_json" rows="6" class="w-full font-mono text-xs rounded-xl border border-slate-200 bg-slate-50 p-4 text-slate-800 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-50" placeholder='{"Trạng thái": "Chất lỏng trong suốt", "Màu sắc": "Trong suốt", "Mùi vị": "..."}'>{{ json_encode($product->attributes ?? [], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) }}</textarea>
+                    <p class="mt-1 text-xs text-slate-500">JSON Tiếng Việt dạng <code>{"Tên": "Giá trị"}</code>.</p>
+                </div>
+            </div>
+
+            {{-- KHỐI TIẾNG ANH --}}
+            <div id="attr_lang_panel_en" class="hidden space-y-4">
+                <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3">
+                    <span class="text-xs font-bold text-slate-700">Đặc tính Tiếng Anh (EN)</span>
+                    <div class="flex items-center gap-2">
+                        <button type="button" onclick="loadWineAttributesPreset('en')" class="inline-flex items-center gap-1.5 rounded-lg border border-amber-300 bg-amber-50 px-3 py-1.5 text-xs font-semibold text-amber-800 hover:bg-amber-100 transition shadow-sm">
+                            <i class="bi bi-magic"></i> Nạp mẫu Rượu EN (Appearance, Color, Taste)
+                        </button>
+                        <button type="button" onclick="toggleAttributesMode('en')" id="btn_toggle_attr_mode_en" class="inline-flex items-center gap-1.5 rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition shadow-sm">
+                            <i class="bi bi-code-slash"></i> Sửa JSON trực tiếp
+                        </button>
+                    </div>
+                </div>
+
+                {{-- Visual repeater EN --}}
+                <div id="attributes_visual_mode_en">
+                    <div id="attributes_repeater_container_en" class="space-y-3">
+                        @forelse($attrRowsEn as $idx => $row)
+                            <div class="attr-row-en flex items-center gap-3">
+                                <input type="text" name="attribute_keys_en[]" value="{{ $row['key'] }}" placeholder="Attribute name (e.g. Appearance, Color, Taste)" class="h-11 w-1/3 rounded-xl border border-slate-200 px-3 text-sm font-semibold text-slate-700 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-50" oninput="syncAttrsToJson('en')">
+                                <input type="text" name="attribute_values_en[]" value="{{ $row['value'] }}" placeholder="Value (e.g. Clear liquid, Transparent...)" class="h-11 flex-1 rounded-xl border border-slate-200 px-3 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-50" oninput="syncAttrsToJson('en')">
+                                <button type="button" onclick="this.closest('.attr-row-en').remove(); syncAttrsToJson('en');" class="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-red-200 text-red-600 hover:bg-red-50 transition" title="Delete this row">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </div>
+                        @empty
+                        @endforelse
+                    </div>
+
+                    <div class="mt-4 flex items-center gap-3">
+                        <button type="button" onclick="addAttributeRow('en')" class="inline-flex items-center gap-1.5 rounded-xl border border-blue-200 bg-blue-50 px-4 py-2 text-xs font-bold text-blue-700 hover:bg-blue-100 transition">
+                            <i class="bi bi-plus-lg"></i> Thêm thuộc tính (EN)
+                        </button>
+                    </div>
+                </div>
+
+                {{-- JSON mode EN --}}
+                <div id="attributes_json_mode_en" class="hidden">
+                    <textarea id="attributes_json_input_en" name="attributes_en_json" rows="6" class="w-full font-mono text-xs rounded-xl border border-slate-200 bg-slate-50 p-4 text-slate-800 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-50" placeholder='{"Appearance": "Clear liquid", "Color": "Transparent", "Taste": "..."}'>{{ json_encode($product->attributes_en ?? [], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) }}</textarea>
+                    <p class="mt-1 text-xs text-slate-500">JSON Tiếng Anh dạng <code>{"Key": "Value"}</code>.</p>
+                </div>
             </div>
         </div>
 
@@ -284,6 +437,137 @@
         const item = document.getElementById(itemId);
         if (item) {
             item.remove();
+        }
+    }
+
+    function switchAttrLang(lang) {
+        const panelVi = document.getElementById('attr_lang_panel_vi');
+        const panelEn = document.getElementById('attr_lang_panel_en');
+        const btnVi = document.getElementById('tab_attr_btn_vi');
+        const btnEn = document.getElementById('tab_attr_btn_en');
+
+        if (lang === 'en') {
+            panelVi.classList.add('hidden');
+            panelEn.classList.remove('hidden');
+            btnEn.className = 'rounded-lg px-4 py-1.5 text-xs font-bold transition bg-white text-slate-900 shadow-sm';
+            btnVi.className = 'rounded-lg px-4 py-1.5 text-xs font-bold transition text-slate-600 hover:text-slate-900';
+        } else {
+            panelEn.classList.add('hidden');
+            panelVi.classList.remove('hidden');
+            btnVi.className = 'rounded-lg px-4 py-1.5 text-xs font-bold transition bg-white text-slate-900 shadow-sm';
+            btnEn.className = 'rounded-lg px-4 py-1.5 text-xs font-bold transition text-slate-600 hover:text-slate-900';
+        }
+    }
+
+    function addAttributeRow(lang = 'vi', key = '', value = '') {
+        const isEn = lang === 'en';
+        const container = document.getElementById(isEn ? 'attributes_repeater_container_en' : 'attributes_repeater_container_vi');
+        if (!container) return;
+
+        const row = document.createElement('div');
+        row.className = (isEn ? 'attr-row-en' : 'attr-row-vi') + ' flex items-center gap-3';
+        const keyName = isEn ? 'attribute_keys_en[]' : 'attribute_keys[]';
+        const valName = isEn ? 'attribute_values_en[]' : 'attribute_values[]';
+        const keyPlaceholder = isEn ? 'Attribute name (e.g. Appearance, Color, Taste)' : 'Tên thuộc tính (vd: Trạng thái, Màu sắc, Mùi vị)';
+        const valPlaceholder = isEn ? 'Value (e.g. Clear liquid, Transparent...)' : 'Giá trị (vd: Chất lỏng trong suốt, Trong suốt...)';
+
+        row.innerHTML = `
+            <input type="text" name="${keyName}" value="${escapeHtml(key)}" placeholder="${keyPlaceholder}" class="h-11 w-1/3 rounded-xl border border-slate-200 px-3 text-sm font-semibold text-slate-700 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-50" oninput="syncAttrsToJson('${lang}')">
+            <input type="text" name="${valName}" value="${escapeHtml(value)}" placeholder="${valPlaceholder}" class="h-11 flex-1 rounded-xl border border-slate-200 px-3 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-50" oninput="syncAttrsToJson('${lang}')">
+            <button type="button" onclick="this.closest('.${isEn ? 'attr-row-en' : 'attr-row-vi'}').remove(); syncAttrsToJson('${lang}');" class="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-red-200 text-red-600 hover:bg-red-50 transition" title="Xóa dòng này">
+                <i class="bi bi-trash"></i>
+            </button>
+        `;
+        container.appendChild(row);
+        syncAttrsToJson(lang);
+    }
+
+    function escapeHtml(str) {
+        if (!str) return '';
+        return String(str)
+            .replace(/&/g, '&amp;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#039;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;');
+    }
+
+    function loadWineAttributesPreset(lang = 'vi') {
+        if (lang === 'en') {
+            const container = document.getElementById('attributes_repeater_container_en');
+            if (!container) return;
+            container.innerHTML = '';
+            addAttributeRow('en', 'Appearance', 'Clear liquid');
+            addAttributeRow('en', 'Color', 'Transparent');
+            addAttributeRow('en', 'Taste', 'Characteristic aroma of fermented sticky rice wine, smooth taste.');
+        } else {
+            const container = document.getElementById('attributes_repeater_container_vi');
+            if (!container) return;
+            container.innerHTML = '';
+            addAttributeRow('vi', 'Trạng thái', 'Chất lỏng trong suốt');
+            addAttributeRow('vi', 'Màu sắc', 'Trong suốt');
+            addAttributeRow('vi', 'Mùi vị', 'Có mùi vị đặc trưng của rượu lên men từ Gạo nếp cái hoa vàng, vị êm dịu.');
+        }
+    }
+
+    function syncAttrsToJson(lang = 'vi') {
+        const isEn = lang === 'en';
+        const keyName = isEn ? 'attribute_keys_en[]' : 'attribute_keys[]';
+        const valName = isEn ? 'attribute_values_en[]' : 'attribute_values[]';
+        const jsonInput = document.getElementById(isEn ? 'attributes_json_input_en' : 'attributes_json_input_vi');
+
+        const keys = document.getElementsByName(keyName);
+        const values = document.getElementsByName(valName);
+        const result = {};
+        for (let i = 0; i < keys.length; i++) {
+            const k = keys[i].value.trim();
+            const v = values[i] ? values[i].value.trim() : '';
+            if (k) {
+                result[k] = v;
+            }
+        }
+        if (jsonInput) {
+            jsonInput.value = Object.keys(result).length > 0 ? JSON.stringify(result, null, 2) : '';
+        }
+    }
+
+    function syncJsonToAttrs(lang = 'vi') {
+        const isEn = lang === 'en';
+        const jsonInput = document.getElementById(isEn ? 'attributes_json_input_en' : 'attributes_json_input_vi');
+        const container = document.getElementById(isEn ? 'attributes_repeater_container_en' : 'attributes_repeater_container_vi');
+        if (!jsonInput || !container || !jsonInput.value.trim()) return;
+
+        try {
+            const parsed = JSON.parse(jsonInput.value);
+            if (typeof parsed === 'object' && parsed !== null) {
+                container.innerHTML = '';
+                for (const [k, v] of Object.entries(parsed)) {
+                    addAttributeRow(lang, k, typeof v === 'object' ? JSON.stringify(v) : v);
+                }
+            }
+        } catch (e) {
+            // invalid JSON
+        }
+    }
+
+    const attrModes = { vi: false, en: false };
+    function toggleAttributesMode(lang = 'vi') {
+        const isEn = lang === 'en';
+        const visualMode = document.getElementById(isEn ? 'attributes_visual_mode_en' : 'attributes_visual_mode_vi');
+        const jsonMode = document.getElementById(isEn ? 'attributes_json_mode_en' : 'attributes_json_mode_vi');
+        const btn = document.getElementById(isEn ? 'btn_toggle_attr_mode_en' : 'btn_toggle_attr_mode_vi');
+
+        attrModes[lang] = !attrModes[lang];
+        if (attrModes[lang]) {
+            syncAttrsToJson(lang);
+            visualMode.classList.add('hidden');
+            jsonMode.classList.remove('hidden');
+            btn.innerHTML = '<i class="bi bi-card-list"></i> Xem dạng bảng trực quan';
+        } else {
+            syncJsonToAttrs(lang);
+            jsonMode.classList.add('hidden');
+            visualMode.classList.remove('hidden');
+            btn.innerHTML = '<i class="bi bi-code-slash"></i> Sửa JSON trực tiếp';
         }
     }
 </script>

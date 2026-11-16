@@ -15,10 +15,14 @@ class Product extends Model
         'category_id',
         'name',
         'name_en',
+        'subtitle',
+        'subtitle_en',
         'slug',
         'slug_en',
         'image',
         'gallery',
+        'attributes',
+        'attributes_en',
         'short_description',
         'short_description_en',
         'description',
@@ -33,6 +37,8 @@ class Product extends Model
 
     protected $translatable = [
         'name',
+        'subtitle',
+        'attributes',
         'short_description',
         'description',
         'seo_title',
@@ -43,6 +49,8 @@ class Product extends Model
     protected $casts = [
         'is_active' => 'boolean',
         'gallery' => 'array',
+        'attributes' => 'array',
+        'attributes_en' => 'array',
     ];
 
     public function category(): BelongsTo

@@ -41,6 +41,23 @@
         ->merge($validGallery)
         ->unique()
         ->values();
+
+    $specifications = [];
+    $rawAttrs = (app()->getLocale() === 'en' && !empty($product->attributes_en)) ? $product->attributes_en : ($product->attributes ?? []);
+    if (!empty($rawAttrs) && is_array($rawAttrs)) {
+        foreach ($product->attributes as $k => $v) {
+            if (is_array($v) && (isset($v['key']) || isset($v['name']) || isset($v['label']))) {
+                $label = $v['label'] ?? $v['name'] ?? $v['key'];
+                $val = $v['value'] ?? $v['val'] ?? '';
+            } else {
+                $label = is_string($k) ? $k : '';
+                $val = is_scalar($v) ? (string)$v : json_encode($v, JSON_UNESCAPED_UNICODE);
+            }
+            if ($label !== '') {
+                $specifications[] = ['label' => $label, 'value' => $val];
+            }
+        }
+    }
 @endphp
                 <div class="product-detail__gallery">
                     <div class="product-detail__main-image" onclick="openProductGallery()" title="{{ __('Bấm để xem ảnh toàn màn hình') }}">
@@ -102,6 +119,9 @@
                 
                 <div class="product-detail__info">
                     <h2 class="product-detail__title">{{ $product->name }}</h2>
+                    @if(!empty($product->subtitle))
+                        <div class="product-detail__subtitle">{{ $product->subtitle }}</div>
+                    @endif
                     <div class="product-detail__meta">
                         <span>{{ __('MÃ:') }} {{ $product->sku ?? '006' }}</span>
                         <span class="divider">|</span>
@@ -119,6 +139,31 @@
                     <div class="product-detail__status">
                         <span class="status-label">{{ __('Liên hệ') }}</span>
                     </div>
+
+                    {{-- Thông số & Đặc tính: Trạng thái, Màu sắc, Mùi vị... --}}
+                    @if(!empty($specifications))
+                        <div class="product-detail__specs">
+                            @foreach($specifications as $spec)
+                                @php
+                                    $lowerLabel = mb_strtolower(trim($spec['label']));
+                                    $isColor = in_array($lowerLabel, ['màu sắc', 'màu', 'color', 'colour']);
+                                    $valTrim = trim($spec['value']);
+                                    $isHex = preg_match('/^#([a-f0-9]{3}|[a-f0-9]{6})$/i', $valTrim);
+                                @endphp
+                                <div class="product-detail__spec-item">
+                                    <span class="spec-label">{{ $spec['label'] }}:</span>
+                                    <span class="spec-value">
+                                        @if($isColor)
+                                            <span class="spec-color-circle" @if($isHex) style="background-color: {{ $valTrim }};" @endif title="{{ $valTrim ?: 'Trong suốt' }}"></span>
+                                        @endif
+                                        @if(!$isHex && $valTrim !== '')
+                                            <span>{{ $spec['value'] }}</span>
+                                        @endif
+                                    </span>
+                                </div>
+                            @endforeach
+                        </div>
+                    @endif
 
                     <div class="product-detail__excerpt">
                         @if($product->slug === 'thit-bo-vaca-a' || $product->slug_en === 'vaca-a')

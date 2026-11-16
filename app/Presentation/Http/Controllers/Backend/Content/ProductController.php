@@ -121,6 +121,12 @@ class ProductController extends Controller
             'category_id' => ['nullable', 'exists:categories,id'],
             'name' => ['required', 'string', 'max:255'],
             'name_en' => ['nullable', 'string', 'max:255'],
+            'subtitle' => ['nullable', 'string', 'max:255'],
+            'subtitle_en' => ['nullable', 'string', 'max:255'],
+            'attributes' => ['nullable'],
+            'attributes_json' => ['nullable', 'string'],
+            'attributes_en' => ['nullable'],
+            'attributes_en_json' => ['nullable', 'string'],
             'slug' => ['required', 'string', 'max:255', Rule::unique('products')->ignore($product?->id)],
             'image_file' => ['nullable', 'image', 'max:10240'],
             'gallery_files' => ['nullable', 'array'],
@@ -139,6 +145,8 @@ class ProductController extends Controller
 
         unset($validated['image_file']);
         unset($validated['gallery_files']);
+        unset($validated['attributes_json']);
+        unset($validated['attributes_en_json']);
 
         if ($request->hasFile('image_file') && $request->file('image_file')->isValid()) {
             $path = $request->file('image_file')->store('products', 'public');
@@ -181,6 +189,62 @@ class ProductController extends Controller
 
         $validated['is_active'] = $request->boolean('is_active');
         $validated['sort_order'] = (int) ($validated['sort_order'] ?? 0);
+
+        // Xử lý subtitle
+        $validated['subtitle'] = $request->filled('subtitle') ? trim((string) $request->input('subtitle')) : null;
+        $validated['subtitle_en'] = $request->filled('subtitle_en') ? trim((string) $request->input('subtitle_en')) : null;
+
+        // Xử lý attributes (VI)
+        if ($request->filled('attributes_json')) {
+            $decoded = json_decode((string) $request->input('attributes_json'), true);
+            $validated['attributes'] = is_array($decoded) ? $decoded : null;
+        } elseif ($request->has('attribute_keys') && is_array($request->input('attribute_keys'))) {
+            $keys = $request->input('attribute_keys', []);
+            $values = $request->input('attribute_values', []);
+            $attrs = [];
+            foreach ($keys as $i => $k) {
+                $trimmedKey = trim((string) $k);
+                $trimmedVal = trim((string) ($values[$i] ?? ''));
+                if ($trimmedKey !== '') {
+                    $attrs[$trimmedKey] = $trimmedVal;
+                }
+            }
+            $validated['attributes'] = !empty($attrs) ? $attrs : null;
+        } elseif ($request->has('attributes')) {
+            $rawAttrs = $request->input('attributes');
+            if (is_string($rawAttrs)) {
+                $decoded = json_decode($rawAttrs, true);
+                $validated['attributes'] = is_array($decoded) ? $decoded : null;
+            } elseif (is_array($rawAttrs)) {
+                $validated['attributes'] = $rawAttrs;
+            }
+        }
+
+        // Xử lý attributes_en (EN)
+        if ($request->filled('attributes_en_json')) {
+            $decodedEn = json_decode((string) $request->input('attributes_en_json'), true);
+            $validated['attributes_en'] = is_array($decodedEn) ? $decodedEn : null;
+        } elseif ($request->has('attribute_keys_en') && is_array($request->input('attribute_keys_en'))) {
+            $keysEn = $request->input('attribute_keys_en', []);
+            $valuesEn = $request->input('attribute_values_en', []);
+            $attrsEn = [];
+            foreach ($keysEn as $i => $k) {
+                $trimmedKey = trim((string) $k);
+                $trimmedVal = trim((string) ($valuesEn[$i] ?? ''));
+                if ($trimmedKey !== '') {
+                    $attrsEn[$trimmedKey] = $trimmedVal;
+                }
+            }
+            $validated['attributes_en'] = !empty($attrsEn) ? $attrsEn : null;
+        } elseif ($request->has('attributes_en')) {
+            $rawAttrsEn = $request->input('attributes_en');
+            if (is_string($rawAttrsEn)) {
+                $decodedEn = json_decode($rawAttrsEn, true);
+                $validated['attributes_en'] = is_array($decodedEn) ? $decodedEn : null;
+            } elseif (is_array($rawAttrsEn)) {
+                $validated['attributes_en'] = $rawAttrsEn;
+            }
+        }
 
         return $validated;
     }
