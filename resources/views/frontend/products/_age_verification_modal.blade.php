@@ -1,10 +1,20 @@
 @if(!empty($requiresAgeVerification))
+@php
+    $productItem = $targetProduct ?? null;
+    $categoryItem = $targetCategory ?? ($category ?? null);
+@endphp
 <div id="ageVerificationModal" class="age-modal-overlay" style="display: none;" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="ageModalTitle">
     <div class="age-modal-card">
         <h2 id="ageModalTitle" class="age-modal-title">{{ __('Xác nhận độ tuổi') }}</h2>
 
         <p class="age-modal-desc">
-            {{ __('Trang web này chứa thông tin và sản phẩm đồ uống có cồn dành riêng cho người từ đủ 18 tuổi trở lên theo quy định của pháp luật Việt Nam.') }}
+            @if(!empty($productItem?->name))
+                {{ __('Website chỉ giới thiệu sản phẩm') }} <span class="age-product-name">"{{ $productItem->name }}"</span> {{ __('đến đối tượng trên 18 tuổi.') }}
+            @elseif(!empty($categoryItem?->name))
+                {{ __('Website chỉ giới thiệu sản phẩm thuộc danh mục') }} <span class="age-product-name">"{{ $categoryItem->name }}"</span> {{ __('đến đối tượng trên 18 tuổi.') }}
+            @else
+                {{ __('Website chỉ giới thiệu sản phẩm đến đối tượng trên 18 tuổi.') }}
+            @endif
         </p>
 
         <div class="age-modal-buttons">
@@ -20,10 +30,6 @@
             <input type="checkbox" id="ageRememberCheckbox" checked class="age-modal-checkbox">
             <span class="age-modal-remember-text">{{ __('Ghi nhớ độ tuổi của tôi') }}</span>
         </label>
-
-        <p class="age-modal-disclaimer">
-            {{ __('Website chỉ giới thiệu sản phẩm đến đối tượng trên 18 tuổi.') }}
-        </p>
     </div>
 </div>
 
@@ -74,10 +80,15 @@
 }
 
 .age-modal-desc {
-    font-size: 14px;
+    font-size: 14.5px;
     line-height: 1.6;
     color: #cfc7bd;
     margin-bottom: 24px;
+}
+
+.age-product-name {
+    color: #f3b21a;
+    font-weight: 700;
 }
 
 .age-modal-buttons {
@@ -127,7 +138,6 @@
     align-items: center;
     gap: 8px;
     cursor: pointer;
-    margin-bottom: 18px;
     user-select: none;
 }
 
@@ -146,15 +156,6 @@
 
 .age-modal-remember:hover .age-modal-remember-text {
     color: #e2dbce;
-}
-
-.age-modal-disclaimer {
-    font-size: 12px;
-    line-height: 1.5;
-    color: #7d7366;
-    margin: 0;
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
-    padding-top: 14px;
 }
 
 @media (max-width: 480px) {

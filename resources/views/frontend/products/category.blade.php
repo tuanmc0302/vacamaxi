@@ -129,5 +129,5 @@
         </div>
     </section>
 
-    @include('frontend.products._age_verification_modal')
+    @include('frontend.products._age_verification_modal', ['targetCategory' => $activeSub ?? $category])
 @endsection

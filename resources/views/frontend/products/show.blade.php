@@ -266,7 +266,7 @@
         @endif
     </div>
 
-    @include('frontend.products._age_verification_modal')
+    @include('frontend.products._age_verification_modal', ['targetProduct' => $product])
 @endsection
 
 @push('scripts')
