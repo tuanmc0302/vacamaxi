@@ -113,7 +113,7 @@
             </div>
         </div>
 
-        @php
+        <?php
             $rawAttrs = old('attributes_json') ? json_decode(old('attributes_json'), true) : ($product->attributes ?? []);
             if (!is_array($rawAttrs)) {
                 $rawAttrs = [];
@@ -151,7 +151,7 @@
                     ];
                 }
             }
-        @endphp
+        ?>
 
         <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
             <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
@@ -186,7 +186,7 @@
                 {{-- Visual repeater VI --}}
                 <div id="attributes_visual_mode_vi">
                     <div id="attributes_repeater_container_vi" class="space-y-3">
-                        @forelse($attrRows as $idx => $row)
+                        @forelse(($attrRows ?? []) as $idx => $row)
                             <div class="attr-row-vi flex items-center gap-3">
                                 <input type="text" name="attribute_keys[]" value="{{ $row['key'] }}" placeholder="Tên thuộc tính (vd: Trạng thái, Màu sắc, Mùi vị)" class="h-11 w-1/3 rounded-xl border border-slate-200 px-3 text-sm font-semibold text-slate-700 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-50" oninput="syncAttrsToJson('vi')">
                                 <input type="text" name="attribute_values[]" value="{{ $row['value'] }}" placeholder="Giá trị (vd: Chất lỏng trong suốt, Trong suốt...)" class="h-11 flex-1 rounded-xl border border-slate-200 px-3 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-50" oninput="syncAttrsToJson('vi')">
@@ -229,7 +229,7 @@
                 {{-- Visual repeater EN --}}
                 <div id="attributes_visual_mode_en">
                     <div id="attributes_repeater_container_en" class="space-y-3">
-                        @forelse($attrRowsEn as $idx => $row)
+                        @forelse(($attrRowsEn ?? []) as $idx => $row)
                             <div class="attr-row-en flex items-center gap-3">
                                 <input type="text" name="attribute_keys_en[]" value="{{ $row['key'] }}" placeholder="Attribute name (e.g. Appearance, Color, Taste)" class="h-11 w-1/3 rounded-xl border border-slate-200 px-3 text-sm font-semibold text-slate-700 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-50" oninput="syncAttrsToJson('en')">
                                 <input type="text" name="attribute_values_en[]" value="{{ $row['value'] }}" placeholder="Value (e.g. Clear liquid, Transparent...)" class="h-11 flex-1 rounded-xl border border-slate-200 px-3 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-50" oninput="syncAttrsToJson('en')">
