@@ -143,6 +143,7 @@ class ProductController extends Controller
             'seo_description_en' => ['nullable', 'string'],
             'sort_order' => ['nullable', 'integer', 'min:0'],
             'is_active' => ['nullable', 'boolean'],
+            'show_contact_button' => ['nullable', 'boolean'],
         ]);
 
         unset($validated['image_file']);
@@ -190,6 +191,7 @@ class ProductController extends Controller
         }
 
         $validated['is_active'] = $request->boolean('is_active');
+        $validated['show_contact_button'] = $request->boolean('show_contact_button');
         $validated['sort_order'] = (int) ($validated['sort_order'] ?? 0);
 
         // Xử lý subtitle

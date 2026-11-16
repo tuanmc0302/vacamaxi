@@ -35,6 +35,7 @@ class Product extends Model
         'seo_description_en',
         'sort_order',
         'is_active',
+        'show_contact_button',
     ];
 
     protected $translatable = [
@@ -51,6 +52,7 @@ class Product extends Model
 
     protected $casts = [
         'is_active' => 'boolean',
+        'show_contact_button' => 'boolean',
         'gallery' => 'array',
         'attributes' => 'array',
         'attributes_en' => 'array',

@@ -180,27 +180,15 @@
                         </div>
                     @endif
 
-                    <div class="product-detail__purchase">
-                        {{-- Quantity and buy/cart buttons temporarily hidden
-                        <div class="quantity-wrapper">
-                            <label>{{ __('Số Lượng') }}</label>
-                            <div class="quantity-selector">
-                                <button type="button" class="qty-btn minus">-</button>
-                                <input type="text" id="product-qty" value="01" readonly class="qty-input">
-                                <button type="button" class="qty-btn plus">+</button>
+                    @if($product->show_contact_button ?? true)
+                        <div class="product-detail__purchase">
+                            <div class="button-group">
+                                <a href="{{ route('frontend.contact') }}" class="btn-contact-now">
+                                    <i class="bi bi-telephone-fill me-2"></i>{{ __('LIÊN HỆ') }}
+                                </a>
                             </div>
                         </div>
-                        <div class="button-group">
-                            <button type="button" class="btn-buy-now">{{ __('MUA NGAY') }}</button>
-                            <button type="button" class="btn-add-cart">{{ __('THÊM VÀO GIỎ HÀNG') }}</button>
-                        </div>
-                        --}}
-                        <div class="button-group">
-                            <a href="{{ route('frontend.contact') }}" class="btn-contact-now">
-                                <i class="bi bi-telephone-fill me-2"></i>{{ __('LIÊN HỆ') }}
-                            </a>
-                        </div>
-                    </div>
+                    @endif
                 </div>
             </div>
 

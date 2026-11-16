@@ -118,10 +118,16 @@
                     <input type="number" min="0" name="sort_order" value="{{ old('sort_order', $product->sort_order ?? 0) }}" class="h-12 w-full rounded-xl border border-slate-200 px-4 text-sm outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-50">
                     @error('sort_order') <p class="mt-2 text-sm text-red-600">{{ $message }}</p> @enderror
                 </div>
-                <label class="flex items-center gap-3 self-end rounded-xl border border-slate-200 px-4 py-3 text-sm font-semibold text-slate-700">
-                    <input type="checkbox" name="is_active" value="1" @checked(old('is_active', $product->is_active)) class="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500">
-                    Hiển thị
-                </label>
+                <div class="flex flex-wrap items-center gap-4 self-end">
+                    <label class="flex items-center gap-3 rounded-xl border border-slate-200 px-4 py-3 text-sm font-semibold text-slate-700 cursor-pointer hover:bg-slate-50 transition">
+                        <input type="checkbox" name="is_active" value="1" @checked(old('is_active', $product->is_active)) class="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500">
+                        Hiển thị
+                    </label>
+                    <label class="flex items-center gap-3 rounded-xl border border-slate-200 px-4 py-3 text-sm font-semibold text-slate-700 cursor-pointer hover:bg-slate-50 transition">
+                        <input type="checkbox" name="show_contact_button" value="1" @checked(old('show_contact_button', $product->exists ? $product->show_contact_button : true)) class="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500">
+                        Bật nút Liên hệ
+                    </label>
+                </div>
             </div>
         </div>
 
