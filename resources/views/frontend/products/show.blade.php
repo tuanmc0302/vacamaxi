@@ -53,7 +53,7 @@
             } else {
                 $label = is_string($k) ? $k : '';
                 $val = is_scalar($v) ? (string)$v : json_encode($v, JSON_UNESCAPED_UNICODE);
-                $type = (preg_match('/^#([a-f0-9]{3}|[a-f0-9]{6})$/i', (string)$val) || in_array(mb_strtolower($label), ['màu sắc', 'màu', 'color', 'colour'])) ? 'color' : 'text');
+                $type = (preg_match('/^#([a-f0-9]{3}|[a-f0-9]{6})$/i', (string)$val) || in_array(mb_strtolower($label), ['màu sắc', 'màu', 'color', 'colour'])) ? 'color' : 'text';
             }
             if ($label !== '') {
                 $specifications[] = ['label' => $label, 'type' => $type, 'value' => $val];
