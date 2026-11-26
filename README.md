@@ -57,3 +57,5 @@ Chua controller, request, response resource, blade view va giao tiep truc tiep v
 3. Tao implementation trong `Infrastructure/...`
 4. Tao controller trong `Presentation/Http/Controllers/Frontend` hoac `Presentation/Http/Controllers/Api/V1`
 5. Bind interface voi implementation tai `app/Providers/AppServiceProvider.php`
+
+test
