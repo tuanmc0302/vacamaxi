@@ -52,7 +52,7 @@
                 {{-- Chế độ xem theo từng component danh mục con --}}
                 @php $hasAnySubProduct = false; @endphp
 
-                @foreach ($subcategories as $sub)
+                @foreach ($subcategories->reverse() as $sub)
                     @php
                         $subProducts = $productsBySubcategory->get($sub->id, collect());
                     @endphp
