@@ -53,7 +53,7 @@
                 <div class="col-lg-3 col-md-6">
                     <div class="footer-social-wrap">
                         @if(!empty($siteSettings['google_map_embed_url']))
-                            <h4 class="footer-title">{{ __('BẢN ĐỒ') }}</h4>
+                            <h4 class="footer-title">{{ __('BẢN ĐỒ TEST') }}</h4>
                             <div class="footer-map mt-2">
                                 {!! $siteSettings['google_map_embed_url'] !!}
                             </div>
